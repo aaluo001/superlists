@@ -1,9 +1,26 @@
 #!python
 # FunctionalTests.py
 
+import unittest
 from selenium import webdriver
 
-vBrowser = webdriver.Firefox()
-vBrowser.get('http://localhost:8000')
+class NewVisitorTest(unittest.TestCase):
+  
+  def setUp(self):
+    self.vBrowser = webdriver.Firefox()
+  
+  def tearDown(self):
+    self.vBrowser.quit()
 
-assert 'Django' in vBrowser.title
+
+  def test_CanStartAListAndRetrieveItLater(self):
+    self.vBrowser.get('http://localhost:8000')
+
+    self.assertIn('To-Do', self.vBrowser.title)
+    self.fail('Finish the test!')
+
+
+
+if (__name__ == '__main__'):
+  #unittest.main(warnings='ignore')
+  unittest.main()
