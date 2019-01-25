@@ -31,7 +31,10 @@ class NewVisitorTest(unittest.TestCase):
         
         vTable = self.vBrowser.find_element_by_id('id_list_table')
         vRows = vTable.find_elements_by_tag_name('tr')
-        self.assertTrue(any(vRow.text == '1: Buy peacock feathers' for vRow in vRows))
+        self.assertTrue( \
+            any(vRow.text == '1: Buy peacock feathers' for vRow in vRows), \
+            'New to-do item did not appear in table' \
+        )
         
         
         self.fail('Finish The Test!')
