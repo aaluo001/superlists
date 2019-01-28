@@ -16,6 +16,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.vBrowser.quit()
 
+    def checkForRowInListTable(self, vRowText):
+        vTable = self.vBrowser.find_element_by_id('id_list_table')
+        vRows = vTable.find_elements_by_tag_name('tr')
+        self.assertIn(vRowText, [ vRow.text for vRow in vRows ])
+
 
     def test_CanStartAListAndRetrieveItLater(self):
         self.vBrowser.get('http://localhost:8000')
@@ -35,11 +40,9 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         
         # 查看刚刚输入的待办事项
-        vTable = self.vBrowser.find_element_by_id('id_list_table')
-        vRows = vTable.find_elements_by_tag_name('tr')
-        self.assertIn('1: 买一些孔雀羽毛', [ vRow.text for vRow in vRows ])
+        self.checkForRowInListTable('1: 买一些孔雀羽毛')
         
-        
+
         # 输入第二个待办事项
         vInputBox = self.vBrowser.find_element_by_id('id_new_item')
         vInputBox.send_keys('用孔雀羽毛做假蝇')
@@ -47,10 +50,8 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         
         # 再次查看刚刚输入的待办事项
-        vTable = self.vBrowser.find_element_by_id('id_list_table')
-        vRows = vTable.find_elements_by_tag_name('tr')
-        self.assertIn('1: 买一些孔雀羽毛',   [ vRow.text for vRow in vRows ])
-        self.assertIn('2: 用孔雀羽毛做假蝇', [ vRow.text for vRow in vRows ])
+        self.checkForRowInListTable('1: 买一些孔雀羽毛')
+        self.checkForRowInListTable('2: 用孔雀羽毛做假蝇')
 
 
         self.fail('Finish The Test!')
