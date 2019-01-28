@@ -1,9 +1,13 @@
 <html>
-    <title>To-Do lists</title>
+    <title>待办事项清单</title>
     <body>
-        <h1>Your To-Do list</h1>
-        <input id="id_new_item" placeholder="Enter a to-do item" />
+        <h1>您的待办事项清单</h1>
+        <form method="POST">
+            <input name="item_text" id="id_new_item" placeholder="试试输入一个待办事项吧" size="50" />
+            {% csrf_token %}
+        </form>
         <table id="id_list_table">
+            <tr><td>1: {{ new_item_text }}</td></tr>
         </table>
     </body>
 </html>
