@@ -1,14 +1,15 @@
 #!python
 # coding: gbk
-# FunctionalTests.py
+# tests.py
 
 import time
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
   
     def setUp(self):
         self.vBrowser = webdriver.Firefox()
@@ -23,7 +24,8 @@ class NewVisitorTest(unittest.TestCase):
 
 
     def test_CanStartAListAndRetrieveItLater(self):
-        self.vBrowser.get('http://localhost:8000')
+        # 访问应用首页
+        self.vBrowser.get(self.live_server_url)
         
         # 页面的标题和开头都包含 "To-Do" 这个词
         self.assertIn('待办事项', self.vBrowser.title)
@@ -56,8 +58,3 @@ class NewVisitorTest(unittest.TestCase):
 
         self.fail('Finish The Test!')
 
-
-
-if (__name__ == '__main__'):
-    #unittest.main(warnings='ignore')
-    unittest.main()
