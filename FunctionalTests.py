@@ -37,7 +37,7 @@ class NewVisitorTest(unittest.TestCase):
         # 输入第一个待办事项
         vInputBox.send_keys('买一些孔雀羽毛')
         vInputBox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
         
         # 查看刚刚输入的待办事项
         self.checkForRowInListTable('1: 买一些孔雀羽毛')
@@ -47,7 +47,7 @@ class NewVisitorTest(unittest.TestCase):
         vInputBox = self.vBrowser.find_element_by_id('id_new_item')
         vInputBox.send_keys('用孔雀羽毛做假蝇')
         vInputBox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
         
         # 再次查看刚刚输入的待办事项
         self.checkForRowInListTable('1: 买一些孔雀羽毛')
