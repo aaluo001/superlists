@@ -8,16 +8,18 @@ def homePage(vRequest):
 
 
 def newList(vRequest):
+    vList = List.objects.create()
     Item.objects.create( \
         text=vRequest.POST['item_text'], \
-        list=List.objects.create() \
+        list=vList \
     )
-    return redirect('/lists/the-only-list/')
+    return redirect('/lists/{}/'.format(vList.id))
 
 
-def viewList(vRequest):
-    vItems = Item.objects.all()
-    vData = { \
+def viewList(vRequest, vListId):
+    vList  = List.objects.get(id=vListId)
+    vItems = Item.objects.filter(list=vList)
+    vData  = { \
         'items': vItems,
     }
     return render(vRequest, 'list.html', vData)

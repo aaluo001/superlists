@@ -9,10 +9,6 @@ class HomePageTest(TestCase):
         vResponse = self.client.get('/')
         self.assertTemplateUsed(vResponse, 'home.html')
 
-    def test_OnlySavesItemsWhenNecessary(self):
-        self.client.get('/')
-        self.assertEqual(Item.objects.count(), 0)
-
 
 class NewListTest(TestCase):
 
@@ -25,25 +21,34 @@ class NewListTest(TestCase):
 
     def test_RedirectsAfterPost(self):
         vResponse = self.client.post('/lists/new', data={'item_text': 'A new list item'})
-        self.assertRedirects(vResponse, '/lists/the-only-list/')
+        vNewList = List.objects.first()
+        self.assertRedirects(vResponse, '/lists/{}/'.format(vNewList.id))
 
 
 
 class ViewListTest(TestCase):
 
     def test_UsesListTemplate(self):
-        vResponse = self.client.get('/lists/the-only-list/')
+        vList = List.objects.create()
+        vResponse = self.client.get('/lists/{}/'.format(vList.id))
         self.assertTemplateUsed(vResponse, 'list.html')
 
-    def test_DisplaysAllListItems(self):
+    def test_DisplaysOnlyItemsForThatList(self):
         vList = List.objects.create()
         Item.objects.create(text='Itemey 1', list=vList)
         Item.objects.create(text='Itemey 2', list=vList)
         
-        vResponse = self.client.get('/lists/the-only-list/')
+        vOtherList = List.objects.create()
+        Item.objects.create(text='Other list item 1', list=vOtherList)
+        Item.objects.create(text='Other list item 2', list=vOtherList)
+        
+        
+        vResponse = self.client.get('/lists/{}/'.format(vList.id))
         
         self.assertContains(vResponse, 'Itemey 1')
         self.assertContains(vResponse, 'Itemey 2')
+        self.assertNotContains(vResponse, 'Other list item 1')
+        self.assertNotContains(vResponse, 'Other list item 2')
 
 
 class ListAndItemModelTest(TestCase):
