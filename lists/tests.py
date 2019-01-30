@@ -1,5 +1,6 @@
 from django.test import TestCase
 from lists.models import Item
+from lists.models import List
 
 
 class HomePageTest(TestCase):
@@ -35,8 +36,9 @@ class ViewListTest(TestCase):
         self.assertTemplateUsed(vResponse, 'list.html')
 
     def test_DisplaysAllListItems(self):
-        Item.objects.create(text='Itemey 1')
-        Item.objects.create(text='Itemey 2')
+        vList = List.objects.create()
+        Item.objects.create(text='Itemey 1', list=vList)
+        Item.objects.create(text='Itemey 2', list=vList)
         
         vResponse = self.client.get('/lists/the-only-list/')
         
@@ -44,19 +46,26 @@ class ViewListTest(TestCase):
         self.assertContains(vResponse, 'Itemey 2')
 
 
-class ItemModelTest(TestCase):
+class ListAndItemModelTest(TestCase):
     
     def test_SavingAndRetrievingItems(self):
+        vList = List()
+        vList.save()
+        
         vFirstItem = Item()
         vFirstItem.text = 'The first (ever) list item'
+        vFirstItem.list = vList
         vFirstItem.save()
         
         vSecondItem = Item()
         vSecondItem.text = 'Item the second'
+        vSecondItem.list = vList
         vSecondItem.save()
         
         vSaveItems = Item.objects.all()
         self.assertEqual(vSaveItems.count(), 2)
         self.assertEqual(vSaveItems[0].text, 'The first (ever) list item')
+        self.assertEqual(vSaveItems[0].list, vList)
         self.assertEqual(vSaveItems[1].text, 'Item the second')
+        self.assertEqual(vSaveItems[1].list, vList)
 
