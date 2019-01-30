@@ -9,6 +9,11 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(vResponse, 'home.html')
 
 
+    def test_OnlySavesItemsWhenNecessary(self):
+        self.client.get('/')
+        self.assertEqual(Item.objects.count(), 0)
+
+
     def test_CanSaveAPostRequest(self):
         vResponse = self.client.post('/', data={'item_text': 'A new list item'})
 
@@ -21,20 +26,27 @@ class HomePageTest(TestCase):
         vResponse = self.client.post('/', data={'item_text': 'A new list item'})
 
         self.assertEqual(vResponse.status_code, 302)
-        self.assertEqual(vResponse['location'], '/')
+        self.assertEqual(vResponse['location'], '/lists/the-only-list/')
+
+
+class ListViewTest(TestCase):
+
+    def test_UsesListTemplate(self):
+        vResponse = self.client.get('/lists/the-only-list/')
+        self.assertTemplateUsed(vResponse, 'list.html')
 
 
     def test_DisplaysAllListItems(self):
         Item.objects.create(text='Itemey 1')
         Item.objects.create(text='Itemey 2')
         
-        vResponse = self.client.get('/')
+        vResponse = self.client.get('/lists/the-only-list/')
         
-        self.assertIn('Itemey 1', vResponse.content.decode())
-        self.assertIn('Itemey 2', vResponse.content.decode())
+        self.assertContains(vResponse, 'Itemey 1')
+        self.assertContains(vResponse, 'Itemey 2')
 
 
-class ItemModelTests(TestCase):
+class ItemModelTest(TestCase):
     
     def test_SavingAndRetrievingItems(self):
         vFirstItem = Item()
