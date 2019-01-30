@@ -8,33 +8,31 @@ class HomePageTest(TestCase):
         vResponse = self.client.get('/')
         self.assertTemplateUsed(vResponse, 'home.html')
 
-
     def test_OnlySavesItemsWhenNecessary(self):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
 
 
+class NewListTest(TestCase):
+
     def test_CanSaveAPostRequest(self):
-        vResponse = self.client.post('/', data={'item_text': 'A new list item'})
+        vResponse = self.client.post('/lists/new', data={'item_text': 'A new list item'})
 
         self.assertEqual(Item.objects.count(), 1)
         vNewItem = Item.objects.first()
         self.assertEqual(vNewItem.text, 'A new list item')
 
-
     def test_RedirectsAfterPost(self):
-        vResponse = self.client.post('/', data={'item_text': 'A new list item'})
-
-        self.assertEqual(vResponse.status_code, 302)
-        self.assertEqual(vResponse['location'], '/lists/the-only-list/')
+        vResponse = self.client.post('/lists/new', data={'item_text': 'A new list item'})
+        self.assertRedirects(vResponse, '/lists/the-only-list/')
 
 
-class ListViewTest(TestCase):
+
+class ViewListTest(TestCase):
 
     def test_UsesListTemplate(self):
         vResponse = self.client.get('/lists/the-only-list/')
         self.assertTemplateUsed(vResponse, 'list.html')
-
 
     def test_DisplaysAllListItems(self):
         Item.objects.create(text='Itemey 1')

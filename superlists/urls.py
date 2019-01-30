@@ -21,5 +21,6 @@ from lists import views
 
 urlpatterns = [
     url(r'^$', views.homePage, name='homePage'),
+    url(r'^lists/new$', views.newList, name='newList'),
     url(r'^lists/the-only-list/$', views.viewList, name='viewList'),
 ]
