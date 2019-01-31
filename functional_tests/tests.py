@@ -9,7 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
 # 等待服务器响应时间(10秒)
@@ -17,7 +17,7 @@ from django.test import LiveServerTestCase
 MAX_WAIT = 10
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.vBrowser = webdriver.Firefox()

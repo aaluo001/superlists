@@ -120,4 +120,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# 解决模板文件中出现中文乱码的问题
 FILE_CHARSET = 'gbk'
