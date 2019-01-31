@@ -69,8 +69,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.waitForRowInListTable('1: 买一些孔雀羽毛')
         self.waitForRowInListTable('2: 用孔雀羽毛做假蝇')
 
-
-        self.fail('Finish The Test!')
+        # 操作完毕
 
 
     def test_MultipleUsersCanStartListsAtDifferentUrls(self):
@@ -115,4 +114,5 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn('买一些孔雀羽毛', vPageText)
         self.assertIn('买一盒牛奶', vPageText)
 
+        # 操作完毕
 

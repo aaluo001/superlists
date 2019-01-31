@@ -42,13 +42,46 @@ class ViewListTest(TestCase):
         Item.objects.create(text='Other list item 1', list=vOtherList)
         Item.objects.create(text='Other list item 2', list=vOtherList)
         
-        
         vResponse = self.client.get('/lists/{}/'.format(vList.id))
         
         self.assertContains(vResponse, 'Itemey 1')
         self.assertContains(vResponse, 'Itemey 2')
         self.assertNotContains(vResponse, 'Other list item 1')
         self.assertNotContains(vResponse, 'Other list item 2')
+
+    def test_PassesCorrectListToTemplate(self):
+        vWorngList = List.objects.create()
+        vList = List.objects.create()
+        vResponse = self.client.get('/lists/{}/'.format(vList.id))
+        self.assertEqual(vResponse.context['list'], vList)
+
+
+class AddItemTest(TestCase):
+    
+    def test_CanSaveAPostRequestToAnExistingList(self):
+        vWorngList = List.objects.create()
+        vList = List.objects.create()
+        
+        vResponse = self.client.post( \
+            '/lists/{}/add_item'.format(vList.id), \
+            data={'item_text': 'A new list item for an existing list'} \
+        )
+        
+        self.assertEqual(Item.objects.count(), 1)
+        vNewItem = Item.objects.first()
+        self.assertEqual(vNewItem.text, 'A new list item for an existing list')
+        self.assertEqual(vNewItem.list, vList)
+
+    def test_RedirectsAfterPost(self):
+        vWorngList = List.objects.create()
+        vList = List.objects.create()
+        
+        vResponse = self.client.post( \
+            '/lists/{}/add_item'.format(vList.id), \
+            data={'item_text': 'A new list item for an existing list'} \
+        )
+
+        self.assertRedirects(vResponse, '/lists/{}/'.format(vList.id))
 
 
 class ListAndItemModelTest(TestCase):
