@@ -116,3 +116,29 @@ class NewVisitorTest(LiveServerTestCase):
 
         # 操作完毕
 
+
+    def test_LayoutAndStyling(self):
+        # 访问应用首页
+        self.vBrowser.get(self.live_server_url)
+        self.vBrowser.set_window_size(1024, 768)
+        
+        # 输入框居中显示
+        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual( \
+            vInputBox.location['x'] + vInputBox.size['width'] / 2, \
+            512, \
+            delta=10 \
+        )
+        
+        vInputBox.send_keys('testing')
+        vInputBox.send_keys(Keys.ENTER)
+        self.waitForRowInListTable('1: testing')
+        
+        # 输入框居中显示
+        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual( \
+            vInputBox.location['x'] + vInputBox.size['width'] / 2, \
+            512, \
+            delta=10 \
+        )
+
