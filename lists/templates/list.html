@@ -1,15 +1,13 @@
-<html>
-    <title>待办事项清单</title>
-    <body>
-        <h1>您的待办事项清单</h1>
-        <form method="POST" action="/lists/{{ list.id }}/add_item">
-            <input name="item_text" id="id_new_item" placeholder="试试输入一个待办事项吧" size="50" />
-            {% csrf_token %}
-        </form>
-        <table id="id_list_table">
-            {% for item in list.item_set.all %}
-                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block header_text %}您的待办事项清单{% endblock %}
+
+{% block form_action %}/lists/{{ list.id }}/add_item{% endblock %}
+
+{% block table %}
+    <table id="id_list_table">
+        {% for item in list.item_set.all %}
+            <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}
