@@ -2,7 +2,7 @@
 # coding: gbk
 # tests.py
 
-import time
+import os, time
 import unittest
 
 from selenium import webdriver
@@ -21,6 +21,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.vBrowser = webdriver.Firefox()
+        vStagingServer = os.getenv('STAGING_SERVER')
+        if vStagingServer:
+            self.live_server_url = 'http://{}'.format(vStagingServer)
   
     def tearDown(self):
         self.vBrowser.quit()
