@@ -19,6 +19,6 @@ from lists import urls as lists_urls
 
 
 urlpatterns = [
-    url(r'^$', lists_views.homePage, name='homePage'),
+    url(r'^$', lists_views.home_page, name='home_page'),
     url(r'^lists/', include(lists_urls)),
 ]

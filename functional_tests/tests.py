@@ -1,8 +1,13 @@
 #!python
 # coding: gbk
+#------------------------------
 # tests.py
-
-import os, time
+#------------------------------
+# author: TangJianwei
+# update: 2019-02-25
+#------------------------------
+import os
+import time
 import unittest
 
 from selenium import webdriver

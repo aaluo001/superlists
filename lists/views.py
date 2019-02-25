@@ -1,36 +1,42 @@
+#!python
+# coding: gbk
+#------------------------------
+# views.py
+#------------------------------
+# author: TangJianwei
+# update: 2019-02-25
+#------------------------------
 from django.shortcuts import render, redirect
 from lists.models import Item
 from lists.models import List
 
 
-def homePage(vRequest):
-    return render(vRequest, 'home.html')
+def home_page(request):
+    return render(request, 'home.html')
 
 
-def newList(vRequest):
-    vList = List.objects.create()
+def new_list(request):
+    list_object = List.objects.create()
     Item.objects.create( \
-        text=vRequest.POST['item_text'], \
-        list=vList \
+        text=request.POST['item_text'], \
+        list=list_object \
     )
-    return redirect('/lists/{}/'.format(vList.id))
+    return redirect('/lists/{}/'.format(list_object.id))
 
 
-def viewList(vRequest, vListId):
-    vList  = List.objects.get(id=vListId)
-    #vItems = Item.objects.filter(list=vList)
-    vData  = { \
-        #'items': vItems,
-        'list': vList,
+def view_list(request, list_id):
+    list_object  = List.objects.get(id=list_id)
+    context = { \
+        'list': list_object,
     }
-    return render(vRequest, 'list.html', vData)
+    return render(request, 'list.html', context)
 
 
-def addItem(vRequest, vListId):
-    vList  = List.objects.get(id=vListId)
+def add_item(request, list_id):
+    list_object  = List.objects.get(id=list_id)
     Item.objects.create( \
-        text=vRequest.POST['item_text'], \
-        list=vList \
+        text=request.POST['item_text'], \
+        list=list_object \
     )
-    return redirect('/lists/{}/'.format(vList.id))
+    return redirect('/lists/{}/'.format(list_object.id))
 
