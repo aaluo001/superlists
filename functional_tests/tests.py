@@ -25,127 +25,126 @@ MAX_WAIT = 10
 class NewVisitorTest(StaticLiveServerTestCase):
   
     def setUp(self):
-        self.vBrowser = webdriver.Firefox()
-        vStagingServer = os.getenv('STAGING_SERVER')
-        if vStagingServer:
-            self.live_server_url = 'http://{}'.format(vStagingServer)
+        self.browser = webdriver.Firefox()
+        staging_server = os.getenv('STAGING_SERVER')
+        if (staging_server): self.live_server_url = 'http://{}'.format(staging_server)
   
     def tearDown(self):
-        self.vBrowser.quit()
+        self.browser.quit()
 
-    def waitForRowInListTable(self, vRowText):
-        vStartTime = time.time()
+    def wait_for_row_in_list_table(self, row_text):
+        start_time = time.time()
         while True:
             try:
-                vTable = self.vBrowser.find_element_by_id('id_list_table')
-                vRows = vTable.find_elements_by_tag_name('tr')
-                self.assertIn(vRowText, [ vRow.text for vRow in vRows ])
+                list_table = self.browser.find_element_by_id('id_list_table')
+                rows = list_table.find_elements_by_tag_name('tr')
+                self.assertIn(row_text, [ row.text for row in rows ])
                 break
             
             except (AssertionError, WebDriverException) as e:
-                if ((time.time() - vStartTime) > MAX_WAIT): raise e
+                if ((time.time() - start_time) > MAX_WAIT): raise e
                 time.sleep(1)
 
 
-    def test_CanStartAListAndRetrieveItLater(self):
+    def test_can_start_a_list_and_retrieve_it_later(self):
         # 访问应用首页
-        self.vBrowser.get(self.live_server_url)
+        self.browser.get(self.live_server_url)
         
         # 页面的标题和开头都包含 "To-Do" 这个词
-        self.assertIn('待办事项', self.vBrowser.title)
-        self.assertIn('待办事项', self.vBrowser.find_element_by_tag_name('h1').text)
+        self.assertIn('待办事项', self.browser.title)
+        self.assertIn('待办事项', self.browser.find_element_by_tag_name('h1').text)
         
         # 页面有一个待办事项文本输入框
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
-        self.assertEqual(vInputBox.get_attribute('placeholder'), '试试输入一个待办事项吧')
+        input_box = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(input_box.get_attribute('placeholder'), '试试输入一个待办事项吧')
         
         
         # 输入第一个待办事项
-        vInputBox.send_keys('买一些孔雀羽毛')
-        vInputBox.send_keys(Keys.ENTER)
+        input_box.send_keys('买一些孔雀羽毛')
+        input_box.send_keys(Keys.ENTER)
         
         # 查看刚刚输入的待办事项
-        self.waitForRowInListTable('1: 买一些孔雀羽毛')
+        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
         
 
         # 输入第二个待办事项
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
-        vInputBox.send_keys('用孔雀羽毛做假蝇')
-        vInputBox.send_keys(Keys.ENTER)
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('用孔雀羽毛做假蝇')
+        input_box.send_keys(Keys.ENTER)
         
         # 再次查看刚刚输入的待办事项
-        self.waitForRowInListTable('1: 买一些孔雀羽毛')
-        self.waitForRowInListTable('2: 用孔雀羽毛做假蝇')
+        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
+        self.wait_for_row_in_list_table('2: 用孔雀羽毛做假蝇')
 
         # 操作完毕
 
 
-    def test_MultipleUsersCanStartListsAtDifferentUrls(self):
+    def test_multiple_users_can_start_lists_at_different_urls(self):
         # 用户A新建了一个待办事项
-        self.vBrowser.get(self.live_server_url)
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
-        vInputBox.send_keys('买一些孔雀羽毛')
-        vInputBox.send_keys(Keys.ENTER)
-        self.waitForRowInListTable('1: 买一些孔雀羽毛')
+        self.browser.get(self.live_server_url)
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('买一些孔雀羽毛')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
         
         #　这时，用户A有自己唯一的URL
-        vUserAUrl = self.vBrowser.current_url
-        self.assertRegex(vUserAUrl, '/lists/.+/')
+        user_url_1 = self.browser.current_url
+        self.assertRegex(user_url_1, '/lists/.+/')
         
         # 用户A关闭了会话
-        self.vBrowser.quit()
+        self.browser.quit()
         
         # 用户B开启了一个新会话
-        self.vBrowser = webdriver.Firefox()
+        self.browser = webdriver.Firefox()
         
         # 用户B开始访问清单首页
         # 页面中看不到用户A的清单
-        self.vBrowser.get(self.live_server_url)
-        vPageText = self.vBrowser.find_element_by_tag_name('body').text
-        self.assertNotIn('买一些孔雀羽毛', vPageText)
-        self.assertNotIn('做假蝇', vPageText)
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('买一些孔雀羽毛', page_text)
+        self.assertNotIn('做假蝇', page_text)
         
         # 用户B新建了一个待办事项
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
-        vInputBox.send_keys('买一盒牛奶')
-        vInputBox.send_keys(Keys.ENTER)
-        self.waitForRowInListTable('1: 买一盒牛奶')
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('买一盒牛奶')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: 买一盒牛奶')
         
         # 用户B获得了自己唯一的URL
-        vUserBUrl = self.vBrowser.current_url
-        self.assertRegex(vUserBUrl, '/lists/.+/')
-        self.assertNotEqual(vUserAUrl, vUserBUrl)
+        user_url_2 = self.browser.current_url
+        self.assertRegex(user_url_2, '/lists/.+/')
+        self.assertNotEqual(user_url_1, user_url_2)
         
         # 用户B看不到用户A的清单
         # 只能看到自己的清单
-        vPageText = self.vBrowser.find_element_by_tag_name('body').text
-        self.assertNotIn('买一些孔雀羽毛', vPageText)
-        self.assertIn('买一盒牛奶', vPageText)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('买一些孔雀羽毛', page_text)
+        self.assertIn('买一盒牛奶', page_text)
 
         # 操作完毕
 
 
-    def test_LayoutAndStyling(self):
+    def test_layout_and_styling(self):
         # 访问应用首页
-        self.vBrowser.get(self.live_server_url)
-        self.vBrowser.set_window_size(1024, 768)
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
         
         # 输入框居中显示
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
+        input_box = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual( \
-            vInputBox.location['x'] + vInputBox.size['width'] / 2, \
+            input_box.location['x'] + input_box.size['width'] / 2, \
             512, \
             delta=10 \
         )
         
-        vInputBox.send_keys('testing')
-        vInputBox.send_keys(Keys.ENTER)
-        self.waitForRowInListTable('1: testing')
+        input_box.send_keys('testing')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
         
         # 输入框居中显示
-        vInputBox = self.vBrowser.find_element_by_id('id_new_item')
+        input_box = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual( \
-            vInputBox.location['x'] + vInputBox.size['width'] / 2, \
+            input_box.location['x'] + input_box.size['width'] / 2, \
             512, \
             delta=10 \
         )
