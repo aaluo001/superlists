@@ -30,6 +30,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         if (staging_server): self.live_server_url = 'http://{}'.format(staging_server)
   
     def tearDown(self):
+        self.browser.refresh()
         self.browser.quit()
 
     def wait_for_row_in_list_table(self, row_text):
