@@ -135,7 +135,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertAlmostEqual( \
             input_box.location['x'] + input_box.size['width'] / 2, \
             512, \
-            delta=10 \
+            delta=20 \
         )
         
         input_box.send_keys('testing')
