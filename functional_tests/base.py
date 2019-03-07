@@ -31,6 +31,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         #self.browser.quit()
         self.browser.close()
 
+
     def wait_for_row_in_list_table(self, row_text):
         start_time = time.time()
         while True:
@@ -40,6 +41,16 @@ class FunctionalTest(StaticLiveServerTestCase):
                 self.assertIn(row_text, [ row.text for row in rows ])
                 break
             
+            except (AssertionError, WebDriverException) as e:
+                if ((time.time() - start_time) > MAX_WAIT): raise e
+                time.sleep(1)
+
+
+    def wait_for(self, func):
+        start_time = time.time()
+        while True:
+            try:
+                return func()
             except (AssertionError, WebDriverException) as e:
                 if ((time.time() - start_time) > MAX_WAIT): raise e
                 time.sleep(1)
