@@ -1,51 +1,17 @@
 #!python
 # coding: gbk
 #------------------------------
-# tests.py
+# test_simple_list_creation.py
 #------------------------------
 # author: TangJianwei
 # update: 2019-02-25
 #------------------------------
-import os
-import time
-import unittest
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
-
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .base import FunctionalTest
 
 
-# 等待服务器响应时间(10秒)
-# 10秒足以捕获潜在的问题和不可预知的缓慢因素
-MAX_WAIT = 10
-
-
-class NewVisitorTest(StaticLiveServerTestCase):
-  
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        staging_server = os.getenv('STAGING_SERVER')
-        if (staging_server): self.live_server_url = 'http://{}'.format(staging_server)
-  
-    def tearDown(self):
-        self.browser.refresh()
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        start_time = time.time()
-        while True:
-            try:
-                list_table = self.browser.find_element_by_id('id_list_table')
-                rows = list_table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [ row.text for row in rows ])
-                break
-            
-            except (AssertionError, WebDriverException) as e:
-                if ((time.time() - start_time) > MAX_WAIT): raise e
-                time.sleep(1)
-
+class NewVisitorTest(FunctionalTest):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 访问应用首页
@@ -123,30 +89,4 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('买一盒牛奶', page_text)
 
         # 操作完毕
-
-
-    def test_layout_and_styling(self):
-        # 访问应用首页
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-        
-        # 输入框居中显示
-        input_box = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual( \
-            input_box.location['x'] + input_box.size['width'] / 2, \
-            512, \
-            delta=20 \
-        )
-        
-        input_box.send_keys('testing')
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-        
-        # 输入框居中显示
-        input_box = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual( \
-            input_box.location['x'] + input_box.size['width'] / 2, \
-            512, \
-            delta=10 \
-        )
 
