@@ -22,6 +22,11 @@
                         <input name="item_text" id="id_new_item" class="form-control input-lg" 
                             placeholder="试试输入一个待办事项吧" size="50" />
                         {% csrf_token %}
+                        {% if error %}
+                            <div class="form-group has-error">
+                                <span class="help-block">{{ error }}</span>
+                            </div>
+                        {% endif %}
                     </form>
                 </div>
             </div>

@@ -23,7 +23,7 @@ class ItemValidationTest(FunctionalTest):
         # 提示待办事项不能为空
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
-            '你不能提交一个空的待办事项！'
+            '您不能提交一个空的待办事项！'
         ))
         
         # 输入一些文字后再次提交
@@ -39,7 +39,7 @@ class ItemValidationTest(FunctionalTest):
         # 页面刷新后显示了一个类似的错误消息
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
-            '你不能提交一个空的待办事项！'
+            '您不能提交一个空的待办事项！'
         ))
 
         # 然后输入一些文字后再次提交
