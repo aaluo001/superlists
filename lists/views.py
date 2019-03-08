@@ -33,17 +33,20 @@ def new_list(request):
 
 def view_list(request, list_id):
     list_object  = List.objects.get(id=list_id)
+    error = None
+    
+    if (request.method == 'POST'):
+        try:
+            item_object = Item(text=request.POST['item_text'], list=list_object)
+            item_object.full_clean()
+            item_object.save()
+            return redirect('/lists/{}/'.format(list_object.id))
+        except ValidationError as e:
+            error = '您不能提交一个空的待办事项！'
+    
     context = { \
         'list': list_object,
+        'error': error,
     }
     return render(request, 'list.html', context)
-
-
-def add_item(request, list_id):
-    list_object  = List.objects.get(id=list_id)
-    Item.objects.create( \
-        text=request.POST['item_text'], \
-        list=list_object \
-    )
-    return redirect('/lists/{}/'.format(list_object.id))
 

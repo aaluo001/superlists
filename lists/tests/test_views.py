@@ -20,14 +20,14 @@ class HomePageTest(TestCase):
 
 class NewListTest(TestCase):
 
-    def test_can_save_a_post_request(self):
+    def test_can_save_a_POST_request(self):
         response = self.client.post('/lists/new', data={'item_text': 'A new list item'})
 
         self.assertEqual(Item.objects.count(), 1)
         item_object = Item.objects.first()
         self.assertEqual(item_object.text, 'A new list item')
 
-    def test_redirects_after_post(self):
+    def test_redirects_after_POST(self):
         response = self.client.post('/lists/new', data={'item_text': 'A new list item'})
         list_object = List.objects.first()
         self.assertRedirects(response, '/lists/{}/'.format(list_object.id))
@@ -73,31 +73,38 @@ class ViewListTest(TestCase):
         response = self.client.get('/lists/{}/'.format(list_object.id))
         self.assertEqual(response.context['list'], list_object)
 
-
-class AddItemTest(TestCase):
-    
-    def test_can_save_a_post_request_to_an_existing_list(self):
+    def test_can_save_a_POST_request_to_an_existing_list(self):
         other_list_object = List.objects.create()
         list_object = List.objects.create()
-        
-        response = self.client.post( \
-            '/lists/{}/add_item'.format(list_object.id), \
-            data={'item_text': 'A new list item for an existing list'} \
+
+        self.client.post(
+            '/lists/{}/'.format(list_object.id), \
+            data={'item_text': 'A new item for an existing list'} \
         )
-        
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, 'A new list item for an existing list')
-        self.assertEqual(new_item.list, list_object)
 
-    def test_redirects_after_post(self):
+        self.assertEqual(Item.objects.count(), 1)
+        item_object = Item.objects.first()
+        self.assertEqual(item_object.text, 'A new item for an existing list')
+        self.assertEqual(item_object.list, list_object)
+
+    def test_POST_redirects_to_list_view(self):
         other_list_object = List.objects.create()
         list_object = List.objects.create()
-        
-        response = self.client.post( \
-            '/lists/{}/add_item'.format(list_object.id), \
-            data={'item_text': 'A new list item for an existing list'} \
+
+        response = self.client.post(
+            '/lists/{}/'.format(list_object.id), \
+            data={'item_text': 'A new item for an existing list'} \
         )
 
         self.assertRedirects(response, '/lists/{}/'.format(list_object.id))
+
+    def test_validation_errors_end_up_on_list_page(self):
+        list_object = List.objects.create()
+        response = self.client.post(
+            '/lists/{}/'.format(list_object.id), \
+            data={'item_text': ''} \
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list.html')
+        self.assertContains(response, "您不能提交一个空的待办事项！")
 
