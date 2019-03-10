@@ -28,7 +28,7 @@ def new_list(request):
     except ValidationError as e:
         list_object.delete()
         return render(request, 'home.html', {'error': "您不能提交一个空的待办事项！"})
-    return redirect('/lists/{}/'.format(list_object.id))
+    return redirect(list_object)
 
 
 def view_list(request, list_id):
@@ -40,7 +40,7 @@ def view_list(request, list_id):
             item_object = Item(text=request.POST['item_text'], list=list_object)
             item_object.full_clean()
             item_object.save()
-            return redirect('/lists/{}/'.format(list_object.id))
+            return redirect(list_object)
         except ValidationError as e:
             error = '您不能提交一个空的待办事项！'
     
