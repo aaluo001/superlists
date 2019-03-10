@@ -7,9 +7,10 @@
 # update: 2019-02-25
 #------------------------------
 from django.test import TestCase
+
 from lists.models import Item
 from lists.models import List
-from lists.forms import ItemForm
+from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 
 
 class HomePageTest(TestCase):
@@ -37,16 +38,27 @@ class NewListTest(TestCase):
         list_object = List.objects.first()
         self.assertRedirects(response, '/lists/{}/'.format(list_object.id))
 
-    def test_validation_errors_are_sent_back_to_home_page_template(self):
-        response = self.client.post('/lists/new', data={'text': ''})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'home.html')
-        self.assertContains(response, "您不能提交一个空的待办事项！")
 
-    def test_invalid_list_items_arent_saved(self):
-        self.client.post('/lists/new', data={'text': ''})
+    def post_invalid_input(self):
+        return self.client.post('/lists/new', data={'text': ''})
+
+    def test_for_invalid_input_are_nothing_saved_to_db(self):
+        self.post_invalid_input()
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
+
+    def test_for_invalid_input_passes_form_to_template(self):
+        response = self.post_invalid_input()
+        self.assertIsInstance(response.context['form'], ItemForm)
+
+    def test_for_invalid_input_renders_home_page_template(self):
+        response = self.post_invalid_input()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+
+    def test_for_invalid_input_shows_error_on_page(self):
+        response = self.post_invalid_input()
+        self.assertContains(response, EMPTY_ITEM_ERROR)
 
 
 class ViewListTest(TestCase):
@@ -95,21 +107,34 @@ class ViewListTest(TestCase):
     def test_POST_redirects_to_list_view(self):
         other_list_object = List.objects.create()
         list_object = List.objects.create()
-
         response = self.client.post(
             '/lists/{}/'.format(list_object.id), \
             data={'text': 'A new item for an existing list'} \
         )
-
         self.assertRedirects(response, '/lists/{}/'.format(list_object.id))
 
-    def test_validation_errors_end_up_on_list_page(self):
+
+    def post_invalid_input(self):
         list_object = List.objects.create()
-        response = self.client.post(
+        return self.client.post(
             '/lists/{}/'.format(list_object.id), \
             data={'text': ''} \
         )
+
+    def test_for_invalid_input_nothing_saved_to_db(self):
+        self.post_invalid_input()
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_for_invalid_input_passes_form_to_template(self):
+        response = self.post_invalid_input()
+        self.assertIsInstance(response.context['form'], ItemForm)
+
+    def test_for_invalid_input_renders_list_template(self):
+        response = self.post_invalid_input()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list.html')
-        self.assertContains(response, "您不能提交一个空的待办事项！")
+
+    def test_for_invalid_input_shows_error_on_page(self):
+        response = self.post_invalid_input()
+        self.assertContains(response, EMPTY_ITEM_ERROR)
 

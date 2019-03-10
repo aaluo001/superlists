@@ -8,6 +8,7 @@
 #------------------------------
 from django.test import TestCase
 from django.core.exceptions import ValidationError
+
 from lists.models import Item
 from lists.models import List
 

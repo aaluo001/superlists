@@ -7,6 +7,7 @@
 # update: 2019-03-10
 #------------------------------
 from django.test import TestCase
+
 from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 
 
