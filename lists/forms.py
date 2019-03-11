@@ -32,6 +32,8 @@ class ItemForm(ModelForm):
             }
         }
 
-
+    def save(self, for_list):
+        self.instance.list = for_list
+        return super().save()
 
 

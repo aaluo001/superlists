@@ -7,7 +7,6 @@
 # update: 2019-02-25
 #------------------------------
 from selenium.webdriver.common.keys import Keys
-#from unittest import skip
 from .base import FunctionalTest
 
 
@@ -56,4 +55,26 @@ class ItemValidationTest(FunctionalTest):
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: 买一盒牛奶')
         self.wait_for_row_in_list_table('2: 泡杯茶')
+
+
+    def test_cannot_add_duplicate_items(self):
+        # 新建一个清单
+        self.browser.get(self.live_server_url)
+        input_box = self.get_item_input_box()
+        input_box.send_keys('买一盒牛奶')
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: 买一盒牛奶')
+
+        # 输入一个重复的待办事项
+        self.browser.get(self.live_server_url)
+        input_box = self.get_item_input_box()
+        input_box.send_keys('买一盒牛奶')
+        input_box.send_keys(Keys.ENTER)
+
+        # 于是，得到一条错误消息
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_css_selector('.has-error').text,
+            '您已经输入一条一模一样的待办事项啦！'
+        ))
+
 

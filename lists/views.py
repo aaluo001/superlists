@@ -22,7 +22,7 @@ def new_list(request):
     form = ItemForm(data=request.POST)
     if (form.is_valid()):
         list_object = List.objects.create()
-        Item.objects.create(text=request.POST['text'], list=list_object)
+        form.save(for_list=list_object)
         return redirect(list_object)
     else:
         return render(request, 'home.html', {'form': form})
@@ -35,7 +35,7 @@ def view_list(request, list_id):
     if (request.method == 'POST'):
         form = ItemForm(data=request.POST)
         if (form.is_valid()):
-            Item.objects.create(text=request.POST['text'], list=list_object)
+            form.save(for_list=list_object)
             return redirect(list_object)
     else:
         form = ItemForm()
