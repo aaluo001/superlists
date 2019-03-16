@@ -74,7 +74,7 @@ class ItemValidationTest(FunctionalTest):
         # 于是，得到一条错误消息
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
-            '您已经输入一条一模一样的待办事项啦！'
+            '您已经有一条同样的待办事项！'
         ))
 
 

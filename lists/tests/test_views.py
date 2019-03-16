@@ -138,3 +138,16 @@ class ViewListTest(TestCase):
         response = self.post_invalid_input()
         self.assertContains(response, EMPTY_ITEM_ERROR)
 
+
+    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
+        list_object = List.objects.create()
+        Item.objects.create(list=list_object, text='do me')
+        response = self.client.post(
+            '/lists/{}/'.format(list_object.id), \
+            data={'text': 'do me'} \
+        )
+        
+        self.assertContains(response, '您已经输入一条同样的待办事项！')
+        self.assertTemplateUsed(response, 'list.html')
+        self.assertEqual(Item.objects.count(), 1)
+
