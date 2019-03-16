@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 
 from lists.models import Item
 from lists.models import List
-from lists.forms import ItemForm
+from lists.forms import ItemForm, ExistingListItemForm
 
 
 def home_page(request):
@@ -33,12 +33,14 @@ def view_list(request, list_id):
     form = None
     
     if (request.method == 'POST'):
-        form = ItemForm(data=request.POST)
+        form = ExistingListItemForm(
+            for_list=list_object, data=request.POST
+        )
         if (form.is_valid()):
-            form.save(for_list=list_object)
+            form.save()
             return redirect(list_object)
     else:
-        form = ItemForm()
+        form = ExistingListItemForm(for_list=list_object)
 
     context = { \
         'list': list_object,

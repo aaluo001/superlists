@@ -11,7 +11,7 @@ from django.test import TestCase
 from lists.models import List, Item
 from lists.forms import (
     ItemForm, ExistingListItemForm,
-    EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR
+    EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR,
 )
 
 

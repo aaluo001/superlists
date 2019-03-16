@@ -66,7 +66,6 @@ class ItemValidationTest(FunctionalTest):
         self.wait_for_row_in_list_table('1: 买一盒牛奶')
 
         # 输入一个重复的待办事项
-        self.browser.get(self.live_server_url)
         input_box = self.get_item_input_box()
         input_box.send_keys('买一盒牛奶')
         input_box.send_keys(Keys.ENTER)

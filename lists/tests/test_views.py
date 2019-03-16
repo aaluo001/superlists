@@ -10,7 +10,10 @@ from django.test import TestCase
 
 from lists.models import Item
 from lists.models import List
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from lists.forms import (
+    ItemForm, ExistingListItemForm,
+    EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR,
+)
 
 
 class HomePageTest(TestCase):
@@ -67,6 +70,12 @@ class ViewListTest(TestCase):
         list_object = List.objects.create()
         response = self.client.get('/lists/{}/'.format(list_object.id))
         self.assertTemplateUsed(response, 'list.html')
+
+    def test_displays_item_form(self):
+        list_object = List.objects.create()
+        response = self.client.get('/lists/{}/'.format(list_object.id))
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
+        self.assertContains(response, 'name="text"')
 
     def test_displays_only_items_for_that_list(self):
         list_object = List.objects.create()
@@ -127,7 +136,7 @@ class ViewListTest(TestCase):
 
     def test_for_invalid_input_passes_form_to_template(self):
         response = self.post_invalid_input()
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
 
     def test_for_invalid_input_renders_list_template(self):
         response = self.post_invalid_input()
@@ -147,7 +156,7 @@ class ViewListTest(TestCase):
             data={'text': 'do me'} \
         )
         
-        self.assertContains(response, '您已经输入一条同样的待办事项！')
+        self.assertContains(response, DUPLICATE_ITEM_ERROR)
         self.assertTemplateUsed(response, 'list.html')
         self.assertEqual(Item.objects.count(), 1)
 
