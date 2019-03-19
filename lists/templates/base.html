@@ -52,5 +52,15 @@
             </div>
         </div>
     </footer>
+
+    <script src="{% static 'jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'lists.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            window.superlists.initialize();
+        });
+    </script>
+
 </body>
 </html>
