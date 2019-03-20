@@ -23,7 +23,7 @@ class NewVisitorTest(FunctionalTest):
         
         # 页面有一个待办事项文本输入框
         input_box = self.get_item_input_box()
-        self.assertEqual(input_box.get_attribute('placeholder'), '试试输入一个待办事项吧')
+        self.assertEqual(input_box.get_attribute('placeholder'), '新建一个待办事项')
         
         
         # 输入第一个待办事项

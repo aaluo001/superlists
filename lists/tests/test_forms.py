@@ -19,7 +19,7 @@ class ItemFormTest(TestCase):
 
     def test_form_renders_item_text_input(self):
         form = ItemForm()
-        self.assertIn('placeholder="试试输入一个待办事项吧"', form.as_p())
+        self.assertIn('placeholder="新建一个待办事项"', form.as_p())
         self.assertIn('class="form-control input-lg"', form.as_p())
 
     def test_form_validation_for_blank_items(self):
@@ -42,7 +42,7 @@ class ExistingListItemFormTest(TestCase):
     def test_form_renders_item_text_input(self):
         list_object = List.objects.create()
         form = ExistingListItemForm(for_list=list_object)
-        self.assertIn('placeholder="试试输入一个待办事项吧"', form.as_p())
+        self.assertIn('placeholder="新建一个待办事项"', form.as_p())
         self.assertIn('class="form-control input-lg"', form.as_p())
 
     def test_form_validation_for_blank_items(self):

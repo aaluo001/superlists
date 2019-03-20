@@ -24,7 +24,7 @@ class ItemForm(ModelForm):
         fields = ('text', )
         widgets = {
             'text': forms.fields.TextInput(attrs={
-                'placeholder': '试试输入一个待办事项吧',
+                'placeholder': '新建一个待办事项',
                 'class': 'form-control input-lg',
             })
         }
