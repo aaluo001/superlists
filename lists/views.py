@@ -1,7 +1,7 @@
 #!python
 # coding: gbk
 #------------------------------
-# views.py
+# lists.views.py
 #------------------------------
 # author: TangJianwei
 # update: 2019-02-25

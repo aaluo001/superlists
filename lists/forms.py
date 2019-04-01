@@ -1,7 +1,7 @@
 #!python
 # coding: gbk
 #------------------------------
-# forms.py
+# lists.forms.py
 #------------------------------
 # author: TangJianwei
 # update: 2019-03-10

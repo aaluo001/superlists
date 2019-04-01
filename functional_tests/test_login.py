@@ -13,8 +13,8 @@ from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 
 
-TEST_EMAIL = 'aaluo008@163.com'
-SUBJECT = '[from superlists]登录验证'
+TEST_EMAIL = 'abc@163.com'
+SUBJECT = '[Superlists]登录验证'
 
 
 class LoginTest(FunctionalTest):
@@ -30,7 +30,7 @@ class LoginTest(FunctionalTest):
         
         # 出现一天消息，表示电子邮件已经发出去了
         self.wait_for(lambda: self.assertIn(
-            '电子邮件发送成功',
+            '邮件发送成功',
             self.browser.find_element_by_tag_name('body').text
         ))
         
@@ -41,7 +41,7 @@ class LoginTest(FunctionalTest):
         
         # 邮件中有个URL链接
         self.assertIn('请使用下面的链接进行登录验证', email.body)
-        url_search = re.search('http://.+/accounts/login\?uid=.+$', email.body)
+        url_search = re.search('http://.+/accounts/login\?token=.+$', email.body)
         if (not url_search):
             self.fail('Could not find url in email body: \n{}'.format(email.body))
         url = url_search.group(0)
@@ -52,8 +52,8 @@ class LoginTest(FunctionalTest):
         
         # 登录成功
         self.wait_for(
-            lambda: self.browser.find_element_by_link_text('Log out')
+            lambda: self.browser.find_element_by_link_text('退出')
         )
-        navbar = self.browser.find_element_by_css_selector('.navbar')
+        navbar = self.browser.find_element_by_css_selector('li.navbar-text')
         self.assertIn(TEST_EMAIL, navbar.text)
 
