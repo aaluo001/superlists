@@ -21,7 +21,7 @@
                 {% if user.email %}
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-text">µÇÂ¼ÓÊ¼þ: {{ user.email }}</li>
-                        <li ><a href="#">ÍË³ö</a></li>
+                        <li ><a href="{% url 'logout' %}">ÍË³ö</a></li>
                     </ul>
                 {% else %}
                     <form class="navbar-form navbar-right" method="POST" action="{% url 'send_login_email' %}">
