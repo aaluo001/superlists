@@ -134,7 +134,6 @@ FILE_CHARSET = 'gbk'
 # Set email
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_HOST_USER = 'superlists@163.com'
-# export EMAIL_PASSWORD="superlists1234"
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True

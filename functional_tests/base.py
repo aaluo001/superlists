@@ -18,6 +18,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 # 10秒足以捕获潜在的问题和不可预知的缓慢因素
 MAX_WAIT = 10
 
+# 过渡服务器
+STAGING_SERVER = 'http://tjw-superlists-staging.site'
+
 
 def wait(func):
     def modified_func(*args, **kwargs):
@@ -37,8 +40,9 @@ class FunctionalTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.browser = webdriver.Firefox()
-        staging_server = os.getenv('STAGING_SERVER')
-        if (staging_server): self.live_server_url = 'http://{}'.format(staging_server)
+        self.staging_tests = os.getenv('STAGING_TESTS')
+        if (self.staging_tests):
+            self.live_server_url = STAGING_SERVER
   
     def tearDown(self):
         #self.browser.refresh()
