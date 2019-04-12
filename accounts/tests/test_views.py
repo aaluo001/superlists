@@ -9,7 +9,9 @@
 from unittest.mock import patch, call
 
 from django.test import TestCase
-from accounts.views import SEND_EMAIL_SUCCESSED
+from accounts.views import (
+    SUBJECT, SEND_EMAIL_SUCCESSED
+)
 from accounts.models import Token
 import accounts.views
 
@@ -32,9 +34,9 @@ class SendLoginEmailViewTest(TestCase):
 
         self.assertTrue(mock_send_mail.called)
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
-        self.assertIn('[Superlists]登录验证', subject)
-        self.assertIn('登录验证', body)
-        self.assertIn('登录验证', kwargs['html_message'])
+        self.assertEqual(SUBJECT, subject)
+        self.assertIn('为此我们给您发送了一条链接，您可以使用这条链接进行登录', body)
+        self.assertIn('为此我们给您发送了一条链接，您可以使用这条链接进行登录', kwargs['html_message'])
         self.assertEqual(from_email, 'superlists@163.com')
         self.assertEqual(to_list, ['abc@163.com', ])
 

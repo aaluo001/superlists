@@ -36,8 +36,8 @@ class LoginTest(FunctionalTest):
         # 查看电子邮件
         email = mail.outbox[0]
         self.assertIn(TEST_EMAIL, email.to)
-        self.assertIn('[Superlists]登录验证', email.subject)
-        self.assertIn('登录验证', email.body)
+        self.assertIn('我们给您发送了一条登录验证用的链接', email.subject)
+        self.assertIn('为此我们给您发送了一条链接，您可以使用这条链接进行登录', email.body)
 
         # 邮件中有个URL链接
         url_search = re.search('http://.+/accounts/login\?token=.+$', email.body)
