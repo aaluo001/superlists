@@ -16,8 +16,15 @@ from accounts.models import Token
 
 SUBJECT = '[Superlists]登录验证'
 
-MESSAGE_BODY = '''
-    请使用下面的链接进行登录验证: \n\n{}
+TEXT_MESSAGE = '请使用下面的链接进行登录验证: \n{}'
+
+HTML_MESSAGE = '''
+    <html>
+    <body>
+        请使用下面的链接进行登录验证: <br>
+        <a href="{0}" target="_blank">{0}</a>
+    </body>
+    </html>
 '''
 
 FROM_EMAIL = 'superlists@163.com'
@@ -31,10 +38,14 @@ SEND_EMAIL_SUCCESSED = '''
 def send_login_email(request):
     email = request.POST['email']
     token_object = Token.objects.create(email=email)
+
     url = request.build_absolute_uri(
         reverse('login') + '?token={}'.format(token_object.uid)
     )
-    send_mail(SUBJECT, MESSAGE_BODY.format(url), FROM_EMAIL, [email])
+    text_message = TEXT_MESSAGE.format(url)
+    html_message = HTML_MESSAGE.format(url)
+    send_mail(SUBJECT, text_message, FROM_EMAIL, [email, ], html_message=html_message)
+
     messages.success(request, SEND_EMAIL_SUCCESSED)
     return redirect('/')
 

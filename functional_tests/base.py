@@ -19,7 +19,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 MAX_WAIT = 10
 
 # ¹ý¶É·þÎñÆ÷
-STAGING_SERVER = 'http://tjw-superlists-staging.site'
+STAGING_SERVER = 'http://www.tjw-superlists-staging.site/'
 
 
 def wait(func):
@@ -31,7 +31,6 @@ def wait(func):
             except (AssertionError, WebDriverException) as e:
                 if ((time.time() - start_time) > MAX_WAIT): raise e
                 time.sleep(0.5)
-    
     return modified_func
 
 
@@ -40,9 +39,12 @@ class FunctionalTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.staging_tests = os.getenv('STAGING_TESTS')
+        self.staging_tests = False
+        if (os.getenv('STAGING_TESTS') == 'yes'):
+            self.staging_tests = True
         if (self.staging_tests):
             self.live_server_url = STAGING_SERVER
+  
   
     def tearDown(self):
         #self.browser.refresh()
@@ -56,7 +58,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @wait
     def wait_for(self, func):
-        return func
+        return func()
 
     @wait
     def wait_for_row_in_list_table(self, row_text):

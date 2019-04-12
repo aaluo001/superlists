@@ -32,7 +32,9 @@ class SendLoginEmailViewTest(TestCase):
 
         self.assertTrue(mock_send_mail.called)
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
-        self.assertEqual(subject, '[Superlists]登录验证')
+        self.assertIn('[Superlists]登录验证', subject)
+        self.assertIn('登录验证', body)
+        self.assertIn('登录验证', kwargs['html_message'])
         self.assertEqual(from_email, 'superlists@163.com')
         self.assertEqual(to_list, ['abc@163.com', ])
 
@@ -66,6 +68,7 @@ class SendLoginEmailViewTest(TestCase):
         token_object = Token.objects.first()
         excepted_url = 'http://testserver/accounts/login?token={}'.format(token_object.uid)
         self.assertIn(excepted_url, body)
+
 
 
 @patch('accounts.views.auth')

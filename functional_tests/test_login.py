@@ -14,7 +14,6 @@ from .base import FunctionalTest
 
 
 TEST_EMAIL = 'abc@163.com'
-SUBJECT = '[Superlists]登录验证'
 
 
 class LoginTest(FunctionalTest):
@@ -28,7 +27,7 @@ class LoginTest(FunctionalTest):
         input_email.send_keys(TEST_EMAIL)
         input_email.send_keys(Keys.ENTER)
         
-        # 出现一天消息，表示电子邮件已经发出去了
+        # 出现一条消息，表示电子邮件已经发出去了
         self.wait_for(lambda: self.assertIn(
             '邮件发送成功',
             self.browser.find_element_by_tag_name('body').text
@@ -37,10 +36,10 @@ class LoginTest(FunctionalTest):
         # 查看电子邮件
         email = mail.outbox[0]
         self.assertIn(TEST_EMAIL, email.to)
-        self.assertEqual(SUBJECT, email.subject)
-        
+        self.assertIn('[Superlists]登录验证', email.subject)
+        self.assertIn('登录验证', email.body)
+
         # 邮件中有个URL链接
-        self.assertIn('请使用下面的链接进行登录验证', email.body)
         url_search = re.search('http://.+/accounts/login\?token=.+$', email.body)
         if (not url_search):
             self.fail('Could not find url in email body: \n{}'.format(email.body))
