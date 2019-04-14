@@ -13,14 +13,12 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
+from .server_tools import STAGING_SERVER, reset_database
+
 
 # 等待服务器响应时间(10秒)
 # 10秒足以捕获潜在的问题和不可预知的缓慢因素
 MAX_WAIT = 10
-
-# 过渡服务器
-STAGING_SERVER = 'http://www.tjw-superlists-staging.site/'
-
 
 def wait(func):
     def modified_func(*args, **kwargs):
@@ -34,18 +32,20 @@ def wait(func):
     return modified_func
 
 
-
 class FunctionalTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.browser = webdriver.Firefox()
+        
         self.staging_tests = False
         if (os.getenv('STAGING_TESTS') == 'yes'):
             self.staging_tests = True
+        
         if (self.staging_tests):
-            self.live_server_url = STAGING_SERVER
-  
-  
+            self.live_server_url = 'http://' + STAGING_SERVER
+            reset_database()
+
+
     def tearDown(self):
         #self.browser.refresh()
         #self.browser.quit()
