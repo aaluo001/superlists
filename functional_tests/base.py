@@ -43,6 +43,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         
         if (self.staging_tests):
             self.live_server_url = 'http://' + STAGING_SERVER
+            if (not os.getenv('STAGING_SERVER_PASSWORD')):
+                self.fail('STAGING_SERVER_PASSWORD is not defined')
             reset_database()
 
 
