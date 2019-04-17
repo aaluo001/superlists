@@ -77,7 +77,7 @@ class ItemValidationTest(FunctionalTest):
         # 于是，得到一条错误消息
         self.wait_for(lambda: self.assertEqual(
             self.get_error_element().text,
-            '您已经有一条同样的待办事项！'
+            '您已经提交一个同样的待办事项！'
         ))
 
 

@@ -19,11 +19,11 @@ class NewVisitorTest(FunctionalTest):
         
         # 页面的标题和开头都包含 "To-Do" 这个词
         self.assertIn('待办事项', self.browser.title)
-        self.assertIn('待办事项', self.browser.find_element_by_tag_name('h1').text)
+        self.assertIn('新建待办事项', self.browser.find_element_by_tag_name('h1').text)
         
         # 页面有一个待办事项文本输入框
         input_box = self.get_item_input_box()
-        self.assertEqual(input_box.get_attribute('placeholder'), '新建一个待办事项')
+        self.assertEqual(input_box.get_attribute('placeholder'), '试试输入一个待办事项')
         
         
         # 输入第一个待办事项

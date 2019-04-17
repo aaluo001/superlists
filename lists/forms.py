@@ -14,7 +14,7 @@ from lists.models import Item
 
 
 EMPTY_ITEM_ERROR = '您不能提交一个空的待办事项！'
-DUPLICATE_ITEM_ERROR = '您已经有一条同样的待办事项！'
+DUPLICATE_ITEM_ERROR = '您已经提交一个同样的待办事项！'
 
 
 class ItemForm(ModelForm):
@@ -24,7 +24,7 @@ class ItemForm(ModelForm):
         fields = ('text', )
         widgets = {
             'text': forms.fields.TextInput(attrs={
-                'placeholder': '新建一个待办事项',
+                'placeholder': '试试输入一个待办事项',
                 'class': 'form-control input-lg',
             })
         }
