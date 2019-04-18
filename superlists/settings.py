@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'superlists.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'superlists',
-        'USER': 'postgres',
-        'PASSWORD': 'dev2019*',
+        'NAME': 'dev001',
+        'USER': 'dev001',
+        'PASSWORD': 'dev001#',
     }
 }
 
