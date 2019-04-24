@@ -3,13 +3,10 @@
 #====================
 
 # 创建测试用户dev001
-  create user dev001 with createdb password 'dev001#';
+  CREATE ROLE dev001 LOGIN PASSWORD 'dev001#' CREATEDB;
   
 # 创建和用户名同名的数据库
-  create database dev001;
-
-# 改变数据所属到用户dev001
-  alter database dev001 owner to dev001;
+  CREATE DATABASE dev001 WITH OWNER = dev001;
 
 
 # 修改settings.py
