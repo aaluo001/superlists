@@ -19,12 +19,12 @@ from .base import FunctionalTest
 
 class LoginTest(FunctionalTest):
 
-    def wait_for_email(self, test_email, test_email_password):
+    def wait_for_email(self, test_email):
         if (self.staging_tests):
             inbox = poplib.POP3_SSL('pop.163.com')
             try:
                 inbox.user(test_email)
-                inbox.pass_(test_email_password)
+                inbox.pass_(os.environ['TEST_EMAIL_PASSWORD'])
                 start_time = time.time()
                 
                 while (time.time() - start_time) < 60:
@@ -58,9 +58,6 @@ class LoginTest(FunctionalTest):
         test_email_password = None
         if (self.staging_tests):
             test_email = 'superlists_tests@163.com'
-            test_email_password = os.getenv('TEST_EMAIL_PASSWORD')
-            if (not test_email_password):
-                self.fail('TEST_EMAIL_PASSWORD is not defined')
         else:
             test_email = 'abc@163.com'
         
@@ -76,7 +73,7 @@ class LoginTest(FunctionalTest):
         ))
         
         # 查看电子邮件
-        email_body = self.wait_for_email(test_email, test_email_password)
+        email_body = self.wait_for_email(test_email)
         self.assertIn('为此我们给您发送了一条链接，您可以使用这条链接进行登录', email_body)
 
         # 邮件中有个URL链接

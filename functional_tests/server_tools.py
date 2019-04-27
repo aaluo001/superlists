@@ -21,7 +21,7 @@ def _manage():
     return '~/sites/{0}/virtualenv/bin/python ~/sites/{0}/source/manage.py'.format(STAGING_SERVER)
 
 def _host_string():
-    env.password = os.getenv('STAGING_SERVER_PASSWORD')
+    env.password = os.environ['STAGING_SERVER_PASSWORD']
     return STAGING_USER + '@' + STAGING_HOST
 
 

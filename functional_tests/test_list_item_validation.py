@@ -6,6 +6,7 @@
 # author: TangJianwei
 # update: 2019-02-25
 #------------------------------
+import time
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 
@@ -102,6 +103,7 @@ class ItemValidationTest(FunctionalTest):
         # 再输入内容，错误消息消失
         input_box = self.get_item_input_box()
         input_box.send_keys('a')
+        time.sleep(1)
 
         self.wait_for(lambda: self.assertFalse(
             self.get_error_element().is_displayed()
