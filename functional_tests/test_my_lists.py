@@ -40,13 +40,28 @@ class MyListsTest(FunctionalTest):
 
 
     def test_logged_in_users_lists_are_saved_as_my_lists(self):
-        email = 'abc@163.com'
-        self.browser.get(self.live_server_url)
-        self.wait_to_be_logged_out(email)
-        
         ## 测试已经是登录用户了
-        self.create_pre_authenticated_session(email)
+        self.create_pre_authenticated_session('abc@163.com')
+        
+        # 访问首页，新建一个清单
         self.browser.get(self.live_server_url)
-        self.wait_to_be_logged_in(email)
+        self.add_list_item('Reticulate splines')
+        self.add_list_item('Immanentize eschaton')
+        first_list_url = self.browser.current_url
+        
+        # 出现"待办事项清单"的链接
+        self.browser.find_element_by_link_text("待办事项清单").click()
+        
+        # 待办事项清单页面有刚刚新建的清单
+        # 而且清单根据第一个待办事项命名
+        self.wait_for(lambda:
+            self.browser.find_element_by_link_text('Reticulate splines')
+        )
+        self.browser.find_element_by_link_text('Reticulate splines').click()
+        self.wait_for(lambda:
+            self.assertEqual(self.browser.current_url, first_list_url)
+        )
+        
+        self.fail('Finish the test!')
 
 

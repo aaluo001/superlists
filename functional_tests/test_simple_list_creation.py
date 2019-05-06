@@ -24,24 +24,11 @@ class NewVisitorTest(FunctionalTest):
         # 页面有一个待办事项文本输入框
         input_box = self.get_item_input_box()
         self.assertEqual(input_box.get_attribute('placeholder'), '试试输入一个待办事项')
-        
-        
-        # 输入第一个待办事项
-        input_box.send_keys('买一些孔雀羽毛')
-        input_box.send_keys(Keys.ENTER)
-        
-        # 查看刚刚输入的待办事项
-        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
-        
 
+        # 输入第一个待办事项
+        self.add_list_item('买一些孔雀羽毛')
         # 输入第二个待办事项
-        input_box = self.get_item_input_box()
-        input_box.send_keys('用孔雀羽毛做假蝇')
-        input_box.send_keys(Keys.ENTER)
-        
-        # 再次查看刚刚输入的待办事项
-        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
-        self.wait_for_row_in_list_table('2: 用孔雀羽毛做假蝇')
+        self.add_list_item('用孔雀羽毛做假蝇')
 
         # 操作完毕
 
@@ -49,10 +36,8 @@ class NewVisitorTest(FunctionalTest):
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # 用户A新建了一个待办事项
         self.browser.get(self.live_server_url)
-        input_box = self.get_item_input_box()
-        input_box.send_keys('买一些孔雀羽毛')
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: 买一些孔雀羽毛')
+        self.add_list_item('买一些孔雀羽毛')
+
         
         #　这时，用户A有自己唯一的URL
         user_url_1 = self.browser.current_url
@@ -73,9 +58,8 @@ class NewVisitorTest(FunctionalTest):
         
         # 用户B新建了一个待办事项
         input_box = self.get_item_input_box()
-        input_box.send_keys('买一盒牛奶')
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: 买一盒牛奶')
+        self.add_list_item('买一盒牛奶')
+
         
         # 用户B获得了自己唯一的URL
         user_url_2 = self.browser.current_url

@@ -48,3 +48,6 @@ def view_list(request, list_id):
     }
     return render(request, 'list.html', context)
 
+
+def my_lists(request, email):
+    return render(request, 'my_lists.html')

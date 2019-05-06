@@ -13,5 +13,6 @@
 
 ## ¹ı¶É·şÎñÆ÷²âÊÔÃüÁî
 
+STAGING_TESTS=yes python manage.py test functional_tests.test_login
 STAGING_TESTS=yes python manage.py test functional_tests
 

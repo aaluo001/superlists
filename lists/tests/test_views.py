@@ -160,3 +160,11 @@ class ViewListTest(TestCase):
         self.assertTemplateUsed(response, 'list.html')
         self.assertEqual(Item.objects.count(), 1)
 
+
+class MyListsTest(TestCase):
+
+    def test_my_lists_url_renders_my_lists_template(self):
+        response = self.client.get('/lists/users/abc@163.com/')
+        self.assertTemplateUsed(response, 'my_lists.html')
+
+
