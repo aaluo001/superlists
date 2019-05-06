@@ -7,11 +7,14 @@
 # update: 2019-02-25
 #------------------------------
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from lists.models import Item
 from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
+
+User = get_user_model()
 
 
 def home_page(request):
@@ -50,4 +53,9 @@ def view_list(request, list_id):
 
 
 def my_lists(request, email):
-    return render(request, 'my_lists.html')
+    owner = User.objects.get(email=email)
+    context = {
+        'owner': owner,
+    }
+    return render(request, 'my_lists.html', context)
+

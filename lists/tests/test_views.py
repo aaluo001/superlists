@@ -7,6 +7,7 @@
 # update: 2019-02-25
 #------------------------------
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 
 from lists.models import Item
 from lists.models import List
@@ -14,6 +15,7 @@ from lists.forms import (
     ItemForm, ExistingListItemForm,
     EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR,
 )
+User = get_user_model()
 
 
 class HomePageTest(TestCase):
@@ -62,6 +64,14 @@ class NewListTest(TestCase):
     def test_for_invalid_input_shows_error_on_page(self):
         response = self.post_invalid_input()
         self.assertContains(response, EMPTY_ITEM_ERROR)
+
+
+    def test_list_owner_is_saved_if_user_is_authenticated(self):
+        user_object = User.objects.create(email='abc@163.com')
+        self.client.force_login(user_object)
+        self.client.post('/lists/new', data={'text': 'New item'})
+        list_object = List.objects.first()
+        self.assertEqual(list_object.owner, user_object)
 
 
 class ViewListTest(TestCase):
@@ -164,7 +174,14 @@ class ViewListTest(TestCase):
 class MyListsTest(TestCase):
 
     def test_my_lists_url_renders_my_lists_template(self):
+        User.objects.create(email='abc@163.com')
         response = self.client.get('/lists/users/abc@163.com/')
         self.assertTemplateUsed(response, 'my_lists.html')
 
+
+    def test_passes_correct_owner_to_template(self):
+        User.objects.create(email='wrong@163.com')
+        user_object = User.objects.create(email='abc@163.com')
+        response = self.client.get('/lists/users/abc@163.com/')
+        self.assertEqual(response.context['owner'], user_object)
 
