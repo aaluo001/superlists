@@ -7,14 +7,14 @@
 # update: 2019-02-25
 #------------------------------
 from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from lists.models import Item
 from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
-
-User = get_user_model()
 
 
 def home_page(request):
@@ -24,7 +24,10 @@ def home_page(request):
 def new_list(request):
     form = ItemForm(data=request.POST)
     if (form.is_valid()):
-        list_object = List.objects.create()
+        list_object = List()
+        if (request.user.is_authenticated):
+            list_object.owner = request.user
+        list_object.save()
         form.save(for_list=list_object)
         return redirect(list_object)
     else:

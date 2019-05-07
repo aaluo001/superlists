@@ -8,6 +8,7 @@
 #------------------------------
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from lists.models import Item
 from lists.models import List
@@ -15,7 +16,6 @@ from lists.forms import (
     ItemForm, ExistingListItemForm,
     EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR,
 )
-User = get_user_model()
 
 
 class HomePageTest(TestCase):
