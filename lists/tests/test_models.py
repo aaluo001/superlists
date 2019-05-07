@@ -90,3 +90,9 @@ class ListModelTest(TestCase):
         list_object = List.objects.create(owner=user_object)
         self.assertIn(list_object, user_object.list_set.all())
 
+    def test_list_name_is_first_item_text(self):
+        list_object = List.objects.create()
+        Item.objects.create(list=list_object, text='first item')
+        Item.objects.create(list=list_object, text='second item')
+        self.assertEqual(list_object.name, 'first item')
+

@@ -62,6 +62,27 @@ class MyListsTest(FunctionalTest):
             self.assertEqual(self.browser.current_url, first_list_url)
         )
         
-        self.fail('Finish the test!')
+        # 再建一个待办事项清单
+        self.browser.get(self.live_server_url)
+        self.add_list_item('Click cows')
+        second_list_url = self.browser.current_url
+        
+        # 在"待办事项清单"里面可以看见这个新建的清单
+        self.browser.find_element_by_link_text("待办事项清单").click()
+        self.wait_for(lambda:
+            self.browser.find_element_by_link_text('Click cows')
+        )
+        self.browser.find_element_by_link_text('Click cows').click()
+        self.wait_for(lambda:
+            self.assertEqual(self.browser.current_url, second_list_url)
+        )
 
+        # 退出后，"待办事项清单"链接不见了
+        self.browser.find_element_by_link_text("退出").click()
+        self.wait_for(lambda:
+            self.assertEqual(
+                self.browser.find_elements_by_link_text("待办事项清单"),
+                []
+            )
+        )
 

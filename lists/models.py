@@ -14,6 +14,10 @@ from django.conf import settings
 class List(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     
+    @property
+    def name(self):
+        return self.item_set.first().text
+    
     def get_absolute_url(self):
         return reverse('view_list', args=[self.id, ])
 
