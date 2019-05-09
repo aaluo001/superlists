@@ -6,7 +6,6 @@
 # author: TangJianwei
 # update: 2019-03-26
 #------------------------------
-import uuid
 from django.db import models
 from django.contrib import auth
 
@@ -24,7 +23,6 @@ class User(models.Model):
 
 
 class Token(models.Model):
-    email = models.EmailField()
-    uid = models.CharField(default=uuid.uuid4, max_length=40)
-
+    email = models.EmailField(primary_key=True)
+    uid = models.CharField(max_length=40)
 

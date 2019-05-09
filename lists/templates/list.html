@@ -4,10 +4,27 @@
 
 {% block form_action %}{% url 'view_list' list.id %}{% endblock %}
 
-{% block table %}
-    <table id="id_list_table" class="table">
-        {% for item in list.item_set.all %}
-            <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
-        {% endfor %}
+{% block dispaly_area_1 %}
+    <table id="id_list_table" class="table table-condensed">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>待办事项</th>
+                <th>标记</th>
+                <th>操作</th>
+                <th><br></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in list.item_set.all %}
+                <tr>
+                    <td width="50" >{{ forloop.counter }}</td>
+                    <td width="550">{{ item.text }}</td>
+                    <td width="50" ><input type="checkbox"></td>
+                    <td width="50" >删除</td>
+                    <td><br></td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock %}

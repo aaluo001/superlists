@@ -6,6 +6,7 @@
 # author: TangJianwei
 # update: 2019-03-25
 #------------------------------
+import uuid
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -41,10 +42,22 @@ SEND_EMAIL_SUCCESSED = '''
     请检查您的邮件内容，我们给您发送了一条链接，您可以使用这条链接进行登录。
 '''
 
+LOGIN_FAILED = '''
+    登录失败！
+    请确认您的登录链接是否正确，或是重新输入邮件地址进行登录。
+'''
+
 
 def send_login_email(request):
     email = request.POST['email']
-    token_object = Token.objects.create(email=email)
+    token_object = None
+    try:
+        token_object = Token.objects.get(email=email)
+        token_object.uid = uuid.uuid4()
+        token_object.save()
+    
+    except Token.DoesNotExist:
+        token_object = Token.objects.create(email=email, uid=uuid.uuid4())
 
     url = request.build_absolute_uri(
         reverse('login') + '?token={}'.format(token_object.uid)
@@ -59,5 +72,8 @@ def send_login_email(request):
 
 def login(request):
     user_object = auth.authenticate(uid=request.GET.get('token'))
-    if (user_object): auth.login(request, user_object)
+    if (user_object):
+        auth.login(request, user_object)
+    else:
+        messages.error(request, LOGIN_FAILED)
     return redirect('/')
