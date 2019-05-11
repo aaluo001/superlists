@@ -24,8 +24,8 @@
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">待办事项<span class="caret"></span></a>
                           <ul class="dropdown-menu">
-                            <li><a href="{% url 'home_page' %}">新建</a></li>
-                            <li><a href="{% url 'my_lists' user.email %}">清单</a></li>
+                            <li><a href="{% url 'home_page' %}">新建清单</a></li>
+                            <li><a href="{% url 'my_lists' %}">查看已有清单</a></li>
                           </ul>
                         </li>
                     </ul>
@@ -46,7 +46,7 @@
         {# 提示消息 #}
         {% if messages %}
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-8">
                     {% for message in messages %}
                         {% if message.level_tag == 'success' %}
                             <div class="alert alert-success">{{ message }}</div>
@@ -61,7 +61,7 @@
 
         {# 巨幕 #}
         <div class="row">
-            <div class="col-md-8 col-md-offset-2 jumbotron">
+            <div class="col-md-6 col-md-offset-3 jumbotron">
                 <div class="text-center">
                     <h1>{% block header_text %}{% endblock %}</h1>
                     {% block list_form %}
@@ -82,14 +82,14 @@
 
         {# 表示区域-1 #}
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-3">
                 {% block dispaly_area_1 %}{% endblock %}
             </div>
         </div>
         
         {# 表示区域-2 #}
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-3">
                 {% block dispaly_area_2 %}{% endblock %}
             </div>
         </div>
@@ -97,7 +97,7 @@
 
         {# 注意事项等其他说明 #}
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-3">
                 {% block notes %}{% endblock %}
             </div>
         </div>

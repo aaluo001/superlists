@@ -13,7 +13,11 @@ from django.conf import settings
 
 class List(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
-    
+
+    class Meta:
+        ordering = ('-id', )
+
+
     @property
     def name(self):
         return self.item_set.first().text

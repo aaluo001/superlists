@@ -55,10 +55,6 @@ def view_list(request, list_id):
     return render(request, 'list.html', context)
 
 
-def my_lists(request, email):
-    owner = User.objects.get(email=email)
-    context = {
-        'owner': owner,
-    }
-    return render(request, 'my_lists.html', context)
+def my_lists(request):
+    return render(request, 'my_lists.html')
 
