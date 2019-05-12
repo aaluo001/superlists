@@ -7,7 +7,7 @@
 # update: 2019-02-25
 #------------------------------
 from django.shortcuts import render, redirect
-from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -60,6 +60,13 @@ def view_list(request, list_id):
         'form': form,
     }
     return render(request, 'list.html', context)
+
+
+def remove_list(request, list_id):
+    # 只有登录用户才能删除自己的清单。
+    list_object = List.objects.get(id=list_id, owner=request.user)
+    list_object.delete()
+    return redirect(reverse('my_lists'))
 
 
 def my_lists(request):
