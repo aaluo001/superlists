@@ -24,10 +24,13 @@ def home_page(request):
 def new_list(request):
     form = ItemForm(data=request.POST)
     if (form.is_valid()):
+        # 如果当前用户已经登录，就将当前用户绑定为清单的拥有者。
+        # 不然清单将没有拥有者，可以被所有未登录用户查看。
         list_object = List()
         if (request.user.is_authenticated):
             list_object.owner = request.user
         list_object.save()
+
         form.save(for_list=list_object)
         return redirect(list_object)
     else:
@@ -35,9 +38,13 @@ def new_list(request):
 
 
 def view_list(request, list_id):
-    list_object  = List.objects.get(id=list_id)
-    form = None
+    # 如果当前用户已经登录，那么只能看到自己的清单。
+    # 不然只能看到没有绑定拥有者的清单。
+    owner = None
+    if (request.user.is_authenticated): owner = request.user
+    list_object = List.objects.get(id=list_id, owner=owner)
     
+    form = None
     if (request.method == 'POST'):
         form = ExistingListItemForm(
             for_list=list_object, data=request.POST
@@ -56,5 +63,6 @@ def view_list(request, list_id):
 
 
 def my_lists(request):
+    # 只有登录用户才能查看自己的清单。
     return render(request, 'my_lists.html')
 

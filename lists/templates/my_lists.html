@@ -8,8 +8,8 @@
     <table id="id_my_lists_table" class="table table-condensed">
         {% for list in user.list_set.all %}
             <tr>
-                <td width="460"><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></td>
-                <td>{# Ô¤Áô #}<br></td>
+                <td width="480"><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></td>
+                <td><br></td>
             </tr>
         {% endfor %}
     </table>

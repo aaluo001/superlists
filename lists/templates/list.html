@@ -5,16 +5,19 @@
 {% block form_action %}{% url 'view_list' list.id %}{% endblock %}
 
 {% block dispaly_area_1 %}
-    <div class="text-right">
-        <a href="#">删除清单</a>&nbsp;&nbsp;
-        <a href="{% url 'my_lists' %}">查看已有清单</a>
-    </div>
+    {# 只有登录用户才能操作自己的清单 #}
+    {% if user.email %}
+        <div class="text-right">
+            <a href="#">删除清单</a>&nbsp;&nbsp;
+            <a href="{% url 'my_lists' %}">查看已有清单</a>
+        </div>
+    {% endif %}
     <table id="id_list_table" class="table table-condensed">
         {% for item in list.item_set.all %}
             <tr>
                 <td width="40" >{{ forloop.counter }}</td>
-                <td width="460">{{ item.text }}</td>
-                <td>{# 预留 #}<br></td>
+                <td width="480">{{ item.text }}</td>
+                <td><br></td>
             </tr>
         {% endfor %}
     </table>
