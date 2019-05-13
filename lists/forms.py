@@ -13,35 +13,25 @@ from django.core.exceptions import ValidationError
 from lists.models import Item
 
 
-TEXT_PLACEHOLDER        = '输入待办事项内容'
-TEXT_LENGTH_ERROR       = '待办事项内容不能超过64个字！'
-TEXT_EMPTY_ERROR        = '待办事项内容不能为空！'
-TEXT_DUPLICATE_ERROR    = '您已经提交一个同样的待办事项！'
-
-
 class ItemForm(ModelForm):
     
     class Meta:
         model = Item
         fields = ('text', )
         widgets = {
-            'text': forms.fields.TextInput(attrs={
-                'placeholder': TEXT_PLACEHOLDER,
-                'class': 'form-control',
-            })
+            'text': forms.fields.TextInput(
+                attrs={
+                    'placeholder': '输入待办事项内容',
+                    'class': 'form-control',
+                    'maxlength': '32',
+                }
+            )
         }
         error_messages = {
             'text': {
-                'required': TEXT_EMPTY_ERROR,
+                'required': '待办事项内容不能为空！',
             }
         }
-
-
-    def clean_text(self):
-        cleaned_data = self.cleaned_data['text']
-        if (len(cleaned_data) > 64):
-            raise ValidationError(TEXT_LENGTH_ERROR)
-        return cleaned_data
 
     def save(self, for_list):
         self.instance.list = for_list
@@ -58,7 +48,7 @@ class ExistingListItemForm(ItemForm):
         try:
             self.instance.validate_unique()
         except ValidationError as e:
-            e.error_dict = {'text': [TEXT_DUPLICATE_ERROR,]}
+            e.error_dict = {'text': ['您已经提交一个同样的待办事项！',]}
             self._update_errors(e)
 
     def save(self):

@@ -7,6 +7,8 @@
 # update: 2019-03-25
 #------------------------------
 import uuid
+import smtplib
+
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -37,15 +39,9 @@ HTML_MESSAGE = '''
 
 FROM_EMAIL = 'superlists@163.com'
 
-SEND_EMAIL_SUCCESSED = '''
-    邮件发送成功！
-    请检查您的邮件内容，我们给您发送了一条链接，您可以使用这条链接进行登录。
-'''
-
-LOGIN_FAILED = '''
-    登录失败！
-    请确认您的登录链接是否正确，或是重新输入邮件地址进行登录。
-'''
+SEND_EMAIL_SUCCESSED = '邮件发送成功！请检查您的邮件内容，我们给您发送了一条链接，您可以使用这条链接进行登录。'
+SEND_EMAIL_FAILED    = '邮件发送失败！请检查您的邮箱地址是否正确。'
+LOGIN_FAILED         = '登录失败！请确认您的登录链接是否正确，或是重新输入邮箱地址进行登录。'
 
 
 def send_login_email(request):
@@ -64,9 +60,14 @@ def send_login_email(request):
     )
     text_message = TEXT_MESSAGE.format(url)
     html_message = HTML_MESSAGE.format(url)
-    send_mail(SUBJECT, text_message, FROM_EMAIL, [email, ], html_message=html_message)
-
-    messages.success(request, SEND_EMAIL_SUCCESSED)
+    
+    try:
+        send_mail(SUBJECT, text_message, FROM_EMAIL, [email, ], html_message=html_message)
+    except smtplib.SMTPRecipientsRefused:
+        messages.error(request, SEND_EMAIL_FAILED)
+    else:
+        messages.success(request, SEND_EMAIL_SUCCESSED)
+    
     return redirect('/')
 
 
