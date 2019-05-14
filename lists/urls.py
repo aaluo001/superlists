@@ -20,6 +20,6 @@ from lists import views
 urlpatterns = [
     url(r'^new$', views.new_list, name='new_list'),
     url(r'^(\d+)/$', views.view_list, name='view_list'),
-    url(r'^remove/(\d+)$', views.remove_list, name='remove_list'),
+    url(r'^(\d+)/remove$', views.remove_list, name='remove_list'),
     url(r'^$', views.my_lists, name='my_lists'),
 ]

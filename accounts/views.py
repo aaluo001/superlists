@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# accounts.views.py
+# accounts.views
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-25
+# Author: TangJianwei
+# Create: 2019-03-25
 #------------------------------
 import uuid
 import smtplib

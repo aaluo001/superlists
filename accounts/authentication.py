@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# accounts.authentication.py
+# accounts.authentication
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-29
+# Author: TangJianwei
+# Create: 2019-03-29
 #------------------------------
 from accounts.models import Token
 from accounts.models import User

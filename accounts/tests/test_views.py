@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# test_views.py
+# accounts.tests.test_views
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-25
+# Author: TangJianwei
+# Create: 2019-03-25
 #------------------------------
 from unittest.mock import patch, call
 

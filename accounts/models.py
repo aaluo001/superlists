@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# accounts.models.py
+# accounts.models
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-26
+# Author: TangJianwei
+# Create: 2019-03-26
 #------------------------------
 from django.db import models
 from django.contrib import auth
