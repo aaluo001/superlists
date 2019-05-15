@@ -15,10 +15,10 @@ from accounts.models import Token
 
 
 class AuthenticateTest(TestCase):
-    ''' 测试登录验证机能
+    ''' 登录验证机能
     '''
     def test_returns_None_if_no_such_token(self):
-        ''' 登录验证失败，返回None
+        ''' 登录验证失败时，返回None
         '''
         login_user_object = PasswordlessAuthenticationBackend().authenticate(uid='abc123')
         self.assertIsNone(login_user_object)
@@ -45,10 +45,10 @@ class AuthenticateTest(TestCase):
 
 
 class GetUserTest(TestCase):
-    ''' 测试取得用户机能
+    ''' 取得用户机能
     '''
     def test_gets_user_by_email(self):
-        ''' 通过Email取得用户
+        ''' 可以通过指定Email取得用户
         '''
         User.objects.create(email='other@163.com')
         user_object = User.objects.create(email='abc@163.com')

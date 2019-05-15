@@ -17,11 +17,11 @@ from django.contrib import messages, auth
 from accounts.models import Token
 
 
-SUBJECT = '我们给您发送了一条登录验证用的链接'
+SUBJECT = '我们给您发送了一条登录验证的链接'
 
 TEXT_MESSAGE = '''
     您好！\n
-    您在 Superlists 网站输入了您的邮箱地址进行登录验证。\n
+    您在 Superlists 网站输入了您的邮箱地址进行登录验证，\n
     为此我们给您发送了一条链接，您可以使用这条链接进行登录：\n
     {0}
 '''
@@ -30,7 +30,7 @@ HTML_MESSAGE = '''
     <html>
     <body>
         您好！<br>
-        您在 Superlists 网站输入了您的邮箱地址进行登录验证。<br>
+        您在 Superlists 网站输入了您的邮箱地址进行登录验证，<br>
         为此我们给您发送了一条链接，您可以使用这条链接进行登录：<br>
         <a href="{0}" target="_blank">{0}</a>
     </body>
