@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'lists/base.html' %}
 
 {% block header_text %}新建待办事项{% endblock %}
 
@@ -9,7 +9,7 @@
     {% if user.email %}
         <div class="text-right">
             <a href="{% url 'remove_list' list.id %}">删除清单</a>&nbsp;&nbsp;
-            <a href="{% url 'my_lists' %}">查看已有清单</a>
+            <a href="{% url 'my_lists' %}">我的清单</a>
         </div>
     {% endif %}
     <table id="id_list_table" class="table table-condensed">

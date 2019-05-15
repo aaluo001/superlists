@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# lists.views.py
+# lists.views
 #------------------------------
-# author: TangJianwei
-# update: 2019-02-25
+# Author: TangJianwei
+# Create: 2019-02-25
 #------------------------------
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
@@ -18,7 +18,7 @@ from lists.forms import ItemForm, ExistingListItemForm
 
 
 def home_page(request):
-    return render(request, 'home.html', {'form': ItemForm()})
+    return render(request, 'lists/index.html', {'form': ItemForm()})
 
 
 def new_list(request):
@@ -34,7 +34,7 @@ def new_list(request):
         form.save(for_list=list_object)
         return redirect(list_object)
     else:
-        return render(request, 'home.html', {'form': form})
+        return render(request, 'lists/index.html', {'form': form})
 
 
 def view_list(request, list_id):
@@ -59,7 +59,7 @@ def view_list(request, list_id):
         'list': list_object,
         'form': form,
     }
-    return render(request, 'list.html', context)
+    return render(request, 'lists/list.html', context)
 
 
 def remove_list(request, list_id):
@@ -71,5 +71,5 @@ def remove_list(request, list_id):
 
 def my_lists(request):
     # 只有登录用户才能查看自己的清单。
-    return render(request, 'my_lists.html')
+    return render(request, 'lists/my_lists.html')
 
