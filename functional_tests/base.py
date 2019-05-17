@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# base.py
+# functional_tests.base
 #------------------------------
-# author: TangJianwei
-# update: 2019-02-25
+# Author: TangJianwei
+# Create: 2019-02-25
 #------------------------------
 import os
 import time
