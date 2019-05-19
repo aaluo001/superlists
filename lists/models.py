@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# lists.models.py
+# lists.models
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-10
+# Author: TangJianwei
+# Create: 2019-03-10
 #------------------------------
 from django.db import models
 from django.core.urlresolvers import reverse
