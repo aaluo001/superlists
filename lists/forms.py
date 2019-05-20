@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# lists.forms.py
+# lists.forms
 #------------------------------
-# author: TangJianwei
-# update: 2019-03-10
+# Author: TangJianwei
+# Create: 2019-03-10
 #------------------------------
 from django import forms
 from django.forms import ModelForm
