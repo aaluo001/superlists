@@ -16,8 +16,8 @@ from accounts.views import (
 from accounts.models import Token
 
 
-class SendLoginEmailViewTest(TestCase):
-    ''' 发送登录验证邮件机能测试
+class SendLoginEmailTest(TestCase):
+    ''' 发送登录验证邮件测试
     '''
     def post_send_login_email(self):
         return self.client.post('/accounts/send_login_email', 
@@ -105,8 +105,8 @@ class SendLoginEmailViewTest(TestCase):
 
 
 @patch('accounts.views.auth')
-class LoginViewTest(TestCase):
-    ''' 登录机能测试
+class LoginTest(TestCase):
+    ''' 登录测试
     '''
     def get_login(self):
         return self.client.get('/accounts/login?token=abc123')

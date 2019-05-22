@@ -8,13 +8,16 @@
 #------------------------------
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from lists.models import Item
 from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
+
+
+NOT_FOUND_LIST_ERROR = '没有找到该清单！'
 
 
 def home_page(request):
@@ -42,8 +45,15 @@ def view_list(request, list_id):
     # 不然只能看到没有绑定拥有者的清单。
     owner = None
     if (request.user.is_authenticated): owner = request.user
-    list_object = List.objects.get(id=list_id, owner=owner)
-    
+
+    list_object = None
+    try:
+        list_object = List.objects.get(id=list_id, owner=owner)
+    except List.DoesNotExist:
+        messages.error(request, NOT_FOUND_LIST_ERROR)
+        return redirect(reverse('home_page'))
+
+
     form = None
     if (request.method == 'POST'):
         form = ExistingListItemForm(

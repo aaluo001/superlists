@@ -67,8 +67,7 @@ def send_login_email(request):
         messages.error(request, SEND_EMAIL_FAILED)
     else:
         messages.success(request, SEND_EMAIL_SUCCESSED)
-    
-    return redirect('/')
+    return redirect(reverse('home_page'))
 
 
 def login(request):
@@ -77,4 +76,4 @@ def login(request):
         auth.login(request, user_object)
     else:
         messages.error(request, LOGIN_FAILED)
-    return redirect('/')
+    return redirect(reverse('home_page'))
