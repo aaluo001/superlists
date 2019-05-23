@@ -21,7 +21,7 @@ class ItemForm(ModelForm):
         widgets = {
             'text': forms.fields.TextInput(
                 attrs={
-                    'placeholder': '输入待办事项内容',
+                    'placeholder': '输入待办事项',
                     'class': 'form-control',
                     'maxlength': '32',
                 }
@@ -29,7 +29,7 @@ class ItemForm(ModelForm):
         }
         error_messages = {
             'text': {
-                'required': '待办事项内容不能为空！',
+                'required': '待办事项不能为空！',
             }
         }
 

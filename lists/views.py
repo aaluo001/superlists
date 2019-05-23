@@ -17,7 +17,11 @@ from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
 
 
-NOT_FOUND_LIST_ERROR = '没有找到该清单！'
+NOT_FOUND_LIST_ERROR = '没有找到该清单，或该清单已被删除！'
+
+def get_owner(request):
+    if (request.user.is_authenticated): return request.user
+    else: return None
 
 
 def home_page(request):
@@ -43,12 +47,11 @@ def new_list(request):
 def view_list(request, list_id):
     # 如果当前用户已经登录，那么只能看到自己的清单。
     # 不然只能看到没有绑定拥有者的清单。
-    owner = None
-    if (request.user.is_authenticated): owner = request.user
-
     list_object = None
     try:
-        list_object = List.objects.get(id=list_id, owner=owner)
+        list_object = List.objects.get(
+            id=list_id, owner=get_owner(request)
+        )
     except List.DoesNotExist:
         messages.error(request, NOT_FOUND_LIST_ERROR)
         return redirect(reverse('home_page'))
@@ -72,14 +75,27 @@ def view_list(request, list_id):
     return render(request, 'lists/list.html', context)
 
 
-def remove_list(request, list_id):
-    # 只有登录用户才能删除自己的清单。
-    list_object = List.objects.get(id=list_id, owner=request.user)
-    list_object.delete()
-    return redirect(reverse('my_lists'))
-
-
 def my_lists(request):
-    # 只有登录用户才能查看自己的清单。
-    return render(request, 'lists/my_lists.html')
+    # 只有登录用户才能查看自己的清单
+    owner = get_owner(request)
+    if (not owner):
+        return redirect(reverse('home_page'))
+
+    list_set = List.objects.filter(owner=owner)
+    return render(request, 'lists/my_lists.html', {'list_set': list_set})
+
+
+def remove_list(request, list_id):
+    # 只有登录用户才能删除自己的清单
+    owner = get_owner(request)
+    if (not owner):
+        return redirect(reverse('home_page'))
+
+    try:
+        list_object = List.objects.get(id=list_id, owner=owner)
+    except List.DoesNotExist:
+        pass
+    else:
+        list_object.delete()
+    return redirect(reverse('my_lists'))
 

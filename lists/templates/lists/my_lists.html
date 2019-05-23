@@ -1,17 +1,21 @@
 {% extends 'lists/base.html' %}
 
-{% block header_text %}我的<br>待办事项清单{% endblock %}
+{% block header_text %}我的清单{% endblock %}
 
 {% block list_form %}{% endblock %}
 
 {% block dispaly_area_1 %}
-    <table id="id_my_lists_table" class="table table-condensed">
-        {% for list in user.list_set.all %}
-            <tr>
-                <td width="480"><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></td>
-                <td><br></td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% if list_set %}
+        <table id="id_my_lists_table" class="table table-condensed">
+            {% for list in list_set %}
+                <tr>
+                    <td width="480"><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></td>
+                    <td><br></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>您还没有自己的清单，试试新建一个吧！</p>
+    {% endif %}
 {% endblock %}
 

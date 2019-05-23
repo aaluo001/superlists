@@ -6,16 +6,18 @@
 # Author: TangJianwei
 # Create: 2019-02-25
 #------------------------------
+from unittest.mock import patch, call
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from lists.models import List, Item
 from lists.forms  import ItemForm, ExistingListItemForm
+from lists.views  import NOT_FOUND_LIST_ERROR
 
 
-
-class ViewListTestGetListItems(TestCase):
+class ViewListTestForRequestGET(TestCase):
     ''' 显示清单项目测试
     '''
     def get_view_list(self, list_object):
@@ -39,7 +41,7 @@ class ViewListTestGetListItems(TestCase):
         
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertEqual(response.context['list'], list_object)
-        
+
         
     def test_003(self):
         ''' 清单项目显示上下文(登录用户)
@@ -55,37 +57,49 @@ class ViewListTestGetListItems(TestCase):
         self.assertEqual(response.context['list'], list_object)
 
 
-    def test_004(self):
-        ''' 正确取得该清单项目，而不会取到其他清单的项目
+    @patch('lists.views.messages')
+    def test_011(self, mock_messages):
+        ''' 无法取得未保存到数据库的清单
         '''
-        list_object = List.objects.create()
-        Item.objects.create(text='Itemey 1', list=list_object)
-        Item.objects.create(text='Itemey 2', list=list_object)
-        
-        ## 不会取到错误的清单项目
-        other_list_object = List.objects.create()
-        Item.objects.create(text='Other list item 1', list=other_list_object)
-        Item.objects.create(text='Other list item 2', list=other_list_object)
+        # 未保存到数据库的清单
+        list_object = List()
+        list_object.id = 99
         
         response = self.get_view_list(list_object)
-        
-        self.assertContains(response, 'Itemey 1')
-        self.assertContains(response, 'Itemey 2')
-        self.assertNotContains(response, 'Other list item 1')
-        self.assertNotContains(response, 'Other list item 2')
 
-    
-    def test_011(self):
-        ''' 匿名用户不能取得已有拥有者的清单
+        self.assertEqual(
+            mock_messages.error.call_args,
+            call(response.wsgi_request, NOT_FOUND_LIST_ERROR)
+        )
+        self.assertRedirects(response, '/')
+
+        
+    def test_012(self):
+        ''' 匿名用户无法取得已指定拥有者的清单
         '''
         user_object = User.objects.create(email='abc@163.com')
+        # 已指定拥有者的清单
         list_object = List.objects.create(owner=user_object)
-        self.get_view_list(list_object)
-        self.fail('Finished the test!')
+        # 未登录用户
+        # self.client.force_login(user_object)
+        response = self.get_view_list(list_object)
+        self.assertRedirects(response, '/')
+
+        
+    def test_013(self):
+        ''' 登录用户无法取得未指定拥有者的清单
+        '''
+        user_object = User.objects.create(email='abc@163.com')
+        # 未指定拥有者的清单
+        list_object = List.objects.create()
+        self.client.force_login(user_object)
+        response = self.get_view_list(list_object)
+        self.assertRedirects(response, '/')
 
         
         
-class ViewListTestAddListItem(TestCase):
+        
+class ViewListTestForRequestPOST(TestCase):
     ''' 添加清单项目测试
     '''
     def post_item_text_input(self, list_object, item_text):
@@ -95,7 +109,7 @@ class ViewListTestAddListItem(TestCase):
         )
 
 
-    def test_011(self):
+    def test_001(self):
         ''' 提交的待办事项内容可以保存到数据库
         '''
         other_list_object = List.objects.create()   ## 不会取到错误的清单项目
@@ -113,7 +127,7 @@ class ViewListTestAddListItem(TestCase):
         self.assertEqual(item_object_arr[1].list, list_object)
 
         
-    def test_012(self):
+    def test_002(self):
         ''' 处理完了后页面跳转到清单项目显示
         '''
         other_list_object = List.objects.create()
@@ -122,6 +136,23 @@ class ViewListTestAddListItem(TestCase):
         self.assertRedirects(response, list_object.get_absolute_url())
 
 
+    @patch('lists.views.messages')
+    def test_011(self, mock_messages):
+        ''' 无法取得未保存到数据库的清单
+        '''
+        # 未保存到数据库的清单
+        list_object = List()
+        list_object.id = 99
+        
+        response = self.post_item_text_input(list_object, 'A New item')
+
+        self.assertEqual(
+            mock_messages.error.call_args,
+            call(response.wsgi_request, NOT_FOUND_LIST_ERROR)
+        )
+        self.assertRedirects(response, '/')
+
+        
     def test_021(self):
         ''' 提交空的待办事项不会保存到数据库
         '''
@@ -150,10 +181,10 @@ class ViewListTestAddListItem(TestCase):
         ''' 提交空的待办事项后，错误消息
         '''
         response = self.post_item_text_input(List.objects.create(), '')
-        self.assertContains(response, '待办事项内容不能为空！')
+        self.assertContains(response, '待办事项不能为空！')
 
 
-    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
+    def test_025(self):
         ''' 提交重复的待办事项，数据库不会更新
             错误消息和清单项目显示页面
         '''

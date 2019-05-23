@@ -23,7 +23,7 @@ class ItemFormTest(TestCase):
         #print(soup)
         item_text = soup.find('input', {'name': 'text'})
         self.assertEqual(item_text['type'], 'text')
-        self.assertEqual(item_text['placeholder'], '输入待办事项内容')
+        self.assertEqual(item_text['placeholder'], '输入待办事项')
         self.assertEqual(item_text['maxlength'], '32')
         self.assertEqual(item_text['required'], '')
         self.assertEqual(item_text['class'], ['form-control', ])
@@ -34,7 +34,7 @@ class ItemFormTest(TestCase):
         '''
         form = ItemForm(data={'text': ''})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['待办事项内容不能为空！', ])
+        self.assertEqual(form.errors['text'], ['待办事项不能为空！', ])
 
         
     def test_003(self):
@@ -60,7 +60,7 @@ class ExistingListItemFormTest(TestCase):
         #print(soup)
         item_text = soup.find('input', {'name': 'text'})
         self.assertEqual(item_text['type'], 'text')
-        self.assertEqual(item_text['placeholder'], '输入待办事项内容')
+        self.assertEqual(item_text['placeholder'], '输入待办事项')
         self.assertEqual(item_text['maxlength'], '32')
         self.assertEqual(item_text['required'], '')
         self.assertEqual(item_text['class'], ['form-control', ])
@@ -72,7 +72,7 @@ class ExistingListItemFormTest(TestCase):
         list_object = List.objects.create()
         form = ExistingListItemForm(for_list=list_object, data={'text': ''})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['待办事项内容不能为空！', ])
+        self.assertEqual(form.errors['text'], ['待办事项不能为空！', ])
 
         
     def test_003(self):
