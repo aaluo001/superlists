@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.views.generic.base import RedirectView
 
 from lists.views import home_page
 from lists import urls as lists_urls
@@ -24,4 +25,5 @@ urlpatterns = [
     url(r'^$', home_page, name='home_page'),
     url(r'^lists/', include(lists_urls)),
     url(r'^accounts/', include(accounts_urls)),
+    url(r'^favicon.ico$', RedirectView.as_view(url='static/favicon.ico'))
 ]
