@@ -62,10 +62,10 @@ class FunctionalTest(StaticLiveServerTestCase):
         return func()
 
     @wait
-    def wait_for_row_in_list_table(self, row_text):
+    def wait_for_row_in_list_table(self, row_num, row_text):
         list_table = self.browser.find_element_by_id('id_list_table')
-        rows = list_table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [ row.text for row in rows ])
+        row = list_table.find_element_by_id('id_row_{}'.format(row_num))
+        self.assertEqual(row_text, row.text)
 
     @wait
     def wait_to_be_logged_in(self, email):
@@ -84,5 +84,5 @@ class FunctionalTest(StaticLiveServerTestCase):
         num_rows = len(self.browser.find_elements_by_css_selector('#id_list_table tr'))
         self.get_item_input_box().send_keys(item_text)
         self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('{}: {}'.format(num_rows+1, item_text))
+        self.wait_for_row_in_list_table(num_rows+1, item_text)
 

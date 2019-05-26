@@ -1,10 +1,10 @@
 #!python
 # coding: gbk
 #------------------------------
-# test_my_lists.py
+# functional_tests.test_my_lists
 #------------------------------
-# author: TangJianwei
-# update: 2019-04-04
+# Author: TangJianwei
+# Create: 2019-04-04
 #------------------------------
 from django.conf import settings
 from django.contrib.sessions.backends.db import SessionStore

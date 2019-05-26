@@ -16,7 +16,7 @@
         {% for item in list.item_set.all %}
             <tr>
                 <td width="40" >{{ forloop.counter }}</td>
-                <td width="480">{{ item.text }}</td>
+                <td width="480" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
                 <td><br></td>
             </tr>
         {% endfor %}
