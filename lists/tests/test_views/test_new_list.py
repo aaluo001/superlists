@@ -76,9 +76,3 @@ class NewListTest(TestCase):
         self.assertIsInstance(response.context['form'], ItemForm)
 
 
-    def test_014(self):
-        ''' 提交空的待办事项时，返回错误消息
-        '''
-        response = self.post_new_list('')
-        self.assertContains(response, '待办事项内容不能为空！')
-
