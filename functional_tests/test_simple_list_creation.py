@@ -1,7 +1,7 @@
 #!python
 # coding: gbk
 #------------------------------
-# test_simple_list_creation.py
+# functional_tests.test_simple_list_creation
 #------------------------------
 # author: TangJianwei
 # update: 2019-02-25
@@ -18,12 +18,12 @@ class NewVisitorTest(FunctionalTest):
         self.browser.get(self.live_server_url)
         
         # 页面的标题和开头都包含 "To-Do" 这个词
-        self.assertIn('待办事项', self.browser.title)
-        self.assertIn('新建待办事项', self.browser.find_element_by_tag_name('h1').text)
+        self.assertIn('Superlists', self.browser.title)
+        self.assertIn('新建清单', self.browser.find_element_by_tag_name('h1').text)
         
         # 页面有一个待办事项文本输入框
         input_box = self.get_item_input_box()
-        self.assertEqual(input_box.get_attribute('placeholder'), '试试输入一个待办事项')
+        self.assertEqual(input_box.get_attribute('placeholder'), '输入待办事项')
 
         # 输入第一个待办事项
         self.add_list_item('买一些孔雀羽毛')

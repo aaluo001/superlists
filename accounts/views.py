@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 
 from accounts.models import Token
+from accounts.request_filter import RequestFilter
 
 
 SUBJECT = '我们给您发送了一条登录验证的链接'
@@ -39,12 +40,20 @@ HTML_MESSAGE = '''
 
 FROM_EMAIL = 'superlists@163.com'
 
+IS_CRAWLER_ERROR     = '系统繁忙，请稍后再试！'
 SEND_EMAIL_SUCCESSED = '邮件发送成功！请检查您的邮件内容，我们给您发送了一条链接，您可以使用这条链接进行登录。'
 SEND_EMAIL_FAILED    = '邮件发送失败！请检查您的邮箱地址是否正确。'
 LOGIN_FAILED         = '登录失败！请确认您的登录链接是否正确，或是重新输入邮箱地址进行登录。'
 
 
 def send_login_email(request):
+    # 监测网络爬虫
+    is_crawler = RequestFilter(request).crawl_monitor()
+    if (is_crawler):
+        messages.error(request, IS_CRAWLER_ERROR)
+        return redirect(reverse('home_page'))
+    
+    # 作成效验码
     email = request.POST['email']
     token_object = None
     try:
@@ -55,12 +64,14 @@ def send_login_email(request):
     except Token.DoesNotExist:
         token_object = Token.objects.create(email=email, uid=uuid.uuid4())
 
+    # 作成邮件内容
     url = request.build_absolute_uri(
         reverse('login') + '?token={}'.format(token_object.uid)
     )
     text_message = TEXT_MESSAGE.format(url)
     html_message = HTML_MESSAGE.format(url)
     
+    # 发送邮件
     try:
         send_mail(SUBJECT, text_message, FROM_EMAIL, [email, ], html_message=html_message)
     except smtplib.SMTPRecipientsRefused:

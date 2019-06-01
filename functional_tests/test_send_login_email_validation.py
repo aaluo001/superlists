@@ -45,7 +45,7 @@ class SendLoginEmailValidationTest(FunctionalTest):
         # 检测到“邮件发送失败”的消息
         self.wait_for(lambda: self.assertIn(
             '邮件发送失败',
-            self.browser.find_element_by_tag_name('body').text
+            self.browser.find_element_by_id('id_messages').text
         ))
 
         # 没有检测到“ServerError(500)”
