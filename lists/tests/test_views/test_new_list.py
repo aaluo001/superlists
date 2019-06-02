@@ -75,4 +75,26 @@ class NewListTest(TestCase):
         response = self.post_new_list('')
         self.assertIsInstance(response.context['form'], ItemForm)
 
+        
+    def test_021(self):
+        '''  提交待办事项内容超过32文字时，不会写入数据库
+        '''
+        self.post_new_list('123456789012345678901234567890123')
+        self.assertEqual(List.objects.count(), 0)
+        self.assertEqual(Item.objects.count(), 0)
+
+        
+    def test_022(self):
+        ''' 提交待办事项内容超过32文字时，返回首页模型
+        '''
+        response = self.post_new_list('123456789012345678901234567890123')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'lists/index.html')
+
+        
+    def test_023(self):
+        ''' 提交待办事项内容超过32文字时，返回首页上下文
+        '''
+        response = self.post_new_list('123456789012345678901234567890123')
+        self.assertIsInstance(response.context['form'], ItemForm)
 

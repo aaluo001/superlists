@@ -43,6 +43,7 @@ class FunctionalTest(StaticLiveServerTestCase):
   
     def setUp(self):
         self.browser = webdriver.Firefox()
+        #self.browser = webdriver.PhantomJS()
         
         self.staging_tests = False
         if (os.getenv('STAGING_TESTS') == 'yes'):

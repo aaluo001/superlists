@@ -36,8 +36,16 @@ class ItemFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['text'], ['待办事项不能为空！', ])
 
-        
+    
     def test_003(self):
+        ''' 提交待办事项的内容不能超过32文字
+        '''
+        form = ItemForm(data={'text': '123456789012345678901234567890123'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['text'], ['待办事项的内容不能超过32文字！', ])
+    
+    
+    def test_004(self):
         ''' 将表单内容保存到数据库
         '''
         form = ItemForm(data={'text': 'do me'})

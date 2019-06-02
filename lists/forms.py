@@ -33,6 +33,16 @@ class ItemForm(ModelForm):
             }
         }
 
+
+    def clean_text(self):
+        ''' 编辑待办事项的内容
+        '''
+        data = self.cleaned_data['text']
+        if (len(data) > 32):
+            raise ValidationError('待办事项的内容不能超过32文字！')
+        return data
+
+    
     def save(self, for_list):
         self.instance.list = for_list
         return super().save()

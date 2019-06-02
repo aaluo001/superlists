@@ -159,14 +159,12 @@ class ViewListTestForRequestPOST(TestCase):
         self.post_item_text_input(List.objects.create(), '')
         self.assertEqual(Item.objects.count(), 0)
 
-        
     def test_022(self):
         ''' 提交空的待办事项后，清单项目显示页面
         '''
         response = self.post_item_text_input(List.objects.create(), '')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lists/list.html')
-        
         
     def test_023(self):
         ''' 提交空的待办事项后，清单项目显示上下文
@@ -177,11 +175,11 @@ class ViewListTestForRequestPOST(TestCase):
         self.assertEqual(response.context['list'], list_object)
 
 
-    def test_024(self):
-        ''' 提交空的待办事项后，错误消息
-        '''
-        response = self.post_item_text_input(List.objects.create(), '')
-        self.assertContains(response, '待办事项不能为空！')
+#    def test_024(self):
+#        ''' 提交空的待办事项后，错误消息
+#        '''
+#        response = self.post_item_text_input(List.objects.create(), '')
+#        self.assertContains(response, '待办事项不能为空！')
 
 
     def test_025(self):
@@ -195,6 +193,27 @@ class ViewListTestForRequestPOST(TestCase):
         response = self.post_item_text_input(list_object, 'do me')
         
         self.assertEqual(Item.objects.count(), 1)
-        self.assertContains(response, '您已经提交一个同样的待办事项！')
+#        self.assertContains(response, '您已经提交一个同样的待办事项！')
         self.assertTemplateUsed(response, 'lists/list.html')
 
+        
+    def test_026(self):
+        '''  提交待办事项内容超过32文字时，不会写入数据库
+        '''
+        self.post_item_text_input(List.objects.create(), '123456789012345678901234567890123')
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_027(self):
+        ''' 提交待办事项内容超过32文字时，返回首页模型
+        '''
+        response = self.post_item_text_input(List.objects.create(), '123456789012345678901234567890123')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'lists/list.html')
+
+    def test_028(self):
+        ''' 提交待办事项内容超过32文字时，清单项目显示上下文
+        '''
+        list_object = List.objects.create()
+        response = self.post_item_text_input(list_object, '123456789012345678901234567890123')
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
+        self.assertEqual(response.context['list'], list_object)

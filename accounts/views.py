@@ -6,6 +6,7 @@
 # Author: TangJianwei
 # Create: 2019-03-25
 #------------------------------
+import re
 import uuid
 import smtplib
 
@@ -17,6 +18,8 @@ from django.contrib import messages, auth
 from accounts.models import Token
 from accounts.request_filter import RequestFilter
 
+
+EMAIL_REGEX = r'[^@]+@[^@]+\.[^@]+'
 
 SUBJECT = '我们给您发送了一条登录验证的链接'
 
@@ -53,8 +56,13 @@ def send_login_email(request):
         messages.error(request, IS_CRAWLER_ERROR)
         return redirect(reverse('home_page'))
     
-    # 作成效验码
+    # 检查邮箱地址是否正确
     email = request.POST['email']
+    if (not re.match(EMAIL_REGEX, email)):
+        messages.error(request, SEND_EMAIL_FAILED)
+        return redirect(reverse('home_page'))
+    
+    # 作成效验码
     token_object = None
     try:
         token_object = Token.objects.get(email=email)

@@ -38,8 +38,17 @@ class ExistingListItemFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['text'], ['待办事项不能为空！', ])
 
-        
+    
     def test_003(self):
+        ''' 提交待办事项的内容不能超过32文字
+        '''
+        list_object = List.objects.create()
+        form = ExistingListItemForm(for_list=list_object, data={'text': '123456789012345678901234567890123'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['text'], ['待办事项的内容不能超过32文字！', ])
+
+        
+    def test_004(self):
         ''' 不能提交重复的待办事项
         '''
         list_object = List.objects.create()
@@ -49,7 +58,7 @@ class ExistingListItemFormTest(TestCase):
         self.assertEqual(form.errors['text'], ['您已经提交一个同样的待办事项！', ])
         
         
-    def test_004(self):
+    def test_005(self):
         ''' 将表单内容保存到数据库
         '''
         list_object = List.objects.create()

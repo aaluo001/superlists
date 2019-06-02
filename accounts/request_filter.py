@@ -36,9 +36,10 @@ class RequestFilter(object):
         # Check User-Agent
         ip_addr = self.request.META.get('REMOTE_ADDR')
         user_agent = self.request.META.get('HTTP_USER_AGENT')
-        if ('Mozilla' not in user_agent \
-            and 'Safari' not in user_agent \
-            and 'Chrome' not in user_agent
+        if (user_agent is None \
+            or  'Mozilla' not in user_agent \
+            and 'Safari'  not in user_agent \
+            and 'Chrome'  not in user_agent \
         ):
             stdout.write(UNKNOW_USER_AGENT.format(ip_addr, user_agent, self.get_formatted_time()))
             return True
