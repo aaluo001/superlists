@@ -7,7 +7,6 @@
 # Create: 2019-06-01
 #------------------------------
 from selenium.webdriver.common.keys import Keys
-
 from .base import FunctionalTest
 
 

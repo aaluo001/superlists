@@ -17,8 +17,10 @@ from selenium.common.exceptions import WebDriverException
 
 from django.core import mail
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.conf import settings
 
-from .server_tools import STAGING_SERVER, reset_database
+from .server_tools import STAGING_SERVER, reset_database, create_session_on_server
+from .management.commands.create_session import create_pre_authenticated_session
 
 
 # 等待服务器响应时间(10秒)
@@ -50,15 +52,36 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.live_server_url = 'http://' + STAGING_SERVER
             reset_database()
 
-
     def tearDown(self):
         #self.browser.refresh()
         #self.browser.quit()
         self.browser.close()
 
+        
+    def create_pre_authenticated_session(self, email):
+        if (self.staging_tests):
+            session_key = create_session_on_server(email)
+        else:
+            session_key = create_pre_authenticated_session(email)
+        
+        # 为了设定Cookie，我们要先访问网站
+        # 而404页面加载最快
+        self.browser.get(self.live_server_url + '/404_no_such_url/')
+        self.browser.add_cookie(dict(
+            name=settings.SESSION_COOKIE_NAME,
+            value=session_key,
+            path='/',
+        ))
 
+        
     def get_item_input_box(self):
         return self.browser.find_element_by_id('id_text')
+
+    def add_list_item(self, item_text):
+        num_rows = len(self.browser.find_elements_by_css_selector('#id_list_table tr'))
+        self.get_item_input_box().send_keys(item_text)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table(num_rows+1, item_text)
 
 
     @wait
@@ -82,13 +105,6 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element_by_name('email')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertNotIn(email, navbar.text)
-
-
-    def add_list_item(self, item_text):
-        num_rows = len(self.browser.find_elements_by_css_selector('#id_list_table tr'))
-        self.get_item_input_box().send_keys(item_text)
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table(num_rows+1, item_text)
 
 
     def wait_for_email(self, test_email):

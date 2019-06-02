@@ -6,8 +6,10 @@
 # Author: TangJianwei
 # Create: 2019-06-02
 #------------------------------
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class UnknowUserAgentTest(object):
+
+class UnknowUserAgentTest(StaticLiveServerTestCase):
     ''' 未知 USER-AGENT 测试
         注意：不能使用 Firefox 浏览器，因此不能继承 FunctionalTest
     '''

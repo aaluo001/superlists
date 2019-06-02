@@ -7,36 +7,13 @@
 # Create: 2019-04-04
 #------------------------------
 import time
-from django.conf import settings
-from django.contrib.sessions.backends.db import SessionStore
-from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 from .base import FunctionalTest
-from .server_tools import create_session_on_server
-from .management.commands.create_session import create_pre_authenticated_session
 
 
 class MyListsTest(FunctionalTest):
     ''' 我的清单测试
     '''
-    def create_pre_authenticated_session(self, email):
-        if (self.staging_tests):
-            session_key = create_session_on_server(email)
-        else:
-            session_key = create_pre_authenticated_session(email)
-        
-        # 为了设定Cookie，我们要先访问网站
-        # 而404页面加载最快
-        self.browser.get(self.live_server_url + '/404_no_such_url/')
-        self.browser.add_cookie(dict(
-            name=settings.SESSION_COOKIE_NAME,
-            value=session_key,
-            path='/',
-        ))
-
-
     def test_001(self):
         ''' 登录用户可以新建清单，然后在我的清单页面显示
         '''
