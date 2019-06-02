@@ -1,46 +1,20 @@
 #!python
 # coding: gbk
 #------------------------------
-# functional_tests.test_crawl_monitor
+# functional_tests.test_frequently_accessed
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-06-01
 #------------------------------
-import os
-import time
-
 from selenium.webdriver.common.keys import Keys
 
 from .base import FunctionalTest
 
 
-class CrawlMonitorTest(FunctionalTest):
-    ''' 登录测试
+class FrequentlyAccessedTest(FunctionalTest):
+    ''' 频繁访问测试
     '''
     def test_001(self):
-        ''' 监测到 USER-AGENT 错误
-            注意：使用PhantomJS浏览器测试
-        '''
-        if (self.staging_tests):
-            test_email = 'superlists_tests@163.com'
-        else:
-            test_email = 'abc@163.com'
-        
-        # 访问首页
-        # 在导航栏的登录区域输入邮箱地址
-        self.browser.get(self.live_server_url)
-        input_email = self.browser.find_element_by_name('email')
-        input_email.send_keys(test_email)
-        input_email.send_keys(Keys.ENTER)
-        
-        # 监测到 USER-AGENT 错误，提示“系统繁忙”的消息
-        self.wait_for(lambda: self.assertIn(
-            '系统繁忙',
-            self.browser.find_element_by_id('id_messages').text
-        ))
-
-
-    def test_002(self):
         ''' 连续时间间隔(5秒)内多次发送登录验证邮件
         '''
         if (self.staging_tests):

@@ -10,7 +10,7 @@ import time
 from sys import stdout, stderr
 
 
-USER_AGENT              = '^IP={0}^USER_AGENT={1}^TIME={2}^\n'
+UNKNOW_USER_AGENT       = '^IP={0}^USER_AGENT={1}^TIME={2}^\n'
 FREQUENTLY_ACCESSED     = '^IP={0}^FREQUENTLY-ACCESSED<{1}s^TIME={2}^\n'
 SEND_LOGIN_EMAIL        = '^IP={0}^EMAIL={1}^TIME={2}^\n'
 
@@ -40,7 +40,7 @@ class RequestFilter(object):
             and 'Safari' not in user_agent \
             and 'Chrome' not in user_agent
         ):
-            stdout.write(USER_AGENT.format(ip_addr, user_agent, self.get_formatted_time()))
+            stdout.write(UNKNOW_USER_AGENT.format(ip_addr, user_agent, self.get_formatted_time()))
             return True
 
         # Check Access Time

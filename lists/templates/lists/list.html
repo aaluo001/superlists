@@ -5,16 +5,6 @@
 {% block form_action %}{% url 'view_list' list.id %}{% endblock %}
 
 {% block dispaly_area_1 %}
-    {# 只有登录用户才能操作自己的清单 #}
-    {% if user.email %}
-        <div class="text-right">
-            <a href="{% url 'remove_list' list.id %}">删除清单</a>
-<!--
-            &nbsp;&nbsp;
-            <a href="{% url 'my_lists' %}">我的清单</a>
--->
-        </div>
-    {% endif %}
     <table id="id_list_table" class="table table-condensed">
         {% for item in list.item_set.all %}
             <tr>
@@ -24,4 +14,10 @@
             </tr>
         {% endfor %}
     </table>
+    {# 只有登录用户才能操作自己的清单 #}
+    {% if user.email %}
+        <div class="text-left">
+            <a href="{% url 'remove_list' list.id %}" class="btn btn-danger btn-sm">删除清单</a>
+        </div>
+    {% endif %}
 {% endblock %}
