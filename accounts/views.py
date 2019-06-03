@@ -49,10 +49,13 @@ SEND_EMAIL_FAILED    = '邮件发送失败！请检查您的邮箱地址是否正确。'
 LOGIN_FAILED         = '登录失败！请确认您的登录链接是否正确，或是重新输入邮箱地址进行登录。'
 
 
+def is_crawler(request):
+    return RequestFilter(request).crawl_monitor()
+
+    
 def send_login_email(request):
     # 监测网络爬虫
-    is_crawler = RequestFilter(request).crawl_monitor()
-    if (is_crawler):
+    if (is_crawler(request)):
         messages.error(request, IS_CRAWLER_ERROR)
         return redirect(reverse('home_page'))
     

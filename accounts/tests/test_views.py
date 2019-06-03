@@ -39,11 +39,15 @@ class SendLoginEmailTest(TestCase):
         self.assertEqual(token_object.email, 'abc@163.com')
 
 
-    def test_003(self):
+    @patch('accounts.views.is_crawler')
+    def test_003(self, mock_is_crawler):
         ''' 对同一邮箱地址发送两次邮件
             该邮箱地址在Token表中只有一条数据
             Token表中两次生成的UID不一致
         '''
+        ## 避免爬虫监测
+        mock_is_crawler.return_value = False
+        
         self.post_send_login_email()
         uid_1 = Token.objects.first().uid
         self.post_send_login_email()
