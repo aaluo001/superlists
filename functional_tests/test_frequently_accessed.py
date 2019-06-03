@@ -49,13 +49,16 @@ class FrequentlyAccessedTest(FunctionalTest):
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # 查看邮件内容，并得到第二个链接
-        email_body = self.wait_for_email(test_email)
-        url_2 = self.get_token_url(email_body)
+        
+        ## STAGING-TESTS 时，前一封收到的邮件已被删除
+        ## 因此无法取得
+        if (not self.staging_tests):
+            # 查看邮件内容，并得到第二个链接
+            email_body = self.wait_for_email(test_email)
+            url_2 = self.get_token_url(email_body)
 
-
-        # 两个链接是一样的
-        self.assertEqual(url_1, url_2)
+            # 两个链接是一样的
+            self.assertEqual(url_1, url_2)
 
         # 使用第一个链接，成功登录
         self.browser.get(url_1)
