@@ -38,7 +38,14 @@ class RequestFilter(object):
         '''
         session = self.request.session
         access_time = time.time()
-        ip_addr = self.request.META.get('REMOTE_ADDR')
+        
+        ip_addr = None
+        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
+        if (x_forwarded_for):
+            ip_addr = x_forwarded_for.split(',')[0]
+        else:
+            ip_addr = self.request.META.get('REMOTE_ADDR')
+        
         #user_agent = self.request.META.get('HTTP_USER_AGENT')
         
         # Check User-Agent
