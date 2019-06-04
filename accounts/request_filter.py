@@ -7,15 +7,18 @@
 # Create: 2019-06-01
 #------------------------------
 import time
-from sys import stdout, stderr
+import logging
 
 
-#UNKNOW_USER_AGENT       = '^IP={0}^USER_AGENT={1}^TIME={2}^\n'
-FREQUENTLY_ACCESSED     = '^IP={0}^FREQUENTLY-ACCESSED<{1}s^TIME={2}^\n'
-#SEND_LOGIN_EMAIL        = '^IP={0}^EMAIL={1}^TIME={2}^\n'
+#UNKNOW_USER_AGENT       = '^IP={0}^USER_AGENT={1}^TIME={2}^'
+FREQUENTLY_ACCESSED     = '^IP={0}^FREQUENTLY-ACCESSED<{1}s^TIME={2}^'
+#SEND_LOGIN_EMAIL        = '^IP={0}^EMAIL={1}^TIME={2}^'
 
 # 访问时间间隔
 ACCESS_TIME_DELAY       = 5
+
+# 日志
+logger = logging.getLogger(__name__)
 
 
 class RequestFilter(object):
@@ -44,7 +47,7 @@ class RequestFilter(object):
 #            and 'Safari'  not in user_agent \
 #            and 'Chrome'  not in user_agent \
 #        ):
-#            stdout.write(UNKNOW_USER_AGENT.format(ip_addr, user_agent, self.get_formatted_time()))
+#            logger.error(UNKNOW_USER_AGENT.format(ip_addr, user_agent, self.get_formatted_time()))
 #            return True
 
         # Check Access Time
@@ -52,7 +55,7 @@ class RequestFilter(object):
         if (session.get('ip_addr') == ip_addr \
             and access_time - session.get('access_time', 0) <= ACCESS_TIME_DELAY
         ):
-            stderr.write(FREQUENTLY_ACCESSED.format(ip_addr, ACCESS_TIME_DELAY, self.get_formatted_time()))
+            logger.error(FREQUENTLY_ACCESSED.format(ip_addr, ACCESS_TIME_DELAY, self.get_formatted_time()))
             return True
         
         # 设置Session
@@ -62,7 +65,7 @@ class RequestFilter(object):
         # 打印发送邮件信息
 #        email = self.request.POST.get('email')
 #        if (email):
-#            stdout.write(SEND_LOGIN_EMAIL.format(ip_addr, email, self.get_formatted_time()))
+#            logger.info(SEND_LOGIN_EMAIL.format(ip_addr, email, self.get_formatted_time()))
 
         # 非爬虫程序
         return False
