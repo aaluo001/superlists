@@ -42,7 +42,7 @@ class NewListTest(FunctionalTest):
         
         # 另启一个浏览器
         # 新建第二个待办事项清单
-        self.browser = webdriver.Firefox()
+        self.init_browser()
         self.browser.get(self.live_server_url)
         self.add_list_item('买一盒牛奶')
         list_url_2 = self.browser.current_url

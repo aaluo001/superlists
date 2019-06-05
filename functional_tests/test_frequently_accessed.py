@@ -14,7 +14,7 @@ class FrequentlyAccessedTest(FunctionalTest):
     ''' 频繁访问测试
     '''
     def test_001(self):
-        ''' 连续时间间隔(5秒)内多次发送登录验证邮件
+        ''' 连续时间间隔内多次发送登录验证邮件
         '''
         if (self.staging_tests):
             test_email = 'superlists_tests@163.com'
@@ -32,10 +32,6 @@ class FrequentlyAccessedTest(FunctionalTest):
             '邮件发送成功',
             self.browser.find_element_by_id('id_messages').text
         ))
-
-        # 查看邮件内容，并得到第一个链接
-        email_body = self.wait_for_email(test_email)
-        url_1 = self.get_token_url(email_body)
  
 
         # 第二次发送登录验证邮件
@@ -49,18 +45,6 @@ class FrequentlyAccessedTest(FunctionalTest):
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        
-        ## STAGING-TESTS 时，前一封收到的邮件已被删除
-        ## 因此无法取得
-        if (not self.staging_tests):
-            # 查看邮件内容，并得到第二个链接
-            email_body = self.wait_for_email(test_email)
-            url_2 = self.get_token_url(email_body)
-
-            # 两个链接是一样的
-            self.assertEqual(url_1, url_2)
-
-        # 使用第一个链接，成功登录
-        self.browser.get(url_1)
-        self.wait_to_be_logged_in(email=test_email)
+        # 监视日志
+        self.fail('Finish the test!')
 

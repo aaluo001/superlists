@@ -50,7 +50,7 @@ LOGIN_FAILED         = '登录失败！请确认您的登录链接是否正确，或是重新输入邮箱地
 
 
 def is_crawler(request):
-    return RequestFilter(request).crawl_monitor()
+    return RequestFilter(request).crawl_monitor(delay=5)
 
     
 def send_login_email(request):

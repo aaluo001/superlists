@@ -101,7 +101,7 @@ class LoginTest(FunctionalTest):
         time.sleep(5)
  
         # 第二次发送登录验证邮件
-        self.browser = webdriver.Firefox()
+        self.init_browser()
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)

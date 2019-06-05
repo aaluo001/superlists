@@ -40,11 +40,22 @@ def wait(func):
 
 
 class FunctionalTest(StaticLiveServerTestCase):
-  
-    def setUp(self):
+    ''' 功能测试（基类）
+    '''
+    def init_browser(self):
         self.browser = webdriver.Firefox()
         #self.browser = webdriver.PhantomJS()
+    
+    def quit_browser(self):
+        try:
+            self.browser.quit()
+        except:
+            pass
+
         
+    def setUp(self):
+        self.init_browser()
+
         self.staging_tests = False
         if (os.getenv('STAGING_TESTS') == 'yes'):
             self.staging_tests = True
@@ -54,9 +65,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             reset_database()
 
     def tearDown(self):
-        #self.browser.refresh()
-        #self.browser.quit()
-        self.browser.close()
+        self.quit_browser()
 
         
     def create_pre_authenticated_session(self, email):
@@ -119,11 +128,11 @@ class FunctionalTest(StaticLiveServerTestCase):
                 while (time.time() - start_time) < 60:
                     email_count, _ = inbox.stat()
                     for i in reversed(range(max(1, email_count-10), email_count+1)):
-                        print('getting email: {}'.format(i))
+                        #print('getting email: {}'.format(i))
                         _, lines, _ = inbox.retr(i)
                         lines = [ line.decode('utf-8') for line in lines ]
-                        print('email lines:')
-                        print(lines)
+                        #print('email lines:')
+                        #print(lines)
                         if ('From: superlists@163.com' in lines):
                             try: inbox.dele(i)
                             except: pass
