@@ -7,11 +7,11 @@
 # Create: 2019-06-01
 #------------------------------
 import time
-import logging
+#import logging
 
 
 # 日志
-LOG = logging.getLogger(__name__)
+#LOG = logging.getLogger(__name__)
 
 
 class RequestFilter(object):
@@ -53,7 +53,7 @@ class RequestFilter(object):
         if (session.get('ip_addr') == ip_addr \
             and access_time - session.get('access_time', 0) <= delay
         ):
-            LOG.error('frequently accessed error: ' + ip_addr)
+            #LOG.error('frequently accessed error: ' + ip_addr)
             return True
         
         # 非爬虫程序

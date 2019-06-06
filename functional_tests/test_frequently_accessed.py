@@ -45,6 +45,3 @@ class FrequentlyAccessedTest(FunctionalTest):
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # º‡ ”»’÷æ
-        self.fail('Finish the test!')
-
