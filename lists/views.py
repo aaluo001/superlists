@@ -99,3 +99,22 @@ def remove_list(request, list_id):
         list_object.delete()
     return redirect(reverse('my_lists'))
 
+
+def remove_list_item(request, item_id):
+    # 只有登录用户才能删除自己的待办事项
+    owner = get_owner(request)
+    if (not owner):
+        return redirect(reverse('home_page'))
+
+    try:
+        item_object = Item.objects.select_related('list').get(id=item_id)
+    except Item.DoesNotExist:
+        pass
+    else:
+        if (item_object.list.owner == owner):
+            item_object.delete()
+            #if (item_object.list.item_set.count() == 0):
+            #    return redirect(reverse('remove_list', args=[item_object.list.id, ]))
+            return redirect(item_object.list)
+
+    return redirect(reverse('my_lists'))

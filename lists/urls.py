@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^new$', views.new_list, name='new_list'),
     url(r'^(\d+)/$', views.view_list, name='view_list'),
     url(r'^(\d+)/remove$', views.remove_list, name='remove_list'),
+    url(r'^(\d+)/remove_item$', views.remove_list_item, name='remove_list_item'),
     url(r'^$', views.my_lists, name='my_lists'),
 ]

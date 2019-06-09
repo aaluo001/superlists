@@ -9,7 +9,13 @@
         {% for item in list.item_set.all %}
             <tr>
                 <td width="40" >{{ forloop.counter }}</td>
-                <td width="480" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
+                <td width="460" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
+                <td width="40" align="right">
+                    {# 第一条是清单标题，不能删除 #}
+                    {% if forloop.counter != 1 and user.email %}
+                        <a href="{% url 'remove_list_item' item.id %}" class="btn btn-danger btn-xs">×</a>
+                    {% endif %}
+                </td>
                 <td><br></td>
             </tr>
         {% endfor %}
@@ -18,6 +24,9 @@
     {% if user.email %}
         <div class="text-left">
             <a href="{% url 'remove_list' list.id %}" class="btn btn-danger btn-sm">删除清单</a>
+            <!--
+            <a href="#" class="btn btn-primary btn-sm">分享清单</a>
+            -->
         </div>
     {% endif %}
 {% endblock %}

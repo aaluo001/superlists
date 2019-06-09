@@ -6,6 +6,9 @@
 
 {% block dispaly_area_1 %}
     {% if list_set %}
+        <!--
+        2019-06-08 我的清单
+        只需要显示清单名称即可，没有必要显示创建日期等信息
         <table id="id_my_lists_table" class="table table-condensed">
             {% for list in list_set %}
                 <tr>
@@ -14,6 +17,13 @@
                 </tr>
             {% endfor %}
         </table>
+        -->
+
+        <ul id="id_my_lists_table">
+            {% for list in list_set %}
+                <li><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></li>
+            {% endfor %}
+        </ul>
     {% else %}
         <p>您还没有自己的清单，试试新建一个吧！</p>
     {% endif %}
