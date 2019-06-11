@@ -78,8 +78,7 @@ def view_list(request, list_id):
 def my_lists(request):
     # 只有登录用户才能查看自己的清单
     owner = get_owner(request)
-    if (not owner):
-        return redirect(reverse('home_page'))
+    if (not owner): return redirect(reverse('home_page'))
 
     list_set = List.objects.filter(owner=owner)
     return render(request, 'lists/my_lists.html', {'list_set': list_set})
@@ -88,8 +87,7 @@ def my_lists(request):
 def remove_list(request, list_id):
     # 只有登录用户才能删除自己的清单
     owner = get_owner(request)
-    if (not owner):
-        return redirect(reverse('home_page'))
+    if (not owner): return redirect(reverse('home_page'))
 
     try:
         list_object = List.objects.get(id=list_id, owner=owner)
@@ -103,18 +101,16 @@ def remove_list(request, list_id):
 def remove_list_item(request, item_id):
     # 只有登录用户才能删除自己的待办事项
     owner = get_owner(request)
-    if (not owner):
-        return redirect(reverse('home_page'))
+    if (not owner): return redirect(reverse('home_page'))
 
     try:
-        item_object = Item.objects.select_related('list').get(id=item_id)
+        item_object = Item.objects.select_related('list').get(id=item_id, list__owner=owner)
     except Item.DoesNotExist:
-        pass
+        return redirect(reverse('my_lists'))
     else:
-        if (item_object.list.owner == owner):
-            item_object.delete()
-            #if (item_object.list.item_set.count() == 0):
-            #    return redirect(reverse('remove_list', args=[item_object.list.id, ]))
-            return redirect(item_object.list)
+        item_object.delete()
+        if (item_object.list.item_set.count() == 0):
+            return redirect(reverse('remove_list', args=[item_object.list.id, ]))
+        return redirect(item_object.list)
 
-    return redirect(reverse('my_lists'))
+    

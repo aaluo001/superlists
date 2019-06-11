@@ -12,21 +12,25 @@
                 <td width="460" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
                 <td width="40" align="right">
                     {# 第一条是清单标题，不能删除 #}
-                    {% if forloop.counter != 1 and user.email %}
-                        <a href="{% url 'remove_list_item' item.id %}" class="btn btn-danger btn-xs">×</a>
+                    {% if user.email %}
+                        <!-- <a href="{% url 'remove_list_item' item.id %}" class="btn btn-default btn-xs">×</a> -->
+                        <form method="POST" action="{% url 'remove_list_item' item.id %}">
+                            <button type="submit" class="btn btn-default btn-xs"
+                                    {% if forloop.counter == 1 %} disabled {% endif %}>×</button>
+                            {% csrf_token %}
+                        </form>
                     {% endif %}
                 </td>
                 <td><br></td>
             </tr>
         {% endfor %}
     </table>
+
     {# 只有登录用户才能操作自己的清单 #}
     {% if user.email %}
-        <div class="text-left">
-            <a href="{% url 'remove_list' list.id %}" class="btn btn-danger btn-sm">删除清单</a>
-            <!--
-            <a href="#" class="btn btn-primary btn-sm">分享清单</a>
-            -->
-        </div>
+        <form class="text-left" method="POST" action="{% url 'remove_list' list.id %}">
+            <button class="btn btn-danger btn-sm">删除清单</button>
+            {% csrf_token %}
+        </form>
     {% endif %}
 {% endblock %}
