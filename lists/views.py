@@ -110,7 +110,8 @@ def remove_list_item(request, item_id):
     else:
         item_object.delete()
         if (item_object.list.item_set.count() == 0):
-            return redirect(reverse('remove_list', args=[item_object.list.id, ]))
+            item_object.list.delete()
+            return redirect(reverse('my_lists'))
         return redirect(item_object.list)
 
     
