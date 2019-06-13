@@ -28,8 +28,9 @@ class RemoveListItemTest(TestCase):
 
         
     def test_001(self):
-        ''' 没有完全删除清单项目时，跳转到清单项目显示页面
-            且List以及其余的Item没有被删除
+        ''' 未完全删除项目清单
+            该清单，以及其他清单项目都未被删除
+            页面跳转至清单页面
         '''
         list_object = self.create_list()
         item_object_1 = Item.objects.create(list=list_object, text='New item 1')
@@ -42,8 +43,9 @@ class RemoveListItemTest(TestCase):
 
 
     def test_002(self):
-        ''' 完全删除清单项目时，跳转到我的清单页面
-            且List也同时被删除
+        ''' 完全删除清单项目
+            该清单，以及所有的清单项目都被删除
+            页面跳转至我的清单页面
         '''
         list_object = self.create_list()
         item_object = Item.objects.create(list=list_object, text='New item 1')
@@ -56,28 +58,28 @@ class RemoveListItemTest(TestCase):
     
     
     def test_003(self):
-        ''' 没有找到清单时不会报错，页面也会跳转到我的清单
+        ''' 未找到要删除的清单项目
+            页面跳转至我的清单页面
         '''
-#        user_object = User.objects.create(email='abc@163.com')
-#        self.client.force_login(user_object)
-#        response = self.client.get('/lists/999/remove')
-#        self.assertRedirects(response, '/lists/')
+        list_object = self.create_list()
+        item_object = Item.objects.create(list=list_object, text='New item 1')
         
+        response = self.client.get('/lists/{}/remove_item'.format(999))
+        
+        self.assertRedirects(response, '/lists/')
+        self.assertIn(item_object, list_object.item_set.all())
+
         
     def test_004(self):
-        ''' 匿名用户直接跳转到首页
+        ''' 未登录用户无法删除清单项目
         '''
-#        user_object = User.objects.create(email='abc@163.com')
-#        # 未登录用户
-#        # self.client.force_login(user_object)
-#        list_object = List.objects.create(owner=user_object)
-#        item_object_1 = Item.objects.create(list=list_object, text='New item 1')
-#        item_object_2 = Item.objects.create(list=list_object, text='New item 2')
-#        response = self.client.get('/lists/{}/remove'.format(list_object.pk))
-#        
-#        self.assertEqual(Item.objects.count(), 2)
-#        self.assertEqual(List.objects.count(), 1)
-#        self.assertIn(list_object, user_object.list_set.all())
-#        self.assertRedirects(response, '/')
+        other_user_object = User.objects.create(email='other@163.com')
+        other_list_object = List.objects.create(owner=other_user_object)
+        other_item_object = Item.objects.create(list=other_list_object)
 
-
+        response = self.client.get('/lists/{}/remove_item'.format(other_item_object.pk))
+        
+        self.assertRedirects(response, '/')
+        self.assertIn(other_item_object, other_list_object.item_set.all())
+        
+        
