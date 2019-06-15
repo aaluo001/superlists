@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # lists.tests.test_forms.test_existing_list_item_form
 #------------------------------
@@ -14,52 +12,52 @@ from lists.forms  import ExistingListItemForm
 
 
 class ExistingListItemFormTest(TestCase):
-    ''' ¶ÔÏóÇåµ¥µÄ´ı°ìÊÂÏî±íµ¥²âÊÔ
+    ''' å¯¹è±¡æ¸…å•çš„å¾…åŠäº‹é¡¹è¡¨å•æµ‹è¯•
     '''
     def test_001(self):
-        ''' ´ı°ìÊÂÏîÊäÈë¿ò¼°ÆäÊôĞÔ
+        ''' å¾…åŠäº‹é¡¹è¾“å…¥æ¡†åŠå…¶å±æ€§
         '''
         list_object = List.objects.create()
         soup = BeautifulSoup(ExistingListItemForm(for_list=list_object).as_p(), 'html.parser')
         #print(soup)
         item_text = soup.find('input', {'name': 'text'})
         self.assertEqual(item_text['type'], 'text')
-        self.assertEqual(item_text['placeholder'], 'ÊäÈë´ı°ìÊÂÏî')
+        self.assertEqual(item_text['placeholder'], 'è¾“å…¥å¾…åŠäº‹é¡¹')
         self.assertEqual(item_text['maxlength'], '32')
         self.assertEqual(item_text['required'], '')
         self.assertEqual(item_text['class'], ['form-control', ])
 
         
     def test_002(self):
-        ''' ²»ÄÜÌá½»¿ÕµÄ´ı°ìÊÂÏî
+        ''' ä¸èƒ½æäº¤ç©ºçš„å¾…åŠäº‹é¡¹
         '''
         list_object = List.objects.create()
         form = ExistingListItemForm(for_list=list_object, data={'text': ''})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['´ı°ìÊÂÏî²»ÄÜÎª¿Õ£¡', ])
+        self.assertEqual(form.errors['text'], ['å¾…åŠäº‹é¡¹ä¸èƒ½ä¸ºç©ºï¼', ])
 
     
     def test_003(self):
-        ''' Ìá½»´ı°ìÊÂÏîµÄÄÚÈİ²»ÄÜ³¬¹ı32ÎÄ×Ö
+        ''' æäº¤å¾…åŠäº‹é¡¹çš„å†…å®¹ä¸èƒ½è¶…è¿‡32æ–‡å­—
         '''
         list_object = List.objects.create()
         form = ExistingListItemForm(for_list=list_object, data={'text': '123456789012345678901234567890123'})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['´ı°ìÊÂÏîµÄÄÚÈİ²»ÄÜ³¬¹ı32ÎÄ×Ö£¡', ])
+        self.assertEqual(form.errors['text'], ['å¾…åŠäº‹é¡¹çš„å†…å®¹ä¸èƒ½è¶…è¿‡32æ–‡å­—ï¼', ])
 
         
     def test_004(self):
-        ''' ²»ÄÜÌá½»ÖØ¸´µÄ´ı°ìÊÂÏî
+        ''' ä¸èƒ½æäº¤é‡å¤çš„å¾…åŠäº‹é¡¹
         '''
         list_object = List.objects.create()
         Item.objects.create(list=list_object, text='do me')
         form = ExistingListItemForm(for_list=list_object, data={'text': 'do me'})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['ÄúÒÑ¾­Ìá½»Ò»¸öÍ¬ÑùµÄ´ı°ìÊÂÏî£¡', ])
+        self.assertEqual(form.errors['text'], ['æ‚¨å·²ç»æäº¤ä¸€ä¸ªåŒæ ·çš„å¾…åŠäº‹é¡¹ï¼', ])
         
         
     def test_005(self):
-        ''' ½«±íµ¥ÄÚÈİ±£´æµ½Êı¾İ¿â
+        ''' å°†è¡¨å•å†…å®¹ä¿å­˜åˆ°æ•°æ®åº“
         '''
         list_object = List.objects.create()
         form = ExistingListItemForm(for_list=list_object, data={'text': 'do me'})

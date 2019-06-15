@@ -1,5 +1,3 @@
-#!python
-# coding: utf-8
 #------------------------------
 # lists.tests.test_views.test_new_list
 #------------------------------

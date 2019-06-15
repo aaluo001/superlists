@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_view_list
 #------------------------------
@@ -12,32 +10,32 @@ from .base import FunctionalTest
 
 
 class ViewListTest(FunctionalTest):
-    ''' ÏÔÊ¾Çåµ¥²âÊÔ
+    ''' æ˜¾ç¤ºæ¸…å•æµ‹è¯•
     '''
     def test_001(self):
-        ''' Í¨¹ıURLÏÔÊ¾Çåµ¥
+        ''' é€šè¿‡URLæ˜¾ç¤ºæ¸…å•
         '''
-        # ĞÂ½¨Çåµ¥
+        # æ–°å»ºæ¸…å•
         self.browser.get(self.live_server_url)
-        self.add_list_item('ÂòÒ»Ğ©¿×È¸ÓğÃ«')
-        self.add_list_item('ÓÃ¿×È¸ÓğÃ«×ö¼ÙÓ¬')
+        self.add_list_item('ä¹°ä¸€äº›å­”é›€ç¾½æ¯›')
+        self.add_list_item('ç”¨å­”é›€ç¾½æ¯›åšå‡è‡')
 
-        # È¡µÃµ±Ç°URL£¬²¢¹Ø±Õä¯ÀÀÆ÷
+        # å–å¾—å½“å‰URLï¼Œå¹¶å…³é—­æµè§ˆå™¨
         url = self.browser.current_url
         self.quit_browser()
         
-        # Í¨¹ıURLÀ´ÏÔÊ¾Çåµ¥
+        # é€šè¿‡URLæ¥æ˜¾ç¤ºæ¸…å•
         self.init_browser()
         self.browser.get(url)
         
-        # ·¢ÏÖÖ®Ç°ÊäÈëµÄ´ı°ìÊÂÏî
+        # å‘ç°ä¹‹å‰è¾“å…¥çš„å¾…åŠäº‹é¡¹
         self.wait_for(lambda: self.assertIn(
-            'ÂòÒ»Ğ©¿×È¸ÓğÃ«',
+            'ä¹°ä¸€äº›å­”é›€ç¾½æ¯›',
             self.browser.find_element_by_id('id_list_table').text
         ))
         
         self.wait_for(lambda: self.assertIn(
-            'ÓÃ¿×È¸ÓğÃ«×ö¼ÙÓ¬',
+            'ç”¨å­”é›€ç¾½æ¯›åšå‡è‡',
             self.browser.find_element_by_id('id_list_table').text
         ))
 

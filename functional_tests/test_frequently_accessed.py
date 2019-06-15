@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_frequently_accessed
 #------------------------------
@@ -11,37 +9,37 @@ from .base import FunctionalTest
 
 
 class FrequentlyAccessedTest(FunctionalTest):
-    ''' Æµ·±·ÃÎÊ²âÊÔ
+    ''' é¢‘ç¹è®¿é—®æµ‹è¯•
     '''
     def test_001(self):
-        ''' Á¬ĞøÊ±¼ä¼ä¸ôÄÚ¶à´Î·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş
+        ''' è¿ç»­æ—¶é—´é—´éš”å†…å¤šæ¬¡å‘é€ç™»å½•éªŒè¯é‚®ä»¶
         '''
         if (self.staging_tests):
             test_email = 'superlists_tests@163.com'
         else:
             test_email = 'abc@163.com'
 
-        # µÚÒ»´Î·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş
+        # ç¬¬ä¸€æ¬¡å‘é€ç™»å½•éªŒè¯é‚®ä»¶
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)
         input_email.send_keys(Keys.ENTER)
         
-        # ¼ì²âµ½¡°ÓÊ¼ş·¢ËÍ³É¹¦¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œé‚®ä»¶å‘é€æˆåŠŸâ€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÓÊ¼ş·¢ËÍ³É¹¦',
+            'é‚®ä»¶å‘é€æˆåŠŸ',
             self.browser.find_element_by_id('id_messages').text
         ))
  
 
-        # µÚ¶ş´Î·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş
+        # ç¬¬äºŒæ¬¡å‘é€ç™»å½•éªŒè¯é‚®ä»¶
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)
         input_email.send_keys(Keys.ENTER)
         
-        # ÓÉÓÚÊ±¼ä¼ä¸ô²»¹»(5Ãë)£¬ÌáÊ¾¡°ÏµÍ³·±Ã¦¡±µÄÏûÏ¢
+        # ç”±äºæ—¶é—´é—´éš”ä¸å¤Ÿ(5ç§’)ï¼Œæç¤ºâ€œç³»ç»Ÿç¹å¿™â€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÏµÍ³·±Ã¦',
+            'ç³»ç»Ÿç¹å¿™',
             self.browser.find_element_by_id('id_messages').text
         ))
 

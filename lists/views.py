@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # lists.views
 #------------------------------
@@ -17,7 +15,7 @@ from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
 
 
-NOT_FOUND_LIST_ERROR = 'Ã»ÓĞÕÒµ½¸ÃÇåµ¥£¬»ò¸ÃÇåµ¥ÒÑ±»É¾³ı£¡'
+NOT_FOUND_LIST_ERROR = 'æ²¡æœ‰æ‰¾åˆ°è¯¥æ¸…å•ï¼Œæˆ–è¯¥æ¸…å•å·²è¢«åˆ é™¤ï¼'
 
 def get_owner(request):
     if (request.user.is_authenticated): return request.user
@@ -31,8 +29,8 @@ def home_page(request):
 def new_list(request):
     form = ItemForm(data=request.POST)
     if (form.is_valid()):
-        # Èç¹ûµ±Ç°ÓÃ»§ÒÑ¾­µÇÂ¼£¬¾Í½«µ±Ç°ÓÃ»§°ó¶¨ÎªÇåµ¥µÄÓµÓĞÕß¡£
-        # ²»È»Çåµ¥½«Ã»ÓĞÓµÓĞÕß£¬¿ÉÒÔ±»ËùÓĞÎ´µÇÂ¼ÓÃ»§²é¿´¡£
+        # å¦‚æœå½“å‰ç”¨æˆ·å·²ç»ç™»å½•ï¼Œå°±å°†å½“å‰ç”¨æˆ·ç»‘å®šä¸ºæ¸…å•çš„æ‹¥æœ‰è€…ã€‚
+        # ä¸ç„¶æ¸…å•å°†æ²¡æœ‰æ‹¥æœ‰è€…ï¼Œå¯ä»¥è¢«æ‰€æœ‰æœªç™»å½•ç”¨æˆ·æŸ¥çœ‹ã€‚
         list_object = List()
         if (request.user.is_authenticated):
             list_object.owner = request.user
@@ -45,8 +43,8 @@ def new_list(request):
 
 
 def view_list(request, list_id):
-    # Èç¹ûµ±Ç°ÓÃ»§ÒÑ¾­µÇÂ¼£¬ÄÇÃ´Ö»ÄÜ¿´µ½×Ô¼ºµÄÇåµ¥¡£
-    # ²»È»Ö»ÄÜ¿´µ½Ã»ÓĞ°ó¶¨ÓµÓĞÕßµÄÇåµ¥¡£
+    # å¦‚æœå½“å‰ç”¨æˆ·å·²ç»ç™»å½•ï¼Œé‚£ä¹ˆåªèƒ½çœ‹åˆ°è‡ªå·±çš„æ¸…å•ã€‚
+    # ä¸ç„¶åªèƒ½çœ‹åˆ°æ²¡æœ‰ç»‘å®šæ‹¥æœ‰è€…çš„æ¸…å•ã€‚
     list_object = None
     try:
         list_object = List.objects.get(
@@ -76,7 +74,7 @@ def view_list(request, list_id):
 
 
 def my_lists(request):
-    # Ö»ÓĞµÇÂ¼ÓÃ»§²ÅÄÜ²é¿´×Ô¼ºµÄÇåµ¥
+    # åªæœ‰ç™»å½•ç”¨æˆ·æ‰èƒ½æŸ¥çœ‹è‡ªå·±çš„æ¸…å•
     owner = get_owner(request)
     if (not owner): return redirect(reverse('home_page'))
 
@@ -85,7 +83,7 @@ def my_lists(request):
 
 
 def remove_list(request, list_id):
-    # Ö»ÓĞµÇÂ¼ÓÃ»§²ÅÄÜÉ¾³ı×Ô¼ºµÄÇåµ¥
+    # åªæœ‰ç™»å½•ç”¨æˆ·æ‰èƒ½åˆ é™¤è‡ªå·±çš„æ¸…å•
     owner = get_owner(request)
     if (not owner): return redirect(reverse('home_page'))
 
@@ -99,7 +97,7 @@ def remove_list(request, list_id):
 
 
 def remove_list_item(request, item_id):
-    # Ö»ÓĞµÇÂ¼ÓÃ»§²ÅÄÜÉ¾³ı×Ô¼ºµÄ´ı°ìÊÂÏî
+    # åªæœ‰ç™»å½•ç”¨æˆ·æ‰èƒ½åˆ é™¤è‡ªå·±çš„å¾…åŠäº‹é¡¹
     owner = get_owner(request)
     if (not owner): return redirect(reverse('home_page'))
 

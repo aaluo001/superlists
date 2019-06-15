@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # accounts.tests.test_views
 #------------------------------
@@ -17,7 +15,7 @@ from accounts.models import Token
 
 
 class SendLoginEmailTest(TestCase):
-    ''' ·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş²âÊÔ
+    ''' å‘é€ç™»å½•éªŒè¯é‚®ä»¶æµ‹è¯•
     '''
     def post_send_login_email(self):
         return self.client.post('/accounts/send_login_email', 
@@ -25,14 +23,14 @@ class SendLoginEmailTest(TestCase):
 
 
     def test_001(self):
-        ''' ·¢ËÍÓÊ¼şºó£¬Ò³ÃæÌø×ªµ½Ê×Ò³
+        ''' å‘é€é‚®ä»¶åï¼Œé¡µé¢è·³è½¬åˆ°é¦–é¡µ
         '''
         response = self.post_send_login_email()
         self.assertRedirects(response, '/')
 
 
     def test_002(self):
-        ''' ·¢ËÍÓÊ¼şºó£¬Token±íÖĞµÄEmailµØÖ·ÓëÌá½»EmailµØÖ·Ò»ÖÂ
+        ''' å‘é€é‚®ä»¶åï¼ŒTokenè¡¨ä¸­çš„Emailåœ°å€ä¸æäº¤Emailåœ°å€ä¸€è‡´
         '''
         self.post_send_login_email()
         token_object = Token.objects.first()
@@ -41,11 +39,11 @@ class SendLoginEmailTest(TestCase):
 
     @patch('accounts.views.is_crawler')
     def test_003(self, mock_is_crawler):
-        ''' ¶ÔÍ¬Ò»ÓÊÏäµØÖ··¢ËÍÁ½´ÎÓÊ¼ş
-            ¸ÃÓÊÏäµØÖ·ÔÚToken±íÖĞÖ»ÓĞÒ»ÌõÊı¾İ
-            Token±íÖĞÁ½´ÎÉú³ÉµÄUID²»Ò»ÖÂ
+        ''' å¯¹åŒä¸€é‚®ç®±åœ°å€å‘é€ä¸¤æ¬¡é‚®ä»¶
+            è¯¥é‚®ç®±åœ°å€åœ¨Tokenè¡¨ä¸­åªæœ‰ä¸€æ¡æ•°æ®
+            Tokenè¡¨ä¸­ä¸¤æ¬¡ç”Ÿæˆçš„UIDä¸ä¸€è‡´
         '''
-        ## ±ÜÃâÅÀ³æ¼à²â
+        ## é¿å…çˆ¬è™«ç›‘æµ‹
         mock_is_crawler.return_value = False
         
         self.post_send_login_email()
@@ -59,22 +57,22 @@ class SendLoginEmailTest(TestCase):
 
     @patch('accounts.views.send_mail')
     def test_004(self, mock_send_mail):
-        ''' ·¢ËÍÓÊ¼şÊ±Ê¹ÓÃÁËsend_mail()º¯Êı
+        ''' å‘é€é‚®ä»¶æ—¶ä½¿ç”¨äº†send_mail()å‡½æ•°
         '''
         self.post_send_login_email()
         
         self.assertTrue(mock_send_mail.called)
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
         self.assertEqual(SUBJECT, subject)
-        self.assertIn('ÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõÁ´½Ó£¬Äú¿ÉÒÔÊ¹ÓÃÕâÌõÁ´½Ó½øĞĞµÇÂ¼', body)
-        self.assertIn('ÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõÁ´½Ó£¬Äú¿ÉÒÔÊ¹ÓÃÕâÌõÁ´½Ó½øĞĞµÇÂ¼', kwargs['html_message'])
+        self.assertIn('æˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡é“¾æ¥ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨è¿™æ¡é“¾æ¥è¿›è¡Œç™»å½•', body)
+        self.assertIn('æˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡é“¾æ¥ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨è¿™æ¡é“¾æ¥è¿›è¡Œç™»å½•', kwargs['html_message'])
         self.assertEqual(from_email, 'superlists@163.com')
         self.assertEqual(to_list, ['abc@163.com', ])
 
 
     @patch('accounts.views.send_mail')
     def test_005(self, mock_send_mail):
-        ''' ·¢ËÍÓÊ¼şÄÚÈİÀï°üº¬µÇÂ¼ÑéÖ¤µÄÁ´½Ó
+        ''' å‘é€é‚®ä»¶å†…å®¹é‡ŒåŒ…å«ç™»å½•éªŒè¯çš„é“¾æ¥
         '''
         self.post_send_login_email()
         
@@ -86,7 +84,7 @@ class SendLoginEmailTest(TestCase):
 
     @patch('accounts.views.messages')
     def test_006(self, mock_messages):
-        ''' ·¢ËÍÓÊ¼ş³É¹¦ºó£¬Ö´ĞĞÁËmessages.success()º¯Êı
+        ''' å‘é€é‚®ä»¶æˆåŠŸåï¼Œæ‰§è¡Œäº†messages.success()å‡½æ•°
         '''
         response = self.post_send_login_email()
         self.assertEqual(
@@ -98,7 +96,7 @@ class SendLoginEmailTest(TestCase):
     @patch('accounts.views.send_mail')
     @patch('accounts.views.messages')
     def test_007(self, mock_messages, mock_send_mail):
-        ''' ·¢ËÍÓÊ¼ş±»¾Üºó£¬Ö´ĞĞÁËmessages.error()º¯Êı
+        ''' å‘é€é‚®ä»¶è¢«æ‹’åï¼Œæ‰§è¡Œäº†messages.error()å‡½æ•°
         '''
         mock_send_mail.side_effect = smtplib.SMTPRecipientsRefused('Send mail error!')
         response = self.post_send_login_email()
@@ -110,28 +108,28 @@ class SendLoginEmailTest(TestCase):
 
 @patch('accounts.views.auth')
 class LoginTest(TestCase):
-    ''' µÇÂ¼²âÊÔ
+    ''' ç™»å½•æµ‹è¯•
     '''
     def get_login(self):
         return self.client.get('/accounts/login?token=abc123')
 
 
     def test_001(self, mock_auth):
-        ''' µÇÂ¼ºó£¬Ò³ÃæÌø×ªµ½Ê×Ò³
+        ''' ç™»å½•åï¼Œé¡µé¢è·³è½¬åˆ°é¦–é¡µ
         '''
         response = self.get_login()
         self.assertRedirects(response, '/')
 
 
     def test_002(self, mock_auth):
-        ''' µÇÂ¼ÑéÖ¤Ê±£¬Ê¹ÓÃÁËauth.authenticate()º¯Êı
+        ''' ç™»å½•éªŒè¯æ—¶ï¼Œä½¿ç”¨äº†auth.authenticate()å‡½æ•°
         '''
         self.get_login()
         self.assertEqual(mock_auth.authenticate.call_args, call(uid='abc123'))
 
 
     def test_003(self, mock_auth):
-        ''' µÇÂ¼ÑéÖ¤³É¹¦ºó£¬Ö´ĞĞÁËauth.login()º¯Êı
+        ''' ç™»å½•éªŒè¯æˆåŠŸåï¼Œæ‰§è¡Œäº†auth.login()å‡½æ•°
         '''
         response = self.get_login()
         self.assertEqual(
@@ -142,7 +140,7 @@ class LoginTest(TestCase):
 
     @patch('accounts.views.messages')
     def test_004(self, mock_messages, mock_auth):
-        ''' µÇÂ¼ÑéÖ¤Ê§°ÜÊ±£¬Ã»ÓĞÖ´ĞĞauth.login()º¯Êı£¬¶øÒªÖ´ĞĞÁËmessages.error()º¯Êı
+        ''' ç™»å½•éªŒè¯å¤±è´¥æ—¶ï¼Œæ²¡æœ‰æ‰§è¡Œauth.login()å‡½æ•°ï¼Œè€Œè¦æ‰§è¡Œäº†messages.error()å‡½æ•°
         '''
         mock_auth.authenticate.return_value = None
         response = self.get_login()

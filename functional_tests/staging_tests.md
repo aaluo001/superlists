@@ -1,17 +1,17 @@
 #====================
-# ¹ý¶É·þÎñÆ÷²âÊÔËµÃ÷
+# è¿‡æ¸¡æœåŠ¡å™¨æµ‹è¯•è¯´æ˜Ž
 #====================
 
-## ¹ý¶É·þÎñÆ÷²âÊÔ¿ªÊ¼Ö®Ç°£¬ÐèÒªÉèÖÃ»·¾³±äÁ¿
+## è¿‡æ¸¡æœåŠ¡å™¨æµ‹è¯•å¼€å§‹ä¹‹å‰ï¼Œéœ€è¦è®¾ç½®çŽ¯å¢ƒå˜é‡
 
-* ¹ý¶É·þÎñÆ÷·ÃÎÊÃÜÂë
+* è¿‡æ¸¡æœåŠ¡å™¨è®¿é—®å¯†ç 
   export STAGING_SERVER_PASSWORD=******
 
-* ²âÊÔÓÊÏäÃÜÂë
+* æµ‹è¯•é‚®ç®±å¯†ç 
   export TEST_EMAIL_PASSWORD=******
 
 
-## ¹ý¶É·þÎñÆ÷²âÊÔÃüÁî
+## è¿‡æ¸¡æœåŠ¡å™¨æµ‹è¯•å‘½ä»¤
 
 STAGING_TESTS=yes python manage.py test functional_tests.test_login
 STAGING_TESTS=yes python manage.py test functional_tests

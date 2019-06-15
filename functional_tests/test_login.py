@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_login
 #------------------------------
@@ -16,124 +14,124 @@ from .base import FunctionalTest
 
 
 class LoginTest(FunctionalTest):
-    ''' µÇÂ¼²âÊÔ
+    ''' ç™»å½•æµ‹è¯•
     '''
     def test_001(self):
-        ''' ÊäÈëÓÊÏäµØÖ··¢ËÍÓÊ¼ş£¬È»ºóÈ¡µÃµÇÂ¼ÑéÖ¤µÄÁ´½Ó²¢³É¹¦µÇÂ¼
+        ''' è¾“å…¥é‚®ç®±åœ°å€å‘é€é‚®ä»¶ï¼Œç„¶åå–å¾—ç™»å½•éªŒè¯çš„é“¾æ¥å¹¶æˆåŠŸç™»å½•
         '''
         if (self.staging_tests):
             test_email = 'superlists_tests@163.com'
         else:
             test_email = 'abc@163.com'
         
-        # ·ÃÎÊÊ×Ò³
-        # ÔÚµ¼º½À¸µÄµÇÂ¼ÇøÓòÊäÈëÓÊÏäµØÖ·
+        # è®¿é—®é¦–é¡µ
+        # åœ¨å¯¼èˆªæ çš„ç™»å½•åŒºåŸŸè¾“å…¥é‚®ç®±åœ°å€
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)
         input_email.send_keys(Keys.ENTER)
         
-        # ¼ì²âµ½¡°ÓÊ¼ş·¢ËÍ³É¹¦¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œé‚®ä»¶å‘é€æˆåŠŸâ€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÓÊ¼ş·¢ËÍ³É¹¦',
+            'é‚®ä»¶å‘é€æˆåŠŸ',
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # ²é¿´ÓÊ¼şÄÚÈİ£¬²¢ÕÒµ½µÇÂ¼ÑéÖ¤µÄÁ´½Ó
+        # æŸ¥çœ‹é‚®ä»¶å†…å®¹ï¼Œå¹¶æ‰¾åˆ°ç™»å½•éªŒè¯çš„é“¾æ¥
         email_body = self.wait_for_email(test_email)
         url = self.get_token_url(email_body)
         self.assertIn(self.live_server_url, url)
 
-        # Ê¹ÓÃÁ´½Ó½øĞĞµÇÂ¼
+        # ä½¿ç”¨é“¾æ¥è¿›è¡Œç™»å½•
         self.browser.get(url)
         self.wait_to_be_logged_in(email=test_email)
 
-        # ÍË³ö
-        self.browser.find_element_by_link_text('ÍË³ö').click()
+        # é€€å‡º
+        self.browser.find_element_by_link_text('é€€å‡º').click()
         self.wait_to_be_logged_out(email=test_email)
 
 
     def test_002(self):
-        ''' Ê¹ÓÃ´íÎóµÄÁ´½ÓÎŞ·¨Íê³ÉµÇÂ¼£¬²¢µÃµ½µÇÂ¼Ê§°ÜµÄÌáÊ¾
+        ''' ä½¿ç”¨é”™è¯¯çš„é“¾æ¥æ— æ³•å®Œæˆç™»å½•ï¼Œå¹¶å¾—åˆ°ç™»å½•å¤±è´¥çš„æç¤º
         '''
-        # Ê¹ÓÃ´íÎóµÄÁ´½Ó·ÃÎÊÍøÕ¾
+        # ä½¿ç”¨é”™è¯¯çš„é“¾æ¥è®¿é—®ç½‘ç«™
         discorrect_url = '{}/accounts/login?token=abc123'.format(self.live_server_url)
         self.browser.get(discorrect_url)
 
-        # ¼ì²âµ½¡°µÇÂ¼Ê§°Ü¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œç™»å½•å¤±è´¥â€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'µÇÂ¼Ê§°Ü',
+            'ç™»å½•å¤±è´¥',
             self.browser.find_element_by_id('id_messages').text
         ))
-        # ¼ì²âµ½ÓÊÏäµØÖ·µÄÊäÈë¿ò
+        # æ£€æµ‹åˆ°é‚®ç®±åœ°å€çš„è¾“å…¥æ¡†
         self.browser.find_element_by_name('email')
 
 
     def test_003(self):
-        ''' ¶ÔÍ¬Ò»ÓÊÏäµØÖ··¢ËÍÁËÁ½´ÎµÇÂ¼ÑéÖ¤µÄÓÊ¼ş
-            ÄÇÃ´£¬µÚÒ»´ÎµÃµ½µÄµÇÂ¼ÑéÖ¤ÓÊ¼şÖĞµÄÁ´½ÓÎŞ·¨Íê³ÉµÇÂ¼
-            µÚ¶ş´ÎµÃµ½µÄÔò¿ÉÒÔ
+        ''' å¯¹åŒä¸€é‚®ç®±åœ°å€å‘é€äº†ä¸¤æ¬¡ç™»å½•éªŒè¯çš„é‚®ä»¶
+            é‚£ä¹ˆï¼Œç¬¬ä¸€æ¬¡å¾—åˆ°çš„ç™»å½•éªŒè¯é‚®ä»¶ä¸­çš„é“¾æ¥æ— æ³•å®Œæˆç™»å½•
+            ç¬¬äºŒæ¬¡å¾—åˆ°çš„åˆ™å¯ä»¥
         '''
         if (self.staging_tests):
             test_email = 'superlists_tests@163.com'
         else:
             test_email = 'abc@163.com'
 
-        # µÚÒ»´Î·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş
+        # ç¬¬ä¸€æ¬¡å‘é€ç™»å½•éªŒè¯é‚®ä»¶
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)
         input_email.send_keys(Keys.ENTER)
         
-        # ¼ì²âµ½¡°ÓÊ¼ş·¢ËÍ³É¹¦¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œé‚®ä»¶å‘é€æˆåŠŸâ€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÓÊ¼ş·¢ËÍ³É¹¦',
+            'é‚®ä»¶å‘é€æˆåŠŸ',
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # ²é¿´ÓÊ¼şÄÚÈİ£¬²¢µÃµ½µÚÒ»¸öÁ´½Ó
+        # æŸ¥çœ‹é‚®ä»¶å†…å®¹ï¼Œå¹¶å¾—åˆ°ç¬¬ä¸€ä¸ªé“¾æ¥
         email_body = self.wait_for_email(test_email)
         url_1 = self.get_token_url(email_body)
         self.browser.quit()
 
         
-        # ¹æ±ÜÅÀ³æ¼à²â³ÌĞò
+        # è§„é¿çˆ¬è™«ç›‘æµ‹ç¨‹åº
         time.sleep(5)
  
-        # µÚ¶ş´Î·¢ËÍµÇÂ¼ÑéÖ¤ÓÊ¼ş
+        # ç¬¬äºŒæ¬¡å‘é€ç™»å½•éªŒè¯é‚®ä»¶
         self.init_browser()
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(test_email)
         input_email.send_keys(Keys.ENTER)
         
-        # ¼ì²âµ½¡°ÓÊ¼ş·¢ËÍ³É¹¦¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œé‚®ä»¶å‘é€æˆåŠŸâ€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÓÊ¼ş·¢ËÍ³É¹¦',
+            'é‚®ä»¶å‘é€æˆåŠŸ',
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # ²é¿´ÓÊ¼şÄÚÈİ£¬²¢µÃµ½µÚ¶ş¸öÁ´½Ó
+        # æŸ¥çœ‹é‚®ä»¶å†…å®¹ï¼Œå¹¶å¾—åˆ°ç¬¬äºŒä¸ªé“¾æ¥
         email_body = self.wait_for_email(test_email)
         url_2 = self.get_token_url(email_body)
 
 
-        # Á½¸öÁ´½ÓÊÇ²»Ò»ÑùµÄ
+        # ä¸¤ä¸ªé“¾æ¥æ˜¯ä¸ä¸€æ ·çš„
         self.assertNotEqual(url_1, url_2)
 
-        # Ê¹ÓÃµÚÒ»¸öÁ´½Ó
+        # ä½¿ç”¨ç¬¬ä¸€ä¸ªé“¾æ¥
         self.browser.get(url_1)
 
-        # ¼ì²âµ½¡°µÇÂ¼Ê§°Ü¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œç™»å½•å¤±è´¥â€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'µÇÂ¼Ê§°Ü',
+            'ç™»å½•å¤±è´¥',
             self.browser.find_element_by_id('id_messages').text
         ))
-        # ¼ì²âµ½ÓÊÏäµØÖ·µÄÊäÈë¿ò
+        # æ£€æµ‹åˆ°é‚®ç®±åœ°å€çš„è¾“å…¥æ¡†
         self.browser.find_element_by_name('email')
 
 
-        # Ê¹ÓÃµÚ¶ş¸öÁ´½Ó£¬³É¹¦µÇÂ¼
+        # ä½¿ç”¨ç¬¬äºŒä¸ªé“¾æ¥ï¼ŒæˆåŠŸç™»å½•
         self.browser.get(url_2)
         self.wait_to_be_logged_in(email=test_email)
 

@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # server_tools.py
 #------------------------------
@@ -11,7 +9,7 @@ from fabric.api import env, run
 from fabric.context_managers import settings
 
 
-# ¹ı¶É·şÎñÆ÷
+# è¿‡æ¸¡æœåŠ¡å™¨
 STAGING_USER   = 'root'
 STAGING_HOST   = '47.97.118.237'
 STAGING_SERVER = 'www.tjw-superlists-staging.site'

@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_send_login_email_validation
 #------------------------------
@@ -11,43 +9,43 @@ from .base import FunctionalTest
 
 
 class SendLoginEmailValidationTest(FunctionalTest):
-    ''' ·¢ËÍµÇÂ¼ÓÊ¼şÑéÖ¤²âÊÔ
+    ''' å‘é€ç™»å½•é‚®ä»¶éªŒè¯æµ‹è¯•
     '''
     def test_001(self):
-        ''' Î´ÊäÈëÓÊÏäµØÖ·¾Í·¢ËÍÓÊ¼ş
+        ''' æœªè¾“å…¥é‚®ç®±åœ°å€å°±å‘é€é‚®ä»¶
         '''
-        # ·ÃÎÊÊ×Ò³
-        # Î´ÊäÈëÓÊÏäµØÖ·¾Í·¢ËÍÓÊ¼ş
+        # è®¿é—®é¦–é¡µ
+        # æœªè¾“å…¥é‚®ç®±åœ°å€å°±å‘é€é‚®ä»¶
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys(Keys.ENTER)
 
-        # ä¯ÀÀÆ÷½Ø»ñÁËÇëÇó£¬Ò³Ãæ²»»á±»¼ÓÔØ
+        # æµè§ˆå™¨æˆªè·äº†è¯·æ±‚ï¼Œé¡µé¢ä¸ä¼šè¢«åŠ è½½
         self.wait_for(lambda:
             self.browser.find_element_by_css_selector('#id_text:invalid')
         )
 
 
     def test_002(self):
-        ''' ·¢ËÍ´íÎóÓÊÏäµØÖ·£¬»áµÃµ½·¢ËÍÓÊ¼şÊ§°ÜµÄÌáÊ¾
-            ¶ø²»»á³öÏÖServer Error (500)
+        ''' å‘é€é”™è¯¯é‚®ç®±åœ°å€ï¼Œä¼šå¾—åˆ°å‘é€é‚®ä»¶å¤±è´¥çš„æç¤º
+            è€Œä¸ä¼šå‡ºç°Server Error (500)
         '''
-        # Ö»ÄÜÔÚ¹ı¶ÉÍøÕ¾ÖĞ²âÊÔ
+        # åªèƒ½åœ¨è¿‡æ¸¡ç½‘ç«™ä¸­æµ‹è¯•
         if (not self.staging_tests): return
         
-        # ·ÃÎÊÊ×Ò³
-        # ÔÚµ¼º½À¸µÄµÇÂ¼ÇøÓòÊäÈë´íÎóµÄÓÊÏäµØÖ·
+        # è®¿é—®é¦–é¡µ
+        # åœ¨å¯¼èˆªæ çš„ç™»å½•åŒºåŸŸè¾“å…¥é”™è¯¯çš„é‚®ç®±åœ°å€
         self.browser.get(self.live_server_url)
         input_email = self.browser.find_element_by_name('email')
         input_email.send_keys('error_email_tests@163.com')
         input_email.send_keys(Keys.ENTER)
         
-        # ¼ì²âµ½¡°ÓÊ¼ş·¢ËÍÊ§°Ü¡±µÄÏûÏ¢
+        # æ£€æµ‹åˆ°â€œé‚®ä»¶å‘é€å¤±è´¥â€çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'ÓÊ¼ş·¢ËÍÊ§°Ü',
+            'é‚®ä»¶å‘é€å¤±è´¥',
             self.browser.find_element_by_id('id_messages').text
         ))
 
-        # Ã»ÓĞ¼ì²âµ½¡°ServerError(500)¡±
+        # æ²¡æœ‰æ£€æµ‹åˆ°â€œServerError(500)â€
         self.assertNotIn('Server Error (500)', self.browser.page_source)
 

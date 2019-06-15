@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # accounts.request_fileter
 #------------------------------
@@ -10,23 +8,23 @@ import time
 #import logging
 
 
-# ÈÕÖ¾
+# æ—¥å¿—
 #LOG = logging.getLogger(__name__)
 
 
 class RequestFilter(object):
-    ''' ÇëÇó¹ıÂËÆ÷
+    ''' è¯·æ±‚è¿‡æ»¤å™¨
     '''
     def __init__(self, request):
         self.request = request
 
     def crawl_monitor(self, delay=3):
-        ''' ·´ÅÀ³æ¼à²âÆ÷
+        ''' åçˆ¬è™«ç›‘æµ‹å™¨
             [Params]
-                delay: ÑÓ³Ù¼ì²é£¨Ãëµ¥Î»£©
+                delay: å»¶è¿Ÿæ£€æŸ¥ï¼ˆç§’å•ä½ï¼‰
             [Returns]
-                True:  ¼à²âµ½ÅÀ³æ³ÌĞò
-                False: ·ÇÅÀ³æ³ÌĞò
+                True:  ç›‘æµ‹åˆ°çˆ¬è™«ç¨‹åº
+                False: éçˆ¬è™«ç¨‹åº
         '''
         session = self.request.session
         access_time = time.time()
@@ -49,14 +47,14 @@ class RequestFilter(object):
 #            return True
 
         # Check Access Time
-        # Í¬Ò»IPµÄ·ÃÎÊÊ±¼äÔÚ5ÃëÒÔÄÚ£¬ÔòÊÓÎªÅÀ³æ³ÌĞò
+        # åŒä¸€IPçš„è®¿é—®æ—¶é—´åœ¨5ç§’ä»¥å†…ï¼Œåˆ™è§†ä¸ºçˆ¬è™«ç¨‹åº
         if (session.get('ip_addr') == ip_addr \
             and access_time - session.get('access_time', 0) <= delay
         ):
             #LOG.error('frequently accessed error: ' + ip_addr)
             return True
         
-        # ·ÇÅÀ³æ³ÌĞò
+        # éçˆ¬è™«ç¨‹åº
         session['ip_addr'] = ip_addr
         session['access_time'] = access_time
         return False

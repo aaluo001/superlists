@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # accounts.views
 #------------------------------
@@ -21,21 +19,21 @@ from accounts.request_filter import RequestFilter
 
 EMAIL_REGEX = r'[^@]+@[^@]+\.[^@]+'
 
-SUBJECT = 'ÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõµÇÂ¼ÑéÖ¤µÄÁ´½Ó'
+SUBJECT = 'æˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡ç™»å½•éªŒè¯çš„é“¾æ¥'
 
 TEXT_MESSAGE = '''
-    ÄúºÃ£¡\n
-    ÄúÔÚ Superlists ÍøÕ¾ÊäÈëÁËÄúµÄÓÊÏäµØÖ·½øĞĞµÇÂ¼ÑéÖ¤£¬\n
-    Îª´ËÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõÁ´½Ó£¬Äú¿ÉÒÔÊ¹ÓÃÕâÌõÁ´½Ó½øĞĞµÇÂ¼£º\n
+    æ‚¨å¥½ï¼\n
+    æ‚¨åœ¨ Superlists ç½‘ç«™è¾“å…¥äº†æ‚¨çš„é‚®ç®±åœ°å€è¿›è¡Œç™»å½•éªŒè¯ï¼Œ\n
+    ä¸ºæ­¤æˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡é“¾æ¥ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨è¿™æ¡é“¾æ¥è¿›è¡Œç™»å½•ï¼š\n
     {0}
 '''
 
 HTML_MESSAGE = '''
     <html>
     <body>
-        ÄúºÃ£¡<br>
-        ÄúÔÚ Superlists ÍøÕ¾ÊäÈëÁËÄúµÄÓÊÏäµØÖ·½øĞĞµÇÂ¼ÑéÖ¤£¬<br>
-        Îª´ËÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõÁ´½Ó£¬Äú¿ÉÒÔÊ¹ÓÃÕâÌõÁ´½Ó½øĞĞµÇÂ¼£º<br>
+        æ‚¨å¥½ï¼<br>
+        æ‚¨åœ¨ Superlists ç½‘ç«™è¾“å…¥äº†æ‚¨çš„é‚®ç®±åœ°å€è¿›è¡Œç™»å½•éªŒè¯ï¼Œ<br>
+        ä¸ºæ­¤æˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡é“¾æ¥ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨è¿™æ¡é“¾æ¥è¿›è¡Œç™»å½•ï¼š<br>
         <a href="{0}" target="_blank">{0}</a>
     </body>
     </html>
@@ -43,10 +41,10 @@ HTML_MESSAGE = '''
 
 FROM_EMAIL = 'superlists@163.com'
 
-IS_CRAWLER_ERROR     = 'ÏµÍ³·±Ã¦£¬ÇëÉÔºóÔÙÊÔ£¡'
-SEND_EMAIL_SUCCESSED = 'ÓÊ¼ş·¢ËÍ³É¹¦£¡Çë¼ì²éÄúµÄÓÊ¼şÄÚÈİ£¬ÎÒÃÇ¸øÄú·¢ËÍÁËÒ»ÌõÁ´½Ó£¬Äú¿ÉÒÔÊ¹ÓÃÕâÌõÁ´½Ó½øĞĞµÇÂ¼¡£'
-SEND_EMAIL_FAILED    = 'ÓÊ¼ş·¢ËÍÊ§°Ü£¡Çë¼ì²éÄúµÄÓÊÏäµØÖ·ÊÇ·ñÕıÈ·¡£'
-LOGIN_FAILED         = 'µÇÂ¼Ê§°Ü£¡ÇëÈ·ÈÏÄúµÄµÇÂ¼Á´½ÓÊÇ·ñÕıÈ·£¬»òÊÇÖØĞÂÊäÈëÓÊÏäµØÖ·½øĞĞµÇÂ¼¡£'
+IS_CRAWLER_ERROR     = 'ç³»ç»Ÿç¹å¿™ï¼Œè¯·ç¨åå†è¯•ï¼'
+SEND_EMAIL_SUCCESSED = 'é‚®ä»¶å‘é€æˆåŠŸï¼è¯·æ£€æŸ¥æ‚¨çš„é‚®ä»¶å†…å®¹ï¼Œæˆ‘ä»¬ç»™æ‚¨å‘é€äº†ä¸€æ¡é“¾æ¥ï¼Œæ‚¨å¯ä»¥ä½¿ç”¨è¿™æ¡é“¾æ¥è¿›è¡Œç™»å½•ã€‚'
+SEND_EMAIL_FAILED    = 'é‚®ä»¶å‘é€å¤±è´¥ï¼è¯·æ£€æŸ¥æ‚¨çš„é‚®ç®±åœ°å€æ˜¯å¦æ­£ç¡®ã€‚'
+LOGIN_FAILED         = 'ç™»å½•å¤±è´¥ï¼è¯·ç¡®è®¤æ‚¨çš„ç™»å½•é“¾æ¥æ˜¯å¦æ­£ç¡®ï¼Œæˆ–æ˜¯é‡æ–°è¾“å…¥é‚®ç®±åœ°å€è¿›è¡Œç™»å½•ã€‚'
 
 
 def is_crawler(request):
@@ -54,18 +52,18 @@ def is_crawler(request):
 
     
 def send_login_email(request):
-    # ¼à²âÍøÂçÅÀ³æ
+    # ç›‘æµ‹ç½‘ç»œçˆ¬è™«
     if (is_crawler(request)):
         messages.error(request, IS_CRAWLER_ERROR)
         return redirect(reverse('home_page'))
     
-    # ¼ì²éÓÊÏäµØÖ·ÊÇ·ñÕıÈ·
+    # æ£€æŸ¥é‚®ç®±åœ°å€æ˜¯å¦æ­£ç¡®
     email = request.POST['email']
     if (not re.match(EMAIL_REGEX, email)):
         messages.error(request, SEND_EMAIL_FAILED)
         return redirect(reverse('home_page'))
     
-    # ×÷³ÉĞ§ÑéÂë
+    # ä½œæˆæ•ˆéªŒç 
     token_object = None
     try:
         token_object = Token.objects.get(email=email)
@@ -75,14 +73,14 @@ def send_login_email(request):
     except Token.DoesNotExist:
         token_object = Token.objects.create(email=email, uid=uuid.uuid4())
 
-    # ×÷³ÉÓÊ¼şÄÚÈİ
+    # ä½œæˆé‚®ä»¶å†…å®¹
     url = request.build_absolute_uri(
         reverse('login') + '?token={}'.format(token_object.uid)
     )
     text_message = TEXT_MESSAGE.format(url)
     html_message = HTML_MESSAGE.format(url)
     
-    # ·¢ËÍÓÊ¼ş
+    # å‘é€é‚®ä»¶
     try:
         send_mail(SUBJECT, text_message, FROM_EMAIL, [email, ], html_message=html_message)
     except smtplib.SMTPRecipientsRefused:

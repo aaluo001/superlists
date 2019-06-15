@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_remove_list
 #------------------------------
@@ -12,36 +10,36 @@ from .base import FunctionalTest
 
 
 class RemoveListTest(FunctionalTest):
-    ''' É¾³ıÇåµ¥²âÊÔ
+    ''' åˆ é™¤æ¸…å•æµ‹è¯•
     '''
     def test_001(self):
-        ''' É¾³ıÇåµ¥ºó£¬Ìø×ªµ½"ÎÒµÄÇåµ¥"Ò³Ãæ
-            ÇÒÉ¾³ıµÄÇåµ¥ÎŞ·¨·ÃÎÊ
+        ''' åˆ é™¤æ¸…å•åï¼Œè·³è½¬åˆ°"æˆ‘çš„æ¸…å•"é¡µé¢
+            ä¸”åˆ é™¤çš„æ¸…å•æ— æ³•è®¿é—®
         '''
-        # ´´½¨µÇÂ¼ÓÃ»§
+        # åˆ›å»ºç™»å½•ç”¨æˆ·
         self.create_pre_authenticated_session('abc@163.com')
 
-        # ĞÂ½¨Çåµ¥
+        # æ–°å»ºæ¸…å•
         self.browser.get(self.live_server_url)
-        self.add_list_item('ÂòÒ»Ğ©¿×È¸ÓğÃ«')
-        self.add_list_item('ÓÃ¿×È¸ÓğÃ«×ö¼ÙÓ¬')
-        # È¡µÃµ±Ç°URL
+        self.add_list_item('ä¹°ä¸€äº›å­”é›€ç¾½æ¯›')
+        self.add_list_item('ç”¨å­”é›€ç¾½æ¯›åšå‡è‡')
+        # å–å¾—å½“å‰URL
         url = self.browser.current_url
         
-        # É¾³ıÇåµ¥
-        self.browser.find_element_by_link_text('É¾³ıÇåµ¥').click()
+        # åˆ é™¤æ¸…å•
+        self.browser.find_element_by_css_selector('button#id_remove_list').click()
 
-        # Ç¨ÒÆµ½"ÎÒµÄÇåµ¥"Ò³Ãæ
+        # è¿ç§»åˆ°"æˆ‘çš„æ¸…å•"é¡µé¢
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            'ÎÒµÄÇåµ¥'
+            'æˆ‘çš„æ¸…å•'
         ))
         self.assertIn('/lists/', self.browser.current_url)
         
-        # É¾³ıµÄÇåµ¥ÎŞ·¨·ÃÎÊ
+        # åˆ é™¤çš„æ¸…å•æ— æ³•è®¿é—®
         self.browser.get(url)
         self.wait_for(lambda: self.assertIn(
-            'Ã»ÓĞÕÒµ½¸ÃÇåµ¥',
+            'æ²¡æœ‰æ‰¾åˆ°è¯¥æ¸…å•',
             self.browser.find_element_by_id('id_messages').text
         ))
         self.assertEqual(self.browser.current_url, self.live_server_url + '/')

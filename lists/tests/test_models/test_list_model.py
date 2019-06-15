@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # lists.tests.test_models.test_list_model
 #------------------------------
@@ -15,10 +13,10 @@ from lists.models import List, Item
 
 
 class ListModelTest(TestCase):
-    ''' Çåµ¥Ä£ĞÍ²âÊÔ
+    ''' æ¸…å•æ¨¡å‹æµ‹è¯•
     '''
     def test_001(self):
-        ''' È¡µÃÇåµ¥µÄURLÁ´½Ó
+        ''' å–å¾—æ¸…å•çš„URLé“¾æ¥
         '''
         list_object = List.objects.create()
         self.assertEqual( \
@@ -28,7 +26,7 @@ class ListModelTest(TestCase):
 
 
     def test_002(self):
-        ''' ¿ÉÒÔÖ¸¶¨Çåµ¥µÄÓµÓĞÕß
+        ''' å¯ä»¥æŒ‡å®šæ¸…å•çš„æ‹¥æœ‰è€…
         '''
         user_object = User.objects.create(email='abc@163.com')
         list_object = List.objects.create(owner=user_object)
@@ -36,13 +34,13 @@ class ListModelTest(TestCase):
 
 
     def test_003(self):
-        ''' ¿ÉÒÔ²»Ö¸¶¨Çåµ¥µÄÓµÓĞÕß
+        ''' å¯ä»¥ä¸æŒ‡å®šæ¸…å•çš„æ‹¥æœ‰è€…
         '''
-        # ĞÂ½¨Ò»ÌõÇåµ¥Êı¾İ£¬Çåµ¥µÄÓµÓĞÕßÊÇNULL
+        # æ–°å»ºä¸€æ¡æ¸…å•æ•°æ®ï¼Œæ¸…å•çš„æ‹¥æœ‰è€…æ˜¯NULL
         List.objects.create()
         self.assertIsNone(List.objects.first().owner)
         
-        # ÏÂÃæ»á³öÏÖÒì³££¬ÒòÎªowner×Ö¶ÎÃ»ÓĞÖ¸¶¨blank=True
+        # ä¸‹é¢ä¼šå‡ºç°å¼‚å¸¸ï¼Œå› ä¸ºownerå­—æ®µæ²¡æœ‰æŒ‡å®šblank=True
         with self.assertRaises(ValidationError):
             list_object = List()
             list_object.full_clean()
@@ -50,7 +48,7 @@ class ListModelTest(TestCase):
 
 
     def test_004(self):
-        ''' Çåµ¥µÄ±êÌâÊÇµÚÒ»Ìõ´ı°ìÊÂÏî
+        ''' æ¸…å•çš„æ ‡é¢˜æ˜¯ç¬¬ä¸€æ¡å¾…åŠäº‹é¡¹
         '''
         list_object = List.objects.create()
         Item.objects.create(list=list_object, text='first item')

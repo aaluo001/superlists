@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # lists.forms
 #------------------------------
@@ -21,7 +19,7 @@ class ItemForm(ModelForm):
         widgets = {
             'text': forms.fields.TextInput(
                 attrs={
-                    'placeholder': 'ÊäÈë´ı°ìÊÂÏî',
+                    'placeholder': 'è¾“å…¥å¾…åŠäº‹é¡¹',
                     'class': 'form-control',
                     'maxlength': '32',
                 }
@@ -29,17 +27,17 @@ class ItemForm(ModelForm):
         }
         error_messages = {
             'text': {
-                'required': '´ı°ìÊÂÏî²»ÄÜÎª¿Õ£¡',
+                'required': 'å¾…åŠäº‹é¡¹ä¸èƒ½ä¸ºç©ºï¼',
             }
         }
 
 
     def clean_text(self):
-        ''' ±à¼­´ı°ìÊÂÏîµÄÄÚÈİ
+        ''' ç¼–è¾‘å¾…åŠäº‹é¡¹çš„å†…å®¹
         '''
         data = self.cleaned_data['text']
         if (len(data) > 32):
-            raise ValidationError('´ı°ìÊÂÏîµÄÄÚÈİ²»ÄÜ³¬¹ı32ÎÄ×Ö£¡')
+            raise ValidationError('å¾…åŠäº‹é¡¹çš„å†…å®¹ä¸èƒ½è¶…è¿‡32æ–‡å­—ï¼')
         return data
 
     
@@ -58,7 +56,7 @@ class ExistingListItemForm(ItemForm):
         try:
             self.instance.validate_unique()
         except ValidationError as e:
-            e.error_dict = {'text': ['ÄúÒÑ¾­Ìá½»Ò»¸öÍ¬ÑùµÄ´ı°ìÊÂÏî£¡',]}
+            e.error_dict = {'text': ['æ‚¨å·²ç»æäº¤ä¸€ä¸ªåŒæ ·çš„å¾…åŠäº‹é¡¹ï¼',]}
             self._update_errors(e)
 
     def save(self):

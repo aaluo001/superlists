@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # accounts.tests.test_authentication
 #------------------------------
@@ -15,18 +13,18 @@ from accounts.models import Token
 
 
 class AuthenticateTest(TestCase):
-    ''' µÇÂ¼ÑéÖ¤»úÄÜ
+    ''' ç™»å½•éªŒè¯æœºèƒ½
     '''
     def test_returns_None_if_no_such_token(self):
-        ''' µÇÂ¼ÑéÖ¤Ê§°ÜÊ±£¬·µ»ØNone
+        ''' ç™»å½•éªŒè¯å¤±è´¥æ—¶ï¼Œè¿”å›None
         '''
         login_user_object = PasswordlessAuthenticationBackend().authenticate(uid='abc123')
         self.assertIsNone(login_user_object)
 
 
     def test_returns_new_user_with_correct_email_if_token_exists(self):
-        ''' µÇÂ¼ÑéÖ¤³É¹¦
-            Èç¹ûÓÃ»§²»´æÔÚ£¬¾Í·µ»ØĞÂ½¨ÓÃ»§
+        ''' ç™»å½•éªŒè¯æˆåŠŸ
+            å¦‚æœç”¨æˆ·ä¸å­˜åœ¨ï¼Œå°±è¿”å›æ–°å»ºç”¨æˆ·
         '''
         token_object = Token.objects.create(email='abc@163.com')
         login_user_object = PasswordlessAuthenticationBackend().authenticate(uid=token_object.uid)
@@ -35,8 +33,8 @@ class AuthenticateTest(TestCase):
 
 
     def test_returns_existing_user_with_correct_email_if_token_exists(self):
-        ''' µÇÂ¼ÑéÖ¤³É¹¦
-            Èç¹ûÓÃ»§ÒÑ¾­´æÔÚ£¬¾Í·µ»Ø¸ÃÓÃ»§
+        ''' ç™»å½•éªŒè¯æˆåŠŸ
+            å¦‚æœç”¨æˆ·å·²ç»å­˜åœ¨ï¼Œå°±è¿”å›è¯¥ç”¨æˆ·
         '''
         token_object = Token.objects.create(email='abc@163.com')
         user_object = User.objects.create(email=token_object.email)
@@ -45,10 +43,10 @@ class AuthenticateTest(TestCase):
 
 
 class GetUserTest(TestCase):
-    ''' È¡µÃÓÃ»§»úÄÜ
+    ''' å–å¾—ç”¨æˆ·æœºèƒ½
     '''
     def test_gets_user_by_email(self):
-        ''' ¿ÉÒÔÍ¨¹ıÖ¸¶¨EmailÈ¡µÃÓÃ»§
+        ''' å¯ä»¥é€šè¿‡æŒ‡å®šEmailå–å¾—ç”¨æˆ·
         '''
         User.objects.create(email='other@163.com')
         user_object = User.objects.create(email='abc@163.com')
@@ -59,7 +57,7 @@ class GetUserTest(TestCase):
 
 
     def test_returns_None_if_no_user_with_that_email(self):
-        ''' Ö¸¶¨EmailµÄÓÃ»§²»´æÔÚÊ±£¬·µ»ØNone
+        ''' æŒ‡å®šEmailçš„ç”¨æˆ·ä¸å­˜åœ¨æ—¶ï¼Œè¿”å›None
         '''
         self.assertIsNone(
             PasswordlessAuthenticationBackend().get_user(email='abc@163.com')

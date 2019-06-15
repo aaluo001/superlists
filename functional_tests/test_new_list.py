@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_new_list
 #------------------------------
@@ -12,48 +10,48 @@ from .base import FunctionalTest
 
 
 class NewListTest(FunctionalTest):
-    ''' ĞÂ½¨Çåµ¥²âÊÔ
+    ''' æ–°å»ºæ¸…å•æµ‹è¯•
     '''
     def test_001(self):
-        ''' ĞÂ½¨Çåµ¥
+        ''' æ–°å»ºæ¸…å•
         '''
-        # ·ÃÎÊÓ¦ÓÃÊ×Ò³
-        # ¿ÉÒÔ¿´µ½Ò³Ãæ±êÌâ£¬ÒÔ¼°¾ŞÄ»£ºĞÂ½¨Çåµ¥
+        # è®¿é—®åº”ç”¨é¦–é¡µ
+        # å¯ä»¥çœ‹åˆ°é¡µé¢æ ‡é¢˜ï¼Œä»¥åŠå·¨å¹•ï¼šæ–°å»ºæ¸…å•
         self.browser.get(self.live_server_url)
         self.assertIn('Superlists', self.browser.title)
-        self.assertIn('ĞÂ½¨Çåµ¥', self.browser.find_element_by_tag_name('h1').text)
+        self.assertIn('æ–°å»ºæ¸…å•', self.browser.find_element_by_tag_name('h1').text)
 
-        # ÊäÈë´ı°ìÊÂÏî
-        self.add_list_item('ÂòÒ»Ğ©¿×È¸ÓğÃ«')
-        self.add_list_item('ÓÃ¿×È¸ÓğÃ«×ö¼ÙÓ¬')
+        # è¾“å…¥å¾…åŠäº‹é¡¹
+        self.add_list_item('ä¹°ä¸€äº›å­”é›€ç¾½æ¯›')
+        self.add_list_item('ç”¨å­”é›€ç¾½æ¯›åšå‡è‡')
 
 
     def test_002(self):
-        ''' ĞÂ½¨²»Í¬µÄÇåµ¥
+        ''' æ–°å»ºä¸åŒçš„æ¸…å•
         '''
-        # ĞÂ½¨µÚÒ»¸ö´ı°ìÊÂÏîÇåµ¥
+        # æ–°å»ºç¬¬ä¸€ä¸ªå¾…åŠäº‹é¡¹æ¸…å•
         self.browser.get(self.live_server_url)
-        self.add_list_item('ÂòÒ»Ğ©¿×È¸ÓğÃ«')
+        self.add_list_item('ä¹°ä¸€äº›å­”é›€ç¾½æ¯›')
         list_url_1 = self.browser.current_url
         self.assertRegex(list_url_1, '/lists/.+/')
         
-        # ¹Ø±Õä¯ÀÀÆ÷
+        # å…³é—­æµè§ˆå™¨
         self.browser.quit()
         
-        # ÁíÆôÒ»¸öä¯ÀÀÆ÷
-        # ĞÂ½¨µÚ¶ş¸ö´ı°ìÊÂÏîÇåµ¥
+        # å¦å¯ä¸€ä¸ªæµè§ˆå™¨
+        # æ–°å»ºç¬¬äºŒä¸ªå¾…åŠäº‹é¡¹æ¸…å•
         self.init_browser()
         self.browser.get(self.live_server_url)
-        self.add_list_item('ÂòÒ»ºĞÅ£ÄÌ')
+        self.add_list_item('ä¹°ä¸€ç›’ç‰›å¥¶')
         list_url_2 = self.browser.current_url
         self.assertRegex(list_url_2, '/lists/.+/')
         
-        # Á½¸öÇåµ¥µÄURLÊÇ²»Ò»ÑùµÄ
+        # ä¸¤ä¸ªæ¸…å•çš„URLæ˜¯ä¸ä¸€æ ·çš„
         self.assertNotEqual(list_url_1, list_url_2)
         
-        # ÇÒ²»ÄÜ¿´µ½µÚÒ»¸öÇåµ¥µÄÄÚÈİ
-        # Ö»ÄÜ¿´µ½×Ô¼ºÇåµ¥µÄÄÚÈİ
+        # ä¸”ä¸èƒ½çœ‹åˆ°ç¬¬ä¸€ä¸ªæ¸…å•çš„å†…å®¹
+        # åªèƒ½çœ‹åˆ°è‡ªå·±æ¸…å•çš„å†…å®¹
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('ÂòÒ»Ğ©¿×È¸ÓğÃ«', page_text)
-        self.assertIn('ÂòÒ»ºĞÅ£ÄÌ', page_text)
+        self.assertNotIn('ä¹°ä¸€äº›å­”é›€ç¾½æ¯›', page_text)
+        self.assertIn('ä¹°ä¸€ç›’ç‰›å¥¶', page_text)
 

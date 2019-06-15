@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- ÉÏÊö3¸ömeta±êÇ©*±ØĞë*·ÅÔÚ×îÇ°Ãæ£¬ÈÎºÎÆäËûÄÚÈİ¶¼*±ØĞë*¸úËæÆäºó£¡ -->
+    <!-- ä¸Šè¿°3ä¸ªmetaæ ‡ç­¾*å¿…é¡»*æ”¾åœ¨æœ€å‰é¢ï¼Œä»»ä½•å…¶ä»–å†…å®¹éƒ½*å¿…é¡»*è·Ÿéšå…¶åï¼ -->
     <title>Superlists</title>
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'base.css' %}">
@@ -14,7 +14,7 @@
 <body>
     <div class="container">
 
-        {# µ¼º½À¸ #}
+        {# å¯¼èˆªæ  #}
         <nav id="id_navigation" class="navbar navbar-default" role="navigation">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'home_page' %}">Superlists</a>
@@ -23,24 +23,24 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">{{ user.email }}</a></li>
                         <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">´ı°ìÊÂÏî<span class="caret"></span></a>
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">å¾…åŠäº‹é¡¹<span class="caret"></span></a>
                           <ul class="dropdown-menu">
-                            <li><a href="{% url 'home_page' %}">ĞÂ½¨Çåµ¥</a></li>
-                            <li><a href="{% url 'my_lists' %}">ÎÒµÄÇåµ¥</a></li>
+                            <li><a href="{% url 'home_page' %}">æ–°å»ºæ¸…å•</a></li>
+                            <li><a href="{% url 'my_lists' %}">æˆ‘çš„æ¸…å•</a></li>
                           </ul>
                         </li>
-                        <li><a href="{% url 'logout' %}">ÍË³ö</a></li>
+                        <li><a href="{% url 'logout' %}">é€€å‡º</a></li>
                     </ul>
                 {% else %}
                     <form class="navbar-form navbar-right" method="POST" action="{% url 'send_login_email' %}">
-                        <input type="text" class="form-control" name="email" size="40" required placeholder="ÊäÈëÓÊÏäµØÖ·µÇÂ¼" />
+                        <input type="text" class="form-control" name="email" size="40" required placeholder="è¾“å…¥é‚®ç®±åœ°å€ç™»å½•" />
                         {% csrf_token %}
                     </form>
                 {% endif %}
                 
                 <!--
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">ÁªÏµÎÒÃÇ</a></li>
+                    <li><a href="#">è”ç³»æˆ‘ä»¬</a></li>
                 </ul>
                 -->
 
@@ -48,7 +48,7 @@
         </nav>
 
 
-        {# ÌáÊ¾ÏûÏ¢ #}
+        {# æç¤ºæ¶ˆæ¯ #}
         {% if messages %}
             <div id="id_messages" class="row">
                 <div class="col-md-8">
@@ -64,7 +64,7 @@
         {% endif %}
 
 
-        {# ¾ŞÄ» #}
+        {# å·¨å¹• #}
         <div id="id_jumbotron" class="row">
             <div class="col-md-6 col-md-offset-3 jumbotron">
                 <div class="text-center">
@@ -85,14 +85,14 @@
         </div>
 
 
-        {# ±íÊ¾ÇøÓò-1 #}
+        {# è¡¨ç¤ºåŒºåŸŸ-1 #}
         <div id="id_display_area_1" class="row">
             <div class="col-md-6 col-md-offset-3">
                 {% block dispaly_area_1 %}{% endblock %}
             </div>
         </div>
         
-        {# ±íÊ¾ÇøÓò-2 #}
+        {# è¡¨ç¤ºåŒºåŸŸ-2 #}
         <div id="id_display_area_2" class="row">
             <div class="col-md-6 col-md-offset-3">
                 {% block dispaly_area_2 %}{% endblock %}
@@ -100,7 +100,7 @@
         </div>
 
 
-        {# ×¢ÒâÊÂÏîµÈÆäËûËµÃ÷ #}
+        {# æ³¨æ„äº‹é¡¹ç­‰å…¶ä»–è¯´æ˜ #}
         <div id="id_notes" class="row">
             <div class="col-md-6 col-md-offset-3">
                 {% block notes %}{% endblock %}
@@ -109,16 +109,16 @@
     </div>
 
 
-    {# Ò³ÃæÄ©Î²±íÊ¾ #}
+    {# é¡µé¢æœ«å°¾è¡¨ç¤º #}
     <footer class="footer">
         <div class="container">
             <div class="text-center">
                 <hr>
                 <p>
                     &copy;2019 Tang &nbsp;
-                    <a href="http://www.miitbeian.gov.cn/" target="_blank">ÊñICP±¸19005354ºÅ</a>&nbsp;
+                    <a href="http://www.miitbeian.gov.cn/" target="_blank">èœ€ICPå¤‡19005354å·</a>&nbsp;
 	                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51010602000909" target="_blank">
-	                    <img src="{% static 'register_icon.png' %}">´¨¹«Íø°²±¸ 51010602000909ºÅ
+	                    <img src="{% static 'register_icon.png' %}">å·å…¬ç½‘å®‰å¤‡ 51010602000909å·
 	                </a>
 	            </p>
             </div>

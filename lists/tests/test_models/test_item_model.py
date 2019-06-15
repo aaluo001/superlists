@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # lists.tests.test_models.test_item_model
 #------------------------------
@@ -15,17 +13,17 @@ from lists.models import List, Item
 
 
 class ItemModelTest(TestCase):
-    ''' ´ı°ìÊÂÏîÄ£ĞÍ²âÊÔ
+    ''' å¾…åŠäº‹é¡¹æ¨¡å‹æµ‹è¯•
     '''
     def test_001(self):
-        ''' ´ı°ìÊÂÏîÄÚÈİ(text)Ä¬ÈÏÊÇ¿Õ
+        ''' å¾…åŠäº‹é¡¹å†…å®¹(text)é»˜è®¤æ˜¯ç©º
         '''
         item_object = Item()
         self.assertEqual(item_object.text, '')
 
 
     def test_002(self):
-        ''' ItemµÄÍâ¼üÊÇList
+        ''' Itemçš„å¤–é”®æ˜¯List
         '''
         list_object = List.objects.create()
         item_object = Item()
@@ -35,7 +33,7 @@ class ItemModelTest(TestCase):
 
 
     def test_003(self):
-        ''' ´ı°ìÊÂÏîµÄÄÚÈİ²»ÄÜÎª¿Õ
+        ''' å¾…åŠäº‹é¡¹çš„å†…å®¹ä¸èƒ½ä¸ºç©º
         '''
         list_object = List.objects.create()
         item_object = Item(list=list_object, text='')
@@ -46,7 +44,7 @@ class ItemModelTest(TestCase):
 
 
     def test_004(self):
-        ''' ¶ÔÓÚÍ¬Ò»List£¬´ı°ìÊÂÏîµÄÄÚÈİ²»ÄÜÖØ¸´
+        ''' å¯¹äºåŒä¸€Listï¼Œå¾…åŠäº‹é¡¹çš„å†…å®¹ä¸èƒ½é‡å¤
         '''
         list_object = List.objects.create()
         Item.objects.create(list=list_object, text='do me')
@@ -58,12 +56,12 @@ class ItemModelTest(TestCase):
 
 
     def test_005(self):
-        ''' ¶ÔÓÚ²»Í¬µÄList£¬´ı°ìÊÂÏîµÄÄÚÈİ¿ÉÒÔÖØ¸´
+        ''' å¯¹äºä¸åŒçš„Listï¼Œå¾…åŠäº‹é¡¹çš„å†…å®¹å¯ä»¥é‡å¤
         '''
         list_object_1 = List.objects.create()
         list_object_2 = List.objects.create()
         Item.objects.create(list=list_object_1, text='do me')
         
         item_object = Item(list=list_object_2, text='do me')
-        item_object.full_clean()    ## ²»»á³öÏÖÒì³£
+        item_object.full_clean()    ## ä¸ä¼šå‡ºç°å¼‚å¸¸
 

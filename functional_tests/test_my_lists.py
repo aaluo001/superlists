@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_my_lists
 #------------------------------
@@ -12,131 +10,131 @@ from .base import FunctionalTest
 
 
 class MyListsTest(FunctionalTest):
-    ''' ÎÒµÄÇåµ¥²âÊÔ
+    ''' æˆ‘çš„æ¸…å•æµ‹è¯•
     '''
     def test_001(self):
-        ''' µÇÂ¼ÓÃ»§¿ÉÒÔĞÂ½¨Çåµ¥£¬È»ºóÔÚÎÒµÄÇåµ¥Ò³ÃæÏÔÊ¾
+        ''' ç™»å½•ç”¨æˆ·å¯ä»¥æ–°å»ºæ¸…å•ï¼Œç„¶ååœ¨æˆ‘çš„æ¸…å•é¡µé¢æ˜¾ç¤º
         '''
-        # ´´½¨µÇÂ¼ÓÃ»§
+        # åˆ›å»ºç™»å½•ç”¨æˆ·
         self.create_pre_authenticated_session('abc@163.com')
         
-        # ĞÂ½¨Çåµ¥
+        # æ–°å»ºæ¸…å•
         self.browser.get(self.live_server_url)
         self.add_list_item('Reticulate splines')
         self.add_list_item('Immanentize eschaton')
         list_url_1 = self.browser.current_url
 
-        # µã»÷"ÎÒµÄÇåµ¥"Á´½Ó
-        self.browser.find_element_by_link_text('´ı°ìÊÂÏî').click()
-        self.browser.find_element_by_link_text('ÎÒµÄÇåµ¥').click()
+        # ç‚¹å‡»"æˆ‘çš„æ¸…å•"é“¾æ¥
+        self.browser.find_element_by_link_text('å¾…åŠäº‹é¡¹').click()
+        self.browser.find_element_by_link_text('æˆ‘çš„æ¸…å•').click()
 
-        # ¾ŞÄ»ÏÔÊ¾"ÎÒµÄÇåµ¥"
+        # å·¨å¹•æ˜¾ç¤º"æˆ‘çš„æ¸…å•"
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            'ÎÒµÄÇåµ¥'
+            'æˆ‘çš„æ¸…å•'
         ))
 
-        # ÎÒµÄÇåµ¥Ò³Ãæ³öÏÖĞÂ½¨µÄÇåµ¥
-        # ¶øÇåµ¥Ãû×ÖÊÇµÚÒ»¸ö´ı°ìÊÂÏîµÄÄÚÈİ
+        # æˆ‘çš„æ¸…å•é¡µé¢å‡ºç°æ–°å»ºçš„æ¸…å•
+        # è€Œæ¸…å•åå­—æ˜¯ç¬¬ä¸€ä¸ªå¾…åŠäº‹é¡¹çš„å†…å®¹
         self.wait_for(lambda:
-            self.browser.find_element_by_css_selector('table#id_my_lists_table')
+            self.browser.find_element_by_css_selector('ul#id_my_lists_table')
         )
         self.wait_for(lambda:
             self.browser.find_element_by_link_text('Reticulate splines')
         )
 
-        # ½øÈëÇåµ¥Ò³Ãæ£¬¸ÃÒ³ÃæµÄÁ´½ÓºÍĞÂ½¨Çåµ¥µÄÁ´½ÓÒ»ÖÂ
+        # è¿›å…¥æ¸…å•é¡µé¢ï¼Œè¯¥é¡µé¢çš„é“¾æ¥å’Œæ–°å»ºæ¸…å•çš„é“¾æ¥ä¸€è‡´
         self.browser.find_element_by_link_text('Reticulate splines').click()
         self.wait_for(lambda:
             self.assertEqual(self.browser.current_url, list_url_1)
         )
 
         
-        # --- ÔÙĞÂ½¨Ò»¸ö´ı°ìÊÂÏîÇåµ¥ ---
+        # --- å†æ–°å»ºä¸€ä¸ªå¾…åŠäº‹é¡¹æ¸…å• ---
 
-        # µã»÷"ĞÂ½¨Çåµ¥"Á´½Ó
-        self.browser.find_element_by_link_text('´ı°ìÊÂÏî').click()
-        self.browser.find_element_by_link_text('ĞÂ½¨Çåµ¥').click()
+        # ç‚¹å‡»"æ–°å»ºæ¸…å•"é“¾æ¥
+        self.browser.find_element_by_link_text('å¾…åŠäº‹é¡¹').click()
+        self.browser.find_element_by_link_text('æ–°å»ºæ¸…å•').click()
         
-        # ĞÂ½¨Çåµ¥
+        # æ–°å»ºæ¸…å•
         self.add_list_item('Click cows')
         list_url_2 = self.browser.current_url
 
-        # µã»÷"ÎÒµÄÇåµ¥"Á´½Ó
-        self.browser.find_element_by_link_text('´ı°ìÊÂÏî').click()
-        self.browser.find_element_by_link_text('ÎÒµÄÇåµ¥').click()
+        # ç‚¹å‡»"æˆ‘çš„æ¸…å•"é“¾æ¥
+        self.browser.find_element_by_link_text('å¾…åŠäº‹é¡¹').click()
+        self.browser.find_element_by_link_text('æˆ‘çš„æ¸…å•').click()
 
-        # ÎÒµÄÇåµ¥Ò³Ãæ³öÏÖĞÂ½¨µÄÇåµ¥
-        # ¶øÇåµ¥Ãû×ÖÊÇµÚÒ»¸ö´ı°ìÊÂÏîµÄÄÚÈİ
+        # æˆ‘çš„æ¸…å•é¡µé¢å‡ºç°æ–°å»ºçš„æ¸…å•
+        # è€Œæ¸…å•åå­—æ˜¯ç¬¬ä¸€ä¸ªå¾…åŠäº‹é¡¹çš„å†…å®¹
         self.wait_for(lambda:
             self.browser.find_element_by_link_text('Click cows')
         )
         
-        # ½øÈëÇåµ¥Ò³Ãæ£¬¸ÃÒ³ÃæµÄÁ´½ÓºÍĞÂ½¨Çåµ¥µÄÁ´½ÓÒ»ÖÂ
+        # è¿›å…¥æ¸…å•é¡µé¢ï¼Œè¯¥é¡µé¢çš„é“¾æ¥å’Œæ–°å»ºæ¸…å•çš„é“¾æ¥ä¸€è‡´
         self.browser.find_element_by_link_text('Click cows').click()
         self.wait_for(lambda:
             self.assertEqual(self.browser.current_url, list_url_2)
         )
 
-        # ÍË³öºó"ÎÒµÄÇåµ¥"Á´½Ó²»¼ûÁË
-        self.browser.find_element_by_link_text("ÍË³ö").click()
+        # é€€å‡ºå"æˆ‘çš„æ¸…å•"é“¾æ¥ä¸è§äº†
+        self.browser.find_element_by_link_text("é€€å‡º").click()
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_elements_by_link_text("ÎÒµÄÇåµ¥"),
+            self.browser.find_elements_by_link_text("æˆ‘çš„æ¸…å•"),
             []
         ))
 
         
     def test_002(self):
-        ''' µÇÂ¼ÓÃ»§Ã»ÓĞ´´½¨Çåµ¥Ê±£¬ÎÒµÄÇåµ¥Ò³ÃæÃ»ÓĞÇåµ¥ÏÔÊ¾
+        ''' ç™»å½•ç”¨æˆ·æ²¡æœ‰åˆ›å»ºæ¸…å•æ—¶ï¼Œæˆ‘çš„æ¸…å•é¡µé¢æ²¡æœ‰æ¸…å•æ˜¾ç¤º
         '''
-        # ´´½¨µÇÂ¼ÓÃ»§
+        # åˆ›å»ºç™»å½•ç”¨æˆ·
         self.create_pre_authenticated_session('abc@163.com')
         self.browser.get(self.live_server_url)
 
-        # µã»÷"ÎÒµÄÇåµ¥"Á´½Ó
-        self.browser.find_element_by_link_text('´ı°ìÊÂÏî').click()
-        self.browser.find_element_by_link_text('ÎÒµÄÇåµ¥').click()
+        # ç‚¹å‡»"æˆ‘çš„æ¸…å•"é“¾æ¥
+        self.browser.find_element_by_link_text('å¾…åŠäº‹é¡¹').click()
+        self.browser.find_element_by_link_text('æˆ‘çš„æ¸…å•').click()
 
-        # ¾ŞÄ»ÏÔÊ¾"ÎÒµÄÇåµ¥"
+        # å·¨å¹•æ˜¾ç¤º"æˆ‘çš„æ¸…å•"
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            'ÎÒµÄÇåµ¥'
+            'æˆ‘çš„æ¸…å•'
         ))
         
-        # Ã»ÓĞÇåµ¥ÏÔÊ¾
+        # æ²¡æœ‰æ¸…å•æ˜¾ç¤º
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_elements_by_css_selector('table#id_my_lists_table'),
+            self.browser.find_elements_by_css_selector('ul#id_my_lists_table'),
             []
         ))
         
-        # ÏÔÊ¾Ã»ÓĞÇåµ¥µÄÏûÏ¢
+        # æç¤ºæ²¡æœ‰æ¸…å•çš„æ¶ˆæ¯
         self.wait_for(lambda: self.assertIn(
-            'Äú»¹Ã»ÓĞ×Ô¼ºµÄÇåµ¥',
+            'æ²¡æœ‰æ‰¾åˆ°æ‚¨çš„æ¸…å•',
             self.browser.find_element_by_tag_name('body').text
         ))
 
     
     def test_003(self):
-        ''' ÄäÃûÓÃ»§ÎŞ·¨ÏÔÊ¾ÎÒµÄÇåµ¥
+        ''' åŒ¿åç”¨æˆ·æ— æ³•æ˜¾ç¤ºæˆ‘çš„æ¸…å•
         '''
-        # ÄäÃûÓÃ»§ĞÂ½¨Çåµ¥
+        # åŒ¿åç”¨æˆ·æ–°å»ºæ¸…å•
         self.browser.get(self.live_server_url)
         self.add_list_item('Work at office')
         self.add_list_item('Have a dinner')
         
-        # Ã»ÓĞÕÒµ½"´ı°ìÊÂÏî"²Ëµ¥
+        # æ²¡æœ‰æ‰¾åˆ°"å¾…åŠäº‹é¡¹"èœå•
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_elements_by_link_text('´ı°ìÊÂÏî'),
+            self.browser.find_elements_by_link_text('å¾…åŠäº‹é¡¹'),
             []
         ))
 
-        # Ê¹ÓÃURLµØÖ·Ç¿ĞĞ½øÈë"ÎÒµÄÇåµ¥"
+        # ä½¿ç”¨URLåœ°å€å¼ºè¡Œè¿›å…¥"æˆ‘çš„æ¸…å•"
         self.browser.get(self.live_server_url + '/lists/')
 
-        # Ò³ÃæÌø×ªµ½Ê×Ò³
+        # é¡µé¢è·³è½¬åˆ°é¦–é¡µ
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            'ĞÂ½¨Çåµ¥'
+            'æ–°å»ºæ¸…å•'
         ))
         self.assertEqual(self.browser.current_url, self.live_server_url + '/')
 

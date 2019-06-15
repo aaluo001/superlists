@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.base
 #------------------------------
@@ -23,8 +21,8 @@ from .server_tools import STAGING_SERVER, reset_database, create_session_on_serv
 from .management.commands.create_session import create_pre_authenticated_session
 
 
-# µÈ´ı·şÎñÆ÷ÏìÓ¦Ê±¼ä(10Ãë)
-# 10Ãë×ãÒÔ²¶»ñÇ±ÔÚµÄÎÊÌâºÍ²»¿ÉÔ¤ÖªµÄ»ºÂıÒòËØ
+# ç­‰å¾…æœåŠ¡å™¨å“åº”æ—¶é—´(10ç§’)
+# 10ç§’è¶³ä»¥æ•è·æ½œåœ¨çš„é—®é¢˜å’Œä¸å¯é¢„çŸ¥çš„ç¼“æ…¢å› ç´ 
 MAX_WAIT = 10
 
 def wait(func):
@@ -40,7 +38,7 @@ def wait(func):
 
 
 class FunctionalTest(StaticLiveServerTestCase):
-    ''' ¹¦ÄÜ²âÊÔ£¨»ùÀà£©
+    ''' åŠŸèƒ½æµ‹è¯•ï¼ˆåŸºç±»ï¼‰
     '''
     def init_browser(self):
         self.browser = webdriver.Firefox()
@@ -74,8 +72,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         else:
             session_key = create_pre_authenticated_session(email)
         
-        # ÎªÁËÉè¶¨Cookie£¬ÎÒÃÇÒªÏÈ·ÃÎÊÍøÕ¾
-        # ¶ø404Ò³Ãæ¼ÓÔØ×î¿ì
+        # ä¸ºäº†è®¾å®šCookieï¼Œæˆ‘ä»¬è¦å…ˆè®¿é—®ç½‘ç«™
+        # è€Œ404é¡µé¢åŠ è½½æœ€å¿«
         self.browser.get(self.live_server_url + '/404_no_such_url/')
         self.browser.add_cookie(dict(
             name=settings.SESSION_COOKIE_NAME,
@@ -106,7 +104,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @wait
     def wait_to_be_logged_in(self, email):
-        self.browser.find_element_by_link_text('ÍË³ö')
+        self.browser.find_element_by_link_text('é€€å‡º')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn(email, navbar.text)
 
@@ -143,7 +141,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                 inbox.quit()
             
         else:
-            # µÚ¶ş´Î·¢ËÍÓÊ¼şÊ±£¬len(mail.outbox) == 2
+            # ç¬¬äºŒæ¬¡å‘é€é‚®ä»¶æ—¶ï¼Œlen(mail.outbox) == 2
             #self.assertEqual(len(mail.outbox), 1)
             email = mail.outbox[-1]
             self.assertIn(test_email, email.to)

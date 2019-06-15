@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_list_item_validation
 #------------------------------
@@ -12,54 +10,54 @@ from .base import FunctionalTest
 
 
 class ListItemValidationTest(FunctionalTest):
-    ''' ÊäÈë¿òĞ§Ñé²âÊÔ
+    ''' è¾“å…¥æ¡†æ•ˆéªŒæµ‹è¯•
     '''
     def test_001(self):
-        ''' Ê×Ò³ºÍÇåµ¥Ò³Ãæ¶¼²»ÄÜÌá½»¿ÕµÄ´ı°ìÊÂÏî
+        ''' é¦–é¡µå’Œæ¸…å•é¡µé¢éƒ½ä¸èƒ½æäº¤ç©ºçš„å¾…åŠäº‹é¡¹
         '''
         self.browser.get(self.live_server_url)
 
-        # Ê×Ò³Ìá½»Ò»¸ö¿ÕµÄ´ı°ìÊÂÏî
+        # é¦–é¡µæäº¤ä¸€ä¸ªç©ºçš„å¾…åŠäº‹é¡¹
         input_box = self.get_item_input_box()
         input_box.send_keys(Keys.ENTER)
 
-        # ä¯ÀÀÆ÷½Ø»ñÁËÇëÇó£¬Ò³Ãæ²»»á±»¼ÓÔØ
+        # æµè§ˆå™¨æˆªè·äº†è¯·æ±‚ï¼Œé¡µé¢ä¸ä¼šè¢«åŠ è½½
         self.wait_for(lambda:
             self.browser.find_element_by_css_selector('#id_text:invalid')
         )
         
-        # ÊäÈë´ı°ìÊÂÏîºó£¬´íÎóÏûÊ§ÁË
+        # è¾“å…¥å¾…åŠäº‹é¡¹åï¼Œé”™è¯¯æ¶ˆå¤±äº†
         input_box = self.get_item_input_box()
-        input_box.send_keys('ÂòÒ»ºĞÅ£ÄÌ')
+        input_box.send_keys('ä¹°ä¸€ç›’ç‰›å¥¶')
         self.wait_for(lambda:
             self.browser.find_element_by_css_selector('#id_text:valid')
         )
 
-        # Ìá½»´ı°ìÊÂÏî£¬Çåµ¥Ò³ÃæÏÔÊ¾Õı³£
+        # æäº¤å¾…åŠäº‹é¡¹ï¼Œæ¸…å•é¡µé¢æ˜¾ç¤ºæ­£å¸¸
         input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table(1, 'ÂòÒ»ºĞÅ£ÄÌ')
+        self.wait_for_row_in_list_table(1, 'ä¹°ä¸€ç›’ç‰›å¥¶')
 
 
-        # Çåµ¥Ò³ÃæÓÖÌá½»Ò»¸ö¿ÕµÄ´ı°ìÊÂÏî
+        # æ¸…å•é¡µé¢åˆæäº¤ä¸€ä¸ªç©ºçš„å¾…åŠäº‹é¡¹
         input_box = self.get_item_input_box()
         input_box.send_keys(Keys.ENTER)
 
-        # Í¬Ñù£¬±»ä¯ÀÀÆ÷½Ø»ñÁË
+        # åŒæ ·ï¼Œè¢«æµè§ˆå™¨æˆªè·äº†
         self.wait_for(lambda:
             self.browser.find_element_by_css_selector('#id_text:invalid')
         )
 
-        # ÊäÈë´ı°ìÊÂÏîºó£¬´íÎóÏûÊ§ÁË
+        # è¾“å…¥å¾…åŠäº‹é¡¹åï¼Œé”™è¯¯æ¶ˆå¤±äº†
         input_box = self.get_item_input_box()
-        input_box.send_keys('Åİ±­²è')
+        input_box.send_keys('æ³¡æ¯èŒ¶')
         self.wait_for(lambda:
             self.browser.find_element_by_css_selector('#id_text:valid')
         )
 
-        # Ìá½»´ı°ìÊÂÏî£¬Çåµ¥Ò³ÃæÏÔÊ¾Õı³£
+        # æäº¤å¾…åŠäº‹é¡¹ï¼Œæ¸…å•é¡µé¢æ˜¾ç¤ºæ­£å¸¸
         input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table(1, 'ÂòÒ»ºĞÅ£ÄÌ')
-        self.wait_for_row_in_list_table(2, 'Åİ±­²è')
+        self.wait_for_row_in_list_table(1, 'ä¹°ä¸€ç›’ç‰›å¥¶')
+        self.wait_for_row_in_list_table(2, 'æ³¡æ¯èŒ¶')
 
 
     def get_error_element(self):
@@ -67,26 +65,26 @@ class ListItemValidationTest(FunctionalTest):
 
 
     def test_002(self):
-        ''' ²»ÄÜÌá½»ÖØ¸´µÄ´ı°ìÊÂÏî
+        ''' ä¸èƒ½æäº¤é‡å¤çš„å¾…åŠäº‹é¡¹
         '''
         self.browser.get(self.live_server_url)
-        self.add_list_item('ÂòÒ»ºĞÅ£ÄÌ')
+        self.add_list_item('ä¹°ä¸€ç›’ç‰›å¥¶')
 
-        # ÊäÈëÒ»¸öÍ¬ÑùµÄ´ı°ìÊÂÏî
+        # è¾“å…¥ä¸€ä¸ªåŒæ ·çš„å¾…åŠäº‹é¡¹
         input_box = self.get_item_input_box()
-        input_box.send_keys('ÂòÒ»ºĞÅ£ÄÌ')
+        input_box.send_keys('ä¹°ä¸€ç›’ç‰›å¥¶')
         input_box.send_keys(Keys.ENTER)
 
-        # ÓÚÊÇ£¬µÃµ½Ò»Ìõ´íÎóÏûÏ¢
+        # äºæ˜¯ï¼Œå¾—åˆ°ä¸€æ¡é”™è¯¯æ¶ˆæ¯
         self.wait_for(lambda: self.assertTrue(
             self.get_error_element().is_displayed()
         ))
         self.wait_for(lambda: self.assertEqual(
             self.get_error_element().text,
-            'ÄúÒÑ¾­Ìá½»Ò»¸öÍ¬ÑùµÄ´ı°ìÊÂÏî£¡'
+            'æ‚¨å·²ç»æäº¤ä¸€ä¸ªåŒæ ·çš„å¾…åŠäº‹é¡¹ï¼'
         ))
 
-        # ÔÙ´ÎÊäÈëÊ±£¬´íÎóÏûÏ¢ÏûÊ§ÁË
+        # å†æ¬¡è¾“å…¥æ—¶ï¼Œé”™è¯¯æ¶ˆæ¯æ¶ˆå¤±äº†
         input_box = self.get_item_input_box()
         input_box.send_keys('a')
         time.sleep(1)

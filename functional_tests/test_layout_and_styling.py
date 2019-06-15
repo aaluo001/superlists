@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # functional_tests.test_layout_and_styling
 #------------------------------
@@ -11,16 +9,16 @@ from .base import FunctionalTest
 
 
 class LayoutAndStylingTest(FunctionalTest):
-    ''' »­Ãæ²¼¾ÖÓë·ç¸ñ²âÊÔ
+    ''' ç”»é¢å¸ƒå±€ä¸é£æ ¼æµ‹è¯•
     '''
     def test_001(self):
-        ''' ÊäÈë¿ò¾ÓÖĞÏÔÊ¾
-            Ö÷ÒªÊÇ¼ì²éBootstrapÊÇ·ñ¼ÓÔØ
+        ''' è¾“å…¥æ¡†å±…ä¸­æ˜¾ç¤º
+            ä¸»è¦æ˜¯æ£€æŸ¥Bootstrapæ˜¯å¦åŠ è½½
         '''
         self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
         
-        # Ê×Ò³µÄÊäÈë¿ò¾ÓÖĞÏÔÊ¾
+        # é¦–é¡µçš„è¾“å…¥æ¡†å±…ä¸­æ˜¾ç¤º
         input_box = self.get_item_input_box()
         self.assertAlmostEqual( \
             input_box.location['x'] + input_box.size['width'] / 2, \
@@ -29,7 +27,7 @@ class LayoutAndStylingTest(FunctionalTest):
         )
         self.add_list_item('testing')
         
-        # Çåµ¥Ò³ÃæµÄÊäÈë¿ò¾ÓÖĞÏÔÊ¾
+        # æ¸…å•é¡µé¢çš„è¾“å…¥æ¡†å±…ä¸­æ˜¾ç¤º
         input_box = self.get_item_input_box()
         self.assertAlmostEqual( \
             input_box.location['x'] + input_box.size['width'] / 2, \

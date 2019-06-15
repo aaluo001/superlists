@@ -1,5 +1,3 @@
-#!python
-# coding: gbk
 #------------------------------
 # accounts.tests.test_models
 #------------------------------
@@ -14,36 +12,36 @@ from accounts.models import Token
 
 
 class UserModelTest(TestCase):
-    ''' 用户模型
+    ''' 鐢ㄦ埛妯″瀷
     '''
     def test_user_is_valid_with_email_only(self):
-        ''' 用户模型可以正常使用，如果只设置Email字段
+        ''' 鐢ㄦ埛妯″瀷鍙互姝ｅ父浣跨敤锛屽鏋滃彧璁剧疆Email瀛楁
         '''
         user_object = User(email='abc@163.com')
-        user_object.full_clean()        ## 这里不会出现异常
+        user_object.full_clean()        ## 杩欓噷涓嶄細鍑虹幇寮傚父
 
 
     def test_email_is_primary_key(self):
-        ''' 用户模型的PrimaryKey是Email字段
+        ''' 鐢ㄦ埛妯″瀷鐨凱rimaryKey鏄疎mail瀛楁
         '''
         user_object = User(email='abc@163.com')
         self.assertEqual(user_object.pk, 'abc@163.com')
 
 
     def test_no_problem_with_auth_login(self):
-        ''' 可以正常使用Django提供的login()函数
+        ''' 鍙互姝ｅ父浣跨敤Django鎻愪緵鐨刲ogin()鍑芥暟
         '''
         user_object = User.objects.create(email='abc@163.com')
         user_object.backend = ''
         request = self.client.request().wsgi_request
-        login(request, user_object)     ## 这里不会出现异常
+        login(request, user_object)     ## 杩欓噷涓嶄細鍑虹幇寮傚父
 
 
 class TokenModelTest(TestCase):
-    ''' 登录验证模型
+    ''' 鐧诲綍楠岃瘉妯″瀷
     '''
     def test_email_is_primary_key(self):
-        ''' 登录验证模型的PrimaryKey是Email字段
+        ''' 鐧诲綍楠岃瘉妯″瀷鐨凱rimaryKey鏄疎mail瀛楁
         '''
         token_object = Token(email='abc@163.com')
         self.assertEqual(token_object.pk, 'abc@163.com')
