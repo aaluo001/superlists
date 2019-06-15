@@ -67,7 +67,7 @@ class RemoveListItemTest(TestCase):
         self.assertRedirects(response, '/lists/')
         self.assertIn(item_object, list_object.item_set.all())
 
-        
+
     def test_004(self):
         ''' 未登录用户无法删除清单项目
         '''
@@ -79,5 +79,20 @@ class RemoveListItemTest(TestCase):
         
         self.assertRedirects(response, '/')
         self.assertIn(other_item_object, other_list_object.item_set.all())
+
+
+    def test_005(self):
+        ''' 登录用户无法删除别人的清单项目
+        '''
+        other_user_object = User.objects.create(email='other@163.com')
+        other_list_object = List.objects.create(owner=other_user_object)
+        other_item_object = Item.objects.create(list=other_list_object)
+
+        # 用户登录
+        self.client.force_login(User.objects.create(email='abc@163.com'))
+
+        response = self.client.get('/lists/{}/remove_item'.format(other_item_object.pk))
         
-        
+        self.assertRedirects(response, '/lists/')
+        self.assertIn(other_item_object, other_list_object.item_set.all())
+

@@ -1,14 +1,15 @@
 #------------------------------
-# functional_tests.test_frequently_accessed
+# functional_tests.test_accounts.test_frequently_accessed
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-06-01
 #------------------------------
 from selenium.webdriver.common.keys import Keys
-from .base import FunctionalTest
+
+from .base_accounts import AccountsTest
 
 
-class FrequentlyAccessedTest(FunctionalTest):
+class FrequentlyAccessedTest(AccountsTest):
     ''' 频繁访问测试
     '''
     def test_001(self):

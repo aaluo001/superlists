@@ -1,15 +1,15 @@
 #------------------------------
-# functional_tests.test_my_lists
+# functional_tests.test_lists.test_my_lists
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-04-04
 #------------------------------
 import time
 
-from .base import FunctionalTest
+from .base_lists import ListsTest
 
 
-class MyListsTest(FunctionalTest):
+class MyListsTest(ListsTest):
     ''' 我的清单测试
     '''
     def test_001(self):

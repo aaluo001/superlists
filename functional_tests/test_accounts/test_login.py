@@ -1,19 +1,17 @@
 #------------------------------
-# functional_tests.test_login
+# functional_tests.test_accounts.test_login
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-03-23
 #------------------------------
-import os
 import time
 
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-from .base import FunctionalTest
+from .base_accounts import AccountsTest
 
 
-class LoginTest(FunctionalTest):
+class LoginTest(AccountsTest):
     ''' 登录测试
     '''
     def test_001(self):

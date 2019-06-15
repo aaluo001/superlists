@@ -1,14 +1,15 @@
 #------------------------------
-# functional_tests.test_layout_and_styling
+# functional_tests.test_lists.test_layout_and_styling
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-02-25
 #------------------------------
 from selenium.webdriver.common.keys import Keys
-from .base import FunctionalTest
+
+from .base_lists import ListsTest
 
 
-class LayoutAndStylingTest(FunctionalTest):
+class LayoutAndStylingTest(ListsTest):
     ''' 画面布局与风格测试
     '''
     def test_001(self):

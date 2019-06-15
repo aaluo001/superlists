@@ -1,14 +1,15 @@
 #------------------------------
-# functional_tests.test_send_login_email_validation
+# functional_tests.test_accounts.test_send_login_email_validation
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-05-18
 #------------------------------
 from selenium.webdriver.common.keys import Keys
-from .base import FunctionalTest
+
+from .base_accounts import AccountsTest
 
 
-class SendLoginEmailValidationTest(FunctionalTest):
+class SendLoginEmailValidationTest(AccountsTest):
     ''' 发送登录邮件验证测试
     '''
     def test_001(self):

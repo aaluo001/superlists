@@ -1,15 +1,15 @@
 #------------------------------
-# functional_tests.test_view_list
+# functional_tests.test_lists.test_view_list
 #------------------------------
 # author: TangJianwei
 # update: 2019-02-25
 #------------------------------
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from .base import FunctionalTest
+
+from .base_lists import ListsTest
 
 
-class ViewListTest(FunctionalTest):
+class ViewListTest(ListsTest):
     ''' 显示清单测试
     '''
     def test_001(self):

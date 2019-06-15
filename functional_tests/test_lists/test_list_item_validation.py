@@ -1,15 +1,17 @@
 #------------------------------
-# functional_tests.test_list_item_validation
+# functional_tests.test_lists.test_list_item_validation
 #------------------------------
 # Author: TangJianwei
 # Create: 2019-02-25
 #------------------------------
 import time
+
 from selenium.webdriver.common.keys import Keys
-from .base import FunctionalTest
+
+from .base_lists import ListsTest
 
 
-class ListItemValidationTest(FunctionalTest):
+class ListItemValidationTest(ListsTest):
     ''' 输入框效验测试
     '''
     def test_001(self):
