@@ -1,8 +1,8 @@
 #------------------------------
 # functional_tests.test_lists.test_view_list
 #------------------------------
-# author: TangJianwei
-# update: 2019-02-25
+# Author: TangJianwei
+# Create: 2019-02-25
 #------------------------------
 from selenium.webdriver.common.keys import Keys
 

@@ -1,8 +1,8 @@
 #------------------------------
 # functional_tests.test_lists.test_remove_list
 #------------------------------
-# author: TangJianwei
-# update: 2019-02-25
+# Author: TangJianwei
+# Create: 2019-05-25
 #------------------------------
 from selenium.webdriver.common.keys import Keys
 
@@ -43,3 +43,16 @@ class RemoveListTest(ListsTest):
             self.browser.find_element_by_id('id_messages').text
         ))
         self.assertEqual(self.browser.current_url, self.live_server_url + '/')
+
+
+    def test_002(self):
+        ''' 匿名用户看不到"删除清单"按钮
+        '''
+        self.browser.get(self.live_server_url)
+        self.add_list_item('New item')
+
+        self.assertEqual(
+            self.browser.find_elements_by_css_selector('button#id_remove_list'),
+            []
+        )
+

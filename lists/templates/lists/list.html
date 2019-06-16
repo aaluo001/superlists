@@ -15,8 +15,10 @@
                     {% if user.email %}
                         <!-- <a href="{% url 'remove_list_item' item.id %}" class="btn btn-default btn-xs">×</a> -->
                         <form method="POST" action="{% url 'remove_list_item' item.id %}">
-                            <button type="submit" id="id_remove_list_item" class="btn btn-default btn-xs"
-                                    {% if forloop.counter == 1 %} disabled {% endif %}>×</button>
+                            <button type="submit"
+                                id="id_remove_list_item_{{forloop.counter}}"
+                                class="btn btn-default btn-xs"
+                                {% if forloop.counter == 1 %} disabled {% endif %}>×</button>
                             {% csrf_token %}
                         </form>
                     {% endif %}
