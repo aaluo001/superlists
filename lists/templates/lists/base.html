@@ -8,7 +8,8 @@
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>Superlists</title>
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'jquery/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 
 <body>
@@ -125,15 +126,10 @@
         </div>
     </footer>
 
-    <script src="{% static 'jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'lists.js' %}"></script>
-
-    <script>
-        $(document).ready(function() {
-            window.superlists.initialize();
-        });
-    </script>
+    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/lists.js' %}"></script>
 
 </body>
 </html>

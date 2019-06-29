@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Lists Test</title>
+    <link rel="stylesheet" href="qunit.css">
+    <link href="../jquery/jquery-ui.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+
+        <form>
+            <input name="text" />
+            <div class="has-error">Error Text</div>
+        </form>
+
+        <form name="remove_list" method="POST">
+            <button name="remove_list">删除清单</button>
+            <div id="id_remove_list_dialog" title="删除清单" style="display:none">
+                <p>您确定要删除该清单吗？</p>
+            </div>
+        </form>
+
+    </div>
+
+    <script src="../jquery/jquery.min.js"></script>
+    <script src="../jquery/jquery-ui.min.js"></script>
+    <script src="qunit.js"></script>
+    <script src="../js/lists.js"></script>
+    <script src="test_lists.js"></script>
+
+</body>
+</html>
