@@ -33,7 +33,10 @@
         <form name="remove_list" class="text-left" method="POST" action="{% url 'remove_list' list.id %}">
             <button type="submit" name="remove_list" class="btn btn-danger btn-sm">删除清单</button>
             <div id="id_remove_list_dialog" title="删除清单" style="display:none">
-                <p>您确定要删除该清单吗？</p>
+                <p>
+                    待办事项清单被删除后将无法恢复！<br>
+                    您确定要这么做吗？
+                </p>
             </div>
             {% csrf_token %}
         </form>
