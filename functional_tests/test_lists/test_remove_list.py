@@ -7,6 +7,7 @@
 import time
 
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import ElementNotInteractableException
 
 from .base_lists import ListsTest
 
@@ -26,6 +27,8 @@ class RemoveListTest(ListsTest):
         self.browser.get(self.live_server_url)
         self.add_list_item('买一些孔雀羽毛')
         self.add_list_item('用孔雀羽毛做假蝇')
+        time.sleep(2)
+
         # 取得当前URL
         url = self.browser.current_url
         
@@ -58,7 +61,8 @@ class RemoveListTest(ListsTest):
         # 新建清单
         self.browser.get(self.live_server_url)
         self.add_list_item('买一些孔雀羽毛')
-        self.add_list_item('用孔雀羽毛做假蝇')
+        time.sleep(2)
+
         # 取得当前URL
         url = self.browser.current_url
         
@@ -87,6 +91,31 @@ class RemoveListTest(ListsTest):
 
 
     def test_003(self):
+        ''' 保持弹出确认对话框状态，尝试继续添加待办事项时出错
+        '''
+        # 创建登录用户
+        self.create_pre_authenticated_session('abc@163.com')
+
+        # 新建清单
+        self.browser.get(self.live_server_url)
+        self.add_list_item('New item 1')
+        time.sleep(2)
+        
+        # 点击"删除清单"按钮后，弹出确认对话框
+        self.browser.find_element_by_css_selector('button[name="remove_list"]').click()
+        self.wait_for(lambda: self.assertEqual(
+            "待办事项清单被删除后将无法恢复！\n您确定要这么做吗？",
+            self.browser.find_element_by_css_selector("#id_remove_list_dialog").text.strip(),
+        ))
+
+        # 尝试继续添加待办事项时出错
+        try:
+            self.add_list_item('New item 2')
+        except ElementNotInteractableException as e:
+            self.assertIn('Element <input id="id_text" class="form-control" name="text" type="text"> is not reachable by keyboard', str(e))
+
+
+    def test_004(self):
         ''' 匿名用户看不到"删除清单"按钮
         '''
         self.browser.get(self.live_server_url)
