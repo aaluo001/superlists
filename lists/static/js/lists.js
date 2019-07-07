@@ -7,6 +7,7 @@
  */
 
 function initItemText() {
+    $('input[name="text"]').focus();
     $('input[name="text"]').on('keypress', function() {
         $(".has-error").hide();
     });
