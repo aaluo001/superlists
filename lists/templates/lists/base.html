@@ -7,64 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>Superlists</title>
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'jquery/jquery-ui.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% include 'commons/css.html' %}
 </head>
 
 <body>
     <div class="container">
-
         {# 导航栏 #}
-        <nav id="id_navigation" class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home_page' %}">Superlists</a>
-                
-                {% if user.email %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">{{ user.email }}</a></li>
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">待办事项<span class="caret"></span></a>
-                          <ul class="dropdown-menu">
-                            <li><a href="{% url 'home_page' %}">新建清单</a></li>
-                            <li><a href="{% url 'my_lists' %}">我的清单</a></li>
-                          </ul>
-                        </li>
-                        <li><a href="{% url 'logout' %}">退出</a></li>
-                    </ul>
-                {% else %}
-                    <form class="navbar-form navbar-right" method="POST" action="{% url 'send_login_email' %}">
-                        <input type="text" class="form-control" name="email" size="40" required placeholder="输入邮箱地址登录" />
-                        {% csrf_token %}
-                    </form>
-                {% endif %}
-                
-                <!--
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">联系我们</a></li>
-                </ul>
-                -->
-
-            </div>
-        </nav>
-
+        {% include 'commons/navbar.html' %}
 
         {# 提示消息 #}
-        {% if messages %}
-            <div id="id_messages" class="row">
-                <div class="col-md-8">
-                    {% for message in messages %}
-                        {% if message.level_tag == 'success' %}
-                            <div class="alert alert-success">{{ message }}</div>
-                        {% else %}
-                            <div class="alert alert-danger">{{ message }}</div>
-                        {% endif %}
-                   {% endfor %}
-                </div>
-            </div> 
-        {% endif %}
+        {% include 'commons/messages.html' %}
 
-
+        {# app parts #}
         {# 巨幕 #}
         <div id="id_jumbotron" class="row">
             <div class="col-md-6 col-md-offset-3 jumbotron">
@@ -84,8 +38,7 @@
                 </div>
             </div>
         </div>
-
-
+        
         {# 表示区域-1 #}
         <div id="id_display_area_1" class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -99,38 +52,25 @@
                 {% block dispaly_area_2 %}{% endblock %}
             </div>
         </div>
-
-
+        
         {# 注意事项等其他说明 #}
         <div id="id_notes" class="row">
             <div class="col-md-6 col-md-offset-3">
                 {% block notes %}{% endblock %}
             </div>
         </div>
+        {# app parts #}
+    
     </div>
 
+    {# 页面底部 #}
+    {% include 'commons/footer.html' %}
 
-    {# 页面末尾表示 #}
-    <footer class="footer">
-        <div class="container">
-            <div class="text-center">
-                <hr>
-                <p>
-                    &copy;2019 Tang &nbsp;
-                    <a href="http://www.miitbeian.gov.cn/" target="_blank">蜀ICP备19005354号</a>&nbsp;
-	                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51010602000909" target="_blank">
-	                    <img src="{% static 'register_icon.png' %}">川公网安备 51010602000909号
-	                </a>
-	            </p>
-            </div>
-        </div>
-    </footer>
+    {# JavaScript #}
+    {% include 'commons/js.html' %}
 
-    <script src="{% static 'jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/utils.js' %}"></script>
+    {# app includes #}
     <script src="{% static 'js/lists.js' %}"></script>
-
+    {# app includes #}
 </body>
 </html>
