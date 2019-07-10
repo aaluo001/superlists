@@ -8,16 +8,15 @@
     <table id="id_list_table" class="table table-condensed">
         {% for item in list.item_set.all %}
             <tr>
-                <td width="40" >{{ forloop.counter }}</td>
+                <td width="40"  align="right">{{ forloop.counter }}</td>
                 <td width="460" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
-                <td width="40" align="right">
+                <td width="40"  align="right">
                     {# 第一条是清单标题，不能删除 #}
                     {% if user.email %}
-                        <!-- <a href="{% url 'remove_list_item' item.id %}" class="btn btn-default btn-xs">×</a> -->
                         <form method="POST" action="{% url 'remove_list_item' item.id %}">
                             <button type="submit"
                                 id="id_remove_list_item_{{forloop.counter}}"
-                                class="btn btn-default btn-xs"
+                                class="btn btn-danger btn-xs"
                                 {% if forloop.counter == 1 %} disabled {% endif %}>×</button>
                             {% csrf_token %}
                         </form>
@@ -28,16 +27,18 @@
         {% endfor %}
     </table>
 
-    {# 只有登录用户才能操作自己的清单 #}
+    {# 只有登录用户才能操作清单 #}
     {% if user.email %}
-        <form name="remove_list" class="text-left" method="POST" action="{% url 'remove_list' list.id %}">
+        <form name="remove_list" class="text-right" method="POST" action="{% url 'remove_list' list.id %}">
             <button type="submit" name="remove_list" class="btn btn-danger btn-sm">删除清单</button>
             <div id="id_remove_list_dialog" title="删除清单" style="display:none">
                 <p>
-                    待办事项清单被删除后将无法恢复！<br>
-                    您确定要这么做吗？
+                    待办事项清单被删除后无法恢复！<br>
+                    您确定要删除该清单吗？
                 </p>
             </div>
+            &nbsp;&nbsp;
+            <a class="btn btn-default btn-sm" href="{% url 'home_page' %}">新建清单</a>
             {% csrf_token %}
         </form>
     {% endif %}

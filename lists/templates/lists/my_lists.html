@@ -1,31 +1,19 @@
-{% extends 'lists/base.html' %}
+{# my_lists.html #}
 
-{% block header_text %}我的清单{% endblock %}
-
-{% block list_form %}{% endblock %}
-
-{% block dispaly_area_1 %}
+{% if user.email %}
     {% if list_set %}
-        <!--
-        2019-06-08 我的清单
-        只需要显示清单名称即可，没有必要显示创建日期等信息
-        <table id="id_my_lists_table" class="table table-condensed">
-            {% for list in list_set %}
+        <table id="id_my_lists_table" class="table table-bordered table-condensed">
+            {% for list_object in list_set %}
                 <tr>
-                    <td width="480"><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></td>
-                    <td><br></td>
+                    <td {% if list and list.id == list_object.id %} class="active selected" {% endif %}>
+                        <a href="{{ list_object.get_absolute_url }}">{{ list_object.name }}</a><br>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
-        -->
-
-        <ul id="id_my_lists_table">
-            {% for list in list_set %}
-                <li><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></li>
-            {% endfor %}
-        </ul>
     {% else %}
         <p>没有找到您的清单！</p>
     {% endif %}
-{% endblock %}
-
+{% else %}
+    <p>您还没有登录！</p>
+{% endif %}

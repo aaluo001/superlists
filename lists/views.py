@@ -21,9 +21,16 @@ def get_owner(request):
     if (request.user.is_authenticated): return request.user
     else: return None
 
+def get_my_lists(request):
+    return List.objects.filter(owner=get_owner(request))
+
 
 def home_page(request):
-    return render(request, 'lists/index.html', {'form': ItemForm()})
+    context = {
+        'form': ItemForm(),
+        'list_set': get_my_lists(request),
+    }
+    return render(request, 'lists/index.html', context)
 
 
 def new_list(request):
@@ -69,17 +76,18 @@ def view_list(request, list_id):
     context = { \
         'list': list_object,
         'form': form,
+        'list_set': get_my_lists(request),
     }
     return render(request, 'lists/list.html', context)
 
 
-def my_lists(request):
-    # 只有登录用户才能查看自己的清单
-    owner = get_owner(request)
-    if (not owner): return redirect(reverse('home_page'))
+# def my_lists(request):
+#     # 只有登录用户才能查看自己的清单
+#     owner = get_owner(request)
+#     if (not owner): return redirect(reverse('home_page'))
 
-    list_set = List.objects.filter(owner=owner)
-    return render(request, 'lists/my_lists.html', {'list_set': list_set})
+#     list_set = List.objects.filter(owner=owner)
+#     return render(request, 'lists/my_lists.html', {'list_set': list_set})
 
 
 def remove_list(request, list_id):
@@ -93,7 +101,7 @@ def remove_list(request, list_id):
         pass
     else:
         list_object.delete()
-    return redirect(reverse('my_lists'))
+    return redirect(reverse('home_page'))
 
 
 def remove_list_item(request, item_id):
@@ -104,12 +112,12 @@ def remove_list_item(request, item_id):
     try:
         item_object = Item.objects.select_related('list').get(id=item_id, list__owner=owner)
     except Item.DoesNotExist:
-        return redirect(reverse('my_lists'))
+        return redirect(reverse('home_page'))
     else:
         item_object.delete()
         if (item_object.list.item_set.count() == 0):
             item_object.list.delete()
-            return redirect(reverse('my_lists'))
+            return redirect(reverse('home_page'))
         return redirect(item_object.list)
 
     
