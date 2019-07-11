@@ -1,0 +1,20 @@
+/*------------------------------
+ * css/base.css
+ *------------------------------
+ * Author: TangJianwei
+ * Create: 2019-07-11
+ *------------------------------
+ */
+.app-selected {
+    font-weight: bold;
+    background-color: #e8e8e8;
+}
+
+.app-title {
+    font-weight: bold;
+}
+
+.app-lebal {
+    font-weight: bold;
+    background-color: #31708f;
+}

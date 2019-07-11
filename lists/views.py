@@ -81,15 +81,6 @@ def view_list(request, list_id):
     return render(request, 'lists/list.html', context)
 
 
-# def my_lists(request):
-#     # 只有登录用户才能查看自己的清单
-#     owner = get_owner(request)
-#     if (not owner): return redirect(reverse('home_page'))
-
-#     list_set = List.objects.filter(owner=owner)
-#     return render(request, 'lists/my_lists.html', {'list_set': list_set})
-
-
 def remove_list(request, list_id):
     # 只有登录用户才能删除自己的清单
     owner = get_owner(request)

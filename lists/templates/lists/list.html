@@ -37,8 +37,7 @@
                     您确定要删除该清单吗？
                 </p>
             </div>
-            &nbsp;&nbsp;
-            <a class="btn btn-default btn-sm" href="{% url 'home_page' %}">新建清单</a>
+            &nbsp;<a class="btn btn-default btn-sm" href="{% url 'home_page' %}">新建清单</a>
             {% csrf_token %}
         </form>
     {% endif %}
