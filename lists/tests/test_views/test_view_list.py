@@ -39,6 +39,7 @@ class ViewListTestForRequestGET(TestCase):
         
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertEqual(response.context['list'], list_object)
+        self.assertIsNone(response.context['list_set'])
 
         
     def test_003(self):
@@ -46,13 +47,18 @@ class ViewListTestForRequestGET(TestCase):
         '''
         other_list_object = List.objects.create()       ## 不会取到错误的清单
         user_object = User.objects.create(email='abc@163.com')
-        list_object = List.objects.create(owner=user_object)
         self.client.force_login(user_object)
+        list_object = List.objects.create(owner=user_object)
+        Item.objects.create(list=list_object, text='new item')
         
         response = self.get_view_list(list_object)
         
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertEqual(response.context['list'], list_object)
+        
+        list_set = response.context['list_set']
+        self.assertEqual(len(list_set), 1)
+        self.assertEqual(list_set[0], list_object)
 
 
     @patch('lists.views.messages')
@@ -152,66 +158,64 @@ class ViewListTestForRequestPOST(TestCase):
 
         
     def test_021(self):
-        ''' 提交空的待办事项不会保存到数据库
+        ''' 提交空的待办事项时，不会保存到数据库
         '''
         self.post_item_text_input(List.objects.create(), '')
         self.assertEqual(Item.objects.count(), 0)
 
     def test_022(self):
-        ''' 提交空的待办事项后，清单项目显示页面
+        '''  提交待办事项内容超过32文字时，不会保存到数据库
+        '''
+        self.post_item_text_input(List.objects.create(), '123456789012345678901234567890123')
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_023(self):
+        ''' 提交重复的待办事项时，不会保存到数据库
+        '''
+        list_object = List.objects.create()
+        Item.objects.create(list=list_object, text='do me')
+        # 提交重复的待办事项
+        response = self.post_item_text_input(list_object, 'do me')
+        self.assertEqual(Item.objects.count(), 1)
+
+
+    def test_031(self):
+        ''' 提交出错时，显示清单项目页面
         '''
         response = self.post_item_text_input(List.objects.create(), '')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lists/list.html')
-        
-    def test_023(self):
-        ''' 提交空的待办事项后，清单项目显示上下文
+
+    def test_032(self):
+        ''' 提交出错时，清单项目显示上下文
         '''
         list_object = List.objects.create()
         response = self.post_item_text_input(list_object, '')
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertEqual(response.context['list'], list_object)
+        self.assertIsNone(response.context['list_set'])
 
-
-#    def test_024(self):
-#        ''' 提交空的待办事项后，错误消息
-#        '''
-#        response = self.post_item_text_input(List.objects.create(), '')
-#        self.assertContains(response, '待办事项不能为空！')
-
-
-    def test_025(self):
-        ''' 提交重复的待办事项，数据库不会更新
-            错误消息和清单项目显示页面
+    def test_033(self):
+        ''' 如果时登录用户，提交出错时，仍可以取得我的清单
         '''
-        list_object = List.objects.create()
-        Item.objects.create(list=list_object, text='do me')
+        other_list_object = List.objects.create()
+        Item.objects.create(list=other_list_object, text='Other item')
         
-        # 提交重复的待办事项
-        response = self.post_item_text_input(list_object, 'do me')
-        
-        self.assertEqual(Item.objects.count(), 1)
-#        self.assertContains(response, '您已经提交一个同样的待办事项！')
-        self.assertTemplateUsed(response, 'lists/list.html')
+        user_object = User.objects.create(email='abc@163.com')
+        self.client.force_login(user_object)
 
-        
-    def test_026(self):
-        '''  提交待办事项内容超过32文字时，不会写入数据库
-        '''
-        self.post_item_text_input(List.objects.create(), '123456789012345678901234567890123')
-        self.assertEqual(Item.objects.count(), 0)
+        ## 新建清单
+        list_object_1 = List.objects.create(owner=user_object)
+        Item.objects.create(list=list_object_1, text='New item 1')
+        list_object_2 = List.objects.create(owner=user_object)
+        Item.objects.create(list=list_object_2, text='New item 2')
 
-    def test_027(self):
-        ''' 提交待办事项内容超过32文字时，返回首页模型
-        '''
-        response = self.post_item_text_input(List.objects.create(), '123456789012345678901234567890123')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'lists/list.html')
+        # 提交出错(提交空的待办事项)
+        response = self.post_item_text_input(list_object_1, '')
 
-    def test_028(self):
-        ''' 提交待办事项内容超过32文字时，清单项目显示上下文
-        '''
-        list_object = List.objects.create()
-        response = self.post_item_text_input(list_object, '123456789012345678901234567890123')
-        self.assertIsInstance(response.context['form'], ExistingListItemForm)
-        self.assertEqual(response.context['list'], list_object)
+        list_set = response.context['list_set']
+        self.assertEqual(len(list_set), 2)
+        self.assertIn(list_object_1, list_set)
+        self.assertIn(list_object_2, list_set)
+        self.assertNotIn(other_list_object, list_set)
+
