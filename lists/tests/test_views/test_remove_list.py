@@ -15,14 +15,14 @@ class RemoveListTest(TestCase):
     ''' 删除清单测试
     '''
     def test_001(self):
-        ''' 删除清单后跳转到我的清单
+        ''' 删除清单后跳转到首页
         '''
         user_object = User.objects.create(email='abc@163.com')
         self.client.force_login(user_object)
         list_object = List.objects.create(owner=user_object)
         Item.objects.create(list=list_object, text='New item')
         response = self.client.get('/lists/{}/remove'.format(list_object.pk))
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/')
 
 
     def test_002(self):
@@ -46,12 +46,12 @@ class RemoveListTest(TestCase):
     
     
     def test_003(self):
-        ''' 没有找到清单时不会报错，页面也会跳转到我的清单
+        ''' 没有找到清单时不会报错，页面跳转到首页
         '''
         user_object = User.objects.create(email='abc@163.com')
         self.client.force_login(user_object)
         response = self.client.get('/lists/999/remove')
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/')
         
         
     def test_004(self):

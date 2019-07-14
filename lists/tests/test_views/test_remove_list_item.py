@@ -43,7 +43,7 @@ class RemoveListItemTest(TestCase):
     def test_002(self):
         ''' 完全删除清单项目
             该清单，以及所有的清单项目都被删除
-            页面跳转至我的清单页面
+            页面跳转至首页
         '''
         list_object = self.create_list()
         item_object = Item.objects.create(list=list_object, text='New item 1')
@@ -52,19 +52,19 @@ class RemoveListItemTest(TestCase):
         
         self.assertEqual(Item.objects.count(), 0)
         self.assertEqual(List.objects.count(), 0)
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/')
     
     
     def test_003(self):
         ''' 未找到要删除的清单项目
-            页面跳转至我的清单页面
+            页面跳转至首页
         '''
         list_object = self.create_list()
         item_object = Item.objects.create(list=list_object, text='New item 1')
         
         response = self.client.get('/lists/{}/remove_item'.format(999))
         
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/')
         self.assertIn(item_object, list_object.item_set.all())
 
 
@@ -93,6 +93,6 @@ class RemoveListItemTest(TestCase):
 
         response = self.client.get('/lists/{}/remove_item'.format(other_item_object.pk))
         
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/')
         self.assertIn(other_item_object, other_list_object.item_set.all())
 
