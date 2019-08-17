@@ -17,22 +17,22 @@ class LayoutAndStylingTest(ListsTest):
             主要是检查Bootstrap是否加载
         '''
         self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-        
+        self.browser.set_window_size(600, 900)
+
         # 首页的输入框居中显示
         input_box = self.get_item_input_box()
         self.assertAlmostEqual( \
             input_box.location['x'] + input_box.size['width'] / 2, \
-            512, \
+            300, \
             delta=10 \
         )
-        self.add_list_item('testing')
         
         # 清单页面的输入框居中显示
+        self.add_list_item('testing')
         input_box = self.get_item_input_box()
         self.assertAlmostEqual( \
             input_box.location['x'] + input_box.size['width'] / 2, \
-            512, \
+            300, \
             delta=10 \
         )
 
