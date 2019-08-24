@@ -35,7 +35,7 @@ class RemoveListTest(ListsTest):
         # 点击"删除清单"按钮后，弹出确认对话框
         self.browser.find_element_by_css_selector('button[name="remove_list"]').click()
         self.wait_for(lambda: self.assertEqual(
-            "待办事项清单被删除后将无法恢复！\n您确定要这么做吗？",
+            "待办事项清单被删除后将无法恢复！\n您确定要删除该待办事项清单吗？",
             self.browser.find_element_by_css_selector("#id_remove_list_dialog").text.strip(),
         ))
 
@@ -52,8 +52,8 @@ class RemoveListTest(ListsTest):
 
     def test_002(self):
         ''' 点击"删除清单"按钮后，弹出确认对话框(确定删除)
-            选择OK按钮后，页面被提交，最后跳转到"我的清单"页面
-            该清单无法访问
+            选择OK按钮后，页面被提交，该清单被删除，然后跳转到新建清单页面
+            在我的清单列表中，该清单无法访问
         '''
         # 创建登录用户
         self.create_pre_authenticated_session('abc@163.com')
@@ -69,17 +69,22 @@ class RemoveListTest(ListsTest):
         # 点击"删除清单"按钮后，弹出确认对话框
         self.browser.find_element_by_css_selector('button[name="remove_list"]').click()
         self.wait_for(lambda: self.assertEqual(
-            "待办事项清单被删除后将无法恢复！\n您确定要这么做吗？",
+            "待办事项清单被删除后将无法恢复！\n您确定要删除该待办事项清单吗？",
             self.browser.find_element_by_css_selector("#id_remove_list_dialog").text.strip(),
         ))
 
-        # 选择OK按钮后，页面被提交，最后跳转到"我的清单"页面
+        # 选择OK按钮后，页面被提交，该清单被删除，然后跳转到新建清单页面
         self.browser.find_elements_by_css_selector("div.ui-dialog-buttonset > button")[0].click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            '我的清单'
+            '新建清单'
         ))
-        self.assertIn('/lists/', self.browser.current_url)
+
+        # 在我的清单列表中，该清单无法访问
+        self.assertEqual(
+            self.browser.find_elements_by_link_text('买一些孔雀羽毛'), 
+            []
+        )
         
         # 该清单无法访问(在首页显示提示消息)
         self.browser.get(url)
@@ -104,7 +109,7 @@ class RemoveListTest(ListsTest):
         # 点击"删除清单"按钮后，弹出确认对话框
         self.browser.find_element_by_css_selector('button[name="remove_list"]').click()
         self.wait_for(lambda: self.assertEqual(
-            "待办事项清单被删除后将无法恢复！\n您确定要这么做吗？",
+            "待办事项清单被删除后将无法恢复！\n您确定要删除该待办事项清单吗？",
             self.browser.find_element_by_css_selector("#id_remove_list_dialog").text.strip(),
         ))
 

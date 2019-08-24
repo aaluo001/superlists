@@ -5,7 +5,10 @@
         <table id="id_my_lists_table" class="table table-bordered table-condensed">
             {% for list_object in list_set %}
                 <tr>
-                    <td {% if list and list.id == list_object.id %} class="app-selected" {% endif %}>
+                    <td id="id_my_lists_row_{{ forloop.counter }}"
+                        {% if list and list.id == list_object.id %}
+                            class="app-selected"
+                        {% endif %}>
                         <a href="{{ list_object.get_absolute_url }}">{{ list_object.name }}</a><br>
                     </td>
                 </tr>

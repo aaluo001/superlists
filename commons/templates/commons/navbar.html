@@ -9,14 +9,19 @@
                 <li><a href="#">{{ user.email }}</a></li>
                 <!--
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">待办事项<span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">SubMenu<span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="">新建清单</a></li>
-                    <li><a href="">我的清单</a></li>
+                    <li><a href="">x1</a></li>
+                    <li><a href="">x2</a></li>
                   </ul>
                 </li>
                 -->
-                <li><a href="{% url 'home_page' %}">待办事项</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">待办事项<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'home_page' %}">新建清单</a></li>
+                    </ul>
+                </li>
                 <li><a href="{% url 'logout' %}">退出</a></li>
             </ul>
         {% else %}
