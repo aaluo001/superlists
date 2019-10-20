@@ -49,7 +49,11 @@ def new_list(request):
         form.save(for_list=list_object)
         return redirect(list_object)
     else:
-        return render(request, 'lists/index.html', {'form': form})
+        context = { \
+            'form': form,
+            'list_set': get_my_lists(request),
+        }
+        return render(request, 'lists/index.html', context)
 
 
 def view_list(request, list_id):

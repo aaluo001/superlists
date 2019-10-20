@@ -95,3 +95,45 @@ class ListItemValidationTest(ListsTest):
             self.get_error_element().is_displayed()
         ))
 
+
+    def test_003(self):
+        ''' 新建清单时，提交空白文字会报错
+            但是，我的清单能正常表示
+        '''
+        # 创建登录用户
+        self.create_pre_authenticated_session('abc@163.com')
+        self.browser.get(self.live_server_url)
+        
+        # 新建清单
+        self.add_list_item('Reticulate splines')
+        self.add_list_item('Immanentize eschaton')
+        # 我的清单列显示刚刚新建的清单(排在最前列)
+        self.wait_for_row_in_my_lists_table(1, 'Reticulate splines')
+        
+
+        # --- 再新建一个待办事项清单 ---
+
+        # 点击"新建清单"链接
+        self.browser.find_element_by_link_text('待办事项').click()
+        self.browser.find_element_by_link_text('新建清单').click()
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
+            '新建清单'
+        ))
+
+        # 提交一个空格
+        input_box = self.get_item_input_box()
+        input_box.send_keys(' ')
+        input_box.send_keys(Keys.ENTER)
+
+        # 于是，得到一条错误消息
+        self.wait_for(lambda: self.assertTrue(
+            self.get_error_element().is_displayed()
+        ))
+        self.wait_for(lambda: self.assertEqual(
+            self.get_error_element().text,
+            '待办事项不能为空！'
+        ))
+
+        # 我的清单可以正常表示
+        self.wait_for_row_in_my_lists_table(1, 'Reticulate splines')

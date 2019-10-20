@@ -70,8 +70,20 @@ class NewListTest(TestCase):
     def test_013(self):
         ''' 提交空的待办事项时，返回首页上下文
         '''
+        user_object = User.objects.create(email='abc@163.com')
+        self.client.force_login(user_object)
+
+        # 新建一个清单
+        self.post_new_list()
+        list_object = List.objects.first()
+
         response = self.post_new_list('')
         self.assertIsInstance(response.context['form'], ItemForm)
+        
+        # 当提交出错时，刚刚的清单也能正常返回
+        list_set = response.context['list_set']
+        self.assertEqual(len(list_set), 1)
+        self.assertEqual(list_set[0], list_object)
 
         
     def test_021(self):
@@ -93,6 +105,17 @@ class NewListTest(TestCase):
     def test_023(self):
         ''' 提交待办事项内容超过32文字时，返回首页上下文
         '''
+        user_object = User.objects.create(email='abc@163.com')
+        self.client.force_login(user_object)
+
+        # 新建一个清单
+        self.post_new_list()
+        list_object = List.objects.first()
+
         response = self.post_new_list('123456789012345678901234567890123')
         self.assertIsInstance(response.context['form'], ItemForm)
 
+        # 当提交出错时，刚刚的清单也能正常返回
+        list_set = response.context['list_set']
+        self.assertEqual(len(list_set), 1)
+        self.assertEqual(list_set[0], list_object)
