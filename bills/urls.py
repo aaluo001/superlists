@@ -13,19 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-from django.views.generic.base import RedirectView
-
-from lists.views import home_page
-from lists import urls as lists_urls
-from accounts import urls as accounts_urls
-from bills import urls as bills_urls
+from django.conf.urls import url
+from bills import views
 
 
 urlpatterns = [
-    url(r'^$', home_page, name='home_page'),
-    url(r'^lists/', include(lists_urls)),
-    url(r'^accounts/', include(accounts_urls)),
-    url(r'^bills/', include(bills_urls)),
-    url(r'^favicon.ico$', RedirectView.as_view(url='static/favicon.ico'))
+    url(r'^index$', views.index, name='bill_page'),
+    url(r'^create$', views.create_bill, name='create_bill'),
+    # url(r'^(\d+)/$', views.view_list, name='view_list'),
+    # url(r'^(\d+)/remove$', views.remove_list, name='remove_list'),
+    # url(r'^(\d+)/remove_item$', views.remove_list_item, name='remove_list_item'),
 ]

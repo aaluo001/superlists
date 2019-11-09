@@ -1,0 +1,22 @@
+{# bills/billym_list.html #}
+
+{% if user.email %}
+    {% if list_set %}
+        <table id="id_billym_list_table" class="table table-bordered table-condensed">
+            {% for list_object in list_set %}
+                <tr>
+                    <td id="id_billym_list_row_{{ forloop.counter }}"
+                        {% if list and list.id == list_object.id %}
+                            class="app-selected"
+                        {% endif %}>
+                        <a href="{{ list_object.get_absolute_url }}">{{ list_object.name }}</a><br>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>没有找到您的账单！</p>
+    {% endif %}
+{% else %}
+    <p>您还没有登录！</p>
+{% endif %}
