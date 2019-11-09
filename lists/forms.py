@@ -8,6 +8,7 @@ from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
+from commons.messages import ERROR_MESSAGES
 from lists.models import Item
 
 
@@ -27,7 +28,7 @@ class ItemForm(ModelForm):
         }
         error_messages = {
             'text': {
-                'required': '待办事项不能为空！',
+                'required': ERROR_MESSAGES['required'].format('待办事项'),
             }
         }
 
@@ -37,7 +38,8 @@ class ItemForm(ModelForm):
         '''
         data = self.cleaned_data['text']
         if (len(data) > 32):
-            raise ValidationError('待办事项的内容不能超过32文字！')
+            raise ValidationError(\
+                ERROR_MESSAGES['max_length'].format('待办事项', '32'))
         return data
 
     

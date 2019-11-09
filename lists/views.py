@@ -7,9 +7,8 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
+from commons.views import get_owner
 from lists.models import Item
 from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
@@ -18,12 +17,8 @@ from lists.forms import ItemForm, ExistingListItemForm
 NOT_FOUND_LIST_ERROR = '没有找到该清单，或该清单已被删除！'
 
 
-def get_owner(request):
-    if (request.user.is_authenticated): return request.user
-    else: return None
-
 def get_my_lists(request):
-    owner=get_owner(request)
+    owner = get_owner(request)
     if (not owner): return None
     else: return List.objects.filter(owner=owner)
 

@@ -13,6 +13,6 @@
 
 ## 过渡服务器测试命令
 
-STAGING_TESTS=yes python manage.py test functional_tests.test_login
-STAGING_TESTS=yes python manage.py test functional_tests
+STAGING_TESTS=yes python manage.py test functional_tests.test_accounts
+STAGING_TESTS=yes python manage.py test functional_tests.test_lists
 

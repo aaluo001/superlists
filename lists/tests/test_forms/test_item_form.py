@@ -32,15 +32,15 @@ class ItemFormTest(TestCase):
         '''
         form = ItemForm(data={'text': ''})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['待办事项不能为空！', ])
+        self.assertEqual(form.errors['text'], ['待办事项: 不能为空！', ])
 
     
     def test_003(self):
-        ''' 提交待办事项的内容不能超过32文字
+        ''' 提交待办事项的内容不能超过32个字符
         '''
         form = ItemForm(data={'text': '123456789012345678901234567890123'})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['text'], ['待办事项的内容不能超过32文字！', ])
+        self.assertEqual(form.errors['text'], ['待办事项: 不能超过 32 个字符！', ])
     
     
     def test_004(self):
