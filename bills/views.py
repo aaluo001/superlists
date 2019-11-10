@@ -4,6 +4,7 @@
 # Author: TangJianwei
 # Create: 2019-11-06
 #------------------------------
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -13,16 +14,20 @@ from bills.models import Billym, Bill
 from bills.forms import BillForm
 
 
-def get_billym_list(request):
+def get_billyms(request):
     owner = get_owner(request)
     if (not owner): return None
     else: return Billym.objects.filter(owner=owner)
+
+def get_bills_on_today_created():
+    return Bill.objects.filter(create_ts__date=timezone.now().date())
 
 
 def index(request):
     context = {
         'form': BillForm(),
-        'billym_list': get_billym_list(request),
+        'bills': get_bills_on_today_created(),
+        'billyms': get_billyms(request),
     }
     return render(request, 'bills/index.html', context)
 
@@ -30,13 +35,13 @@ def index(request):
 def create_bill(request):
     form = BillForm(data=request.POST)
     if (form.is_valid()):
-        pass
+        form.save(get_owner(request))
+        return redirect(reverse('bill_page'))
     else:
-        pass
-
-    context = {
-        'form': form,
-        'billym_list': get_billym_list(request),
-    }
-    return render(request, 'bills/index.html', context)
+        context = {
+            'form': form,
+            'bills': get_bills_on_today_created(),
+            'billyms': get_billyms(request),
+        }
+        return render(request, 'bills/index.html', context)
 

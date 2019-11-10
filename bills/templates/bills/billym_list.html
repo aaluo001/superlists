@@ -1,15 +1,17 @@
 {# bills/billym_list.html #}
 
 {% if user.email %}
-    {% if list_set %}
-        <table id="id_billym_list_table" class="table table-bordered table-condensed">
-            {% for list_object in list_set %}
+    {% if billyms %}
+        <table id="id_billyms_table" class="table table-bordered table-condensed">
+            {% for billym in billyms %}
                 <tr>
-                    <td id="id_billym_list_row_{{ forloop.counter }}"
-                        {% if list and list.id == list_object.id %}
+                    <td id="id_billym_row_{{ forloop.counter }}"
+                        {% if selected_billym and selected_billym.id == billym.id %}
                             class="app-selected"
                         {% endif %}>
-                        <a href="{{ list_object.get_absolute_url }}">{{ list_object.name }}</a><br>
+                        <a href="{{ billym.get_absolute_url }}">
+                            {{ billym.year }}年{{ billym.month }}月
+                        </a><br>
                     </td>
                 </tr>
             {% endfor %}
