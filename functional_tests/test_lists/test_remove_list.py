@@ -77,7 +77,7 @@ class RemoveListTest(ListsTest):
         self.browser.find_elements_by_css_selector("div.ui-dialog-buttonset > button")[0].click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div.text-center > h1').text,
-            '新建清单'
+            '新建待办事项'
         ))
 
         # 在我的清单列表中，该清单无法访问

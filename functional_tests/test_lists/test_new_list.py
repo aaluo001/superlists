@@ -19,7 +19,7 @@ class NewListTest(ListsTest):
         # 可以看到页面标题，以及巨幕：新建清单
         self.browser.get(self.live_server_url)
         self.assertIn('Superlists', self.browser.title)
-        self.assertIn('新建清单', self.browser.find_element_by_tag_name('h1').text)
+        self.assertIn('新建待办事项', self.browser.find_element_by_tag_name('h1').text)
 
         # 输入待办事项
         self.add_list_item('买一些孔雀羽毛')

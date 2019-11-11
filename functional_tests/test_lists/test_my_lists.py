@@ -19,19 +19,19 @@ class MyListsTest(ListsTest):
         self.create_pre_authenticated_session('abc@163.com')
         
         # 访问首页
-        # 巨幕显示"新建清单"，在"我的清单"列显示没有清单
+        # 巨幕显示"新建待办事项"，在"我的待办事项"列显示"没有找到您的待办事项！"
         self.browser.get(self.live_server_url)
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
-            '新建清单'
+            '新建待办事项'
         ))
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_my_lists > .panel-heading > .panel-title').text,
-            '我的清单'
+            '我的待办事项'
         ))
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_my_lists > .panel-body > p').text,
-            '没有找到您的清单！'
+            '没有找到您的待办事项！'
         ))
 
 
@@ -62,12 +62,12 @@ class MyListsTest(ListsTest):
         
         # --- 再新建一个待办事项清单 ---
 
-        # 点击"新建清单"链接
+        # 点击"待办事项"链接
+        self.browser.find_element_by_link_text('应用').click()
         self.browser.find_element_by_link_text('待办事项').click()
-        self.browser.find_element_by_link_text('新建清单').click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
-            '新建清单'
+            '新建待办事项'
         ))
 
         # 新建清单
@@ -93,14 +93,14 @@ class MyListsTest(ListsTest):
             self.assertEqual(self.browser.current_url, list_url_1)
         )
 
-        # 退出后，返回"新建清单"页面
+        # 退出后，返回"新建待办事项"页面
         self.browser.find_element_by_link_text("退出").click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
-            '新建清单'
+            '新建待办事项'
         ))
 
-        # "我的清单"列不再显示任何清单内容(显示未登录信息)
+        # "我的待办事项"列不再显示任何清单内容(显示未登录信息)
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('div#id_my_lists > div.panel-body > p').text,
             '您还没有登录！'

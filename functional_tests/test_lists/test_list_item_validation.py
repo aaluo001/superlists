@@ -113,12 +113,12 @@ class ListItemValidationTest(ListsTest):
 
         # --- 再新建一个待办事项清单 ---
 
-        # 点击"新建清单"链接
+        # 点击"待办事项"链接
+        self.browser.find_element_by_link_text('应用').click()
         self.browser.find_element_by_link_text('待办事项').click()
-        self.browser.find_element_by_link_text('新建清单').click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
-            '新建清单'
+            '新建待办事项'
         ))
 
         # 提交一个空格
@@ -132,7 +132,7 @@ class ListItemValidationTest(ListsTest):
         ))
         self.wait_for(lambda: self.assertEqual(
             self.get_error_element().text,
-            '待办事项不能为空！'
+            '待办事项：不能为空！'
         ))
 
         # 我的清单可以正常表示
