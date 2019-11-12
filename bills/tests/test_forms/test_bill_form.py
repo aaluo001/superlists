@@ -25,13 +25,13 @@ class BillFormTest(TestCase):
         # print(soup)
         money_text = soup.find('input', {'name': 'money'})
         self.assertEqual(money_text['type'], 'text')
-        self.assertEqual(money_text['placeholder'], '负数为支出，正数为收入')
+        self.assertEqual(money_text['placeholder'], '正数为收入，负数为支出')
         self.assertEqual(money_text['required'], '')
         self.assertEqual(money_text['class'], ['form-control', ])
 
         comment_text = soup.find('input', {'name': 'comment'})
         self.assertEqual(comment_text['type'], 'text')
-        self.assertEqual(comment_text['placeholder'], '金额的使用说明')
+        self.assertEqual(comment_text['placeholder'], '收入支出说明')
         self.assertEqual(comment_text['maxlength'], '32')
         self.assertEqual(comment_text['required'], '')
         self.assertEqual(comment_text['class'], ['form-control', ])
@@ -42,23 +42,23 @@ class BillFormTest(TestCase):
         '''
         form = BillForm(data={'money': '', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['金额：不能为空！', ])
+        self.assertEqual(form.errors['money'], ['收入支出：不能为空！', ])
 
         form = BillForm(data={'money': 'abc', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['金额：请输入实数！', ])
+        self.assertEqual(form.errors['money'], ['收入支出：请输入实数！', ])
 
         form = BillForm(data={'money': '12345678.1', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['金额：不能超过 8 个数字！', ])
+        self.assertEqual(form.errors['money'], ['收入支出：不能超过 8 个数字！', ])
 
         form = BillForm(data={'money': '9.11', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['金额：不能超过 1 位小数！', ])
+        self.assertEqual(form.errors['money'], ['收入支出：不能超过 1 位小数！', ])
 
         form = BillForm(data={'money': '12345678', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['金额：不能超过 7 位整数！', ])
+        self.assertEqual(form.errors['money'], ['收入支出：不能超过 7 位整数！', ])
 
         form = BillForm(data={'money': '-1234567.1', 'comment': 'test', })
         self.assertTrue(form.is_valid())

@@ -1,0 +1,27 @@
+{# bills/bill_list.html #}
+
+{% extends 'bills/base.html' %}
+
+{% block header_text %}账单明细{% endblock %}
+
+{% block dispaly_area_1 %}
+<h3>{{ selected_billym.year }}年{{ selected_billym.month }}月</h3>
+<div class="row">
+    <div class="col-md-2 text-right"><b>合计支出：</b></div>
+    <div class="col-md-2 text-right text-danger">{{ aggs.expends }}</div>
+</div>
+<div class="row">
+    <div class="col-md-2 text-right"><b>合计收入：</b></div>
+    <div class="col-md-2 text-right">{{ aggs.incomes }}</div>
+</div>
+<div class="row">
+    <div class="col-md-2 text-right"><b>余额：</b></div>
+    <div class="col-md-2 text-right">
+        <div
+            {% if aggs.balance < 0 %}
+                class="text-danger"
+            {% endif %}
+        >{{ aggs.balance }}</div>
+    </div>
+</div>
+{% endblock %}

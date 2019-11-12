@@ -82,22 +82,18 @@ class BillymModelTest(TestCase):
         ''' 同一拥有者不能重复登录同一年月
         '''
         owner = User.objects.create(email='abc@163.com')
-        Billym.objects.create(owner=owner, year='2019', month=1)
+        Billym.objects.create(owner=owner, year=2019, month=1)
         
         with self.assertRaises(IntegrityError):
-            Billym.objects.create(owner=owner, year='2019', month=1)
+            Billym.objects.create(owner=owner, year=2019, month=1)
 
 
-
-    # def test_002(self):
-    #     ''' 取得URL链接get_absolute_url()
-    #     '''
-    #     billym = List.objects.create()
-    #     self.assertEqual( \
-    #         Billym.get_absolute_url(), \
-    #         '/lists/{}/'.format(Billym.id) \
-    #     )
-
-
-
+    def test_031(self):
+        ''' 取得URL链接get_absolute_url()
+        '''
+        owner = User.objects.create(email='abc@163.com')
+        billym = Billym.objects.create(owner=owner, year=2019, month=1)
+        self.assertEqual( \
+            billym.get_absolute_url(), '/bills/{}/'.format(billym.id) \
+        )
 

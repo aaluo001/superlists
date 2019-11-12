@@ -57,7 +57,37 @@
 
                 {# 表示区域-2 #}
                 <div id="id_display_area_2">
-                    {% block dispaly_area_2 %}{% endblock %}
+                    {% block dispaly_area_2 %}
+                    {% if bills %}
+                    <br>
+                    <table id="id_bills_table" class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th class="text-right">收入支出</th>
+                                <th>备注</th>
+                                <th><br></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bill in bills %}
+                                <tr>
+                                    <td width="90">{{ bill.date | date:"Y-m-d" }}</td>
+                                    <td width="90" class="text-right">
+                                        <div
+                                            {% if bill.money < 0 %}
+                                                class="text-danger"
+                                            {% endif %}
+                                        >{{ bill.money }}</div>
+                                    </td>
+                                    <td width="450">{{ bill.comment }}</td>
+                                    <td><br></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                    {% endblock %}
                 </div>
             
                 {# 温馨提示 #}

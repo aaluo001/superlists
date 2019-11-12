@@ -18,9 +18,9 @@ from bills import views
 
 
 urlpatterns = [
-    url(r'^index$', views.index, name='bill_page'),
+    url(r'^index/$', views.index, name='bill_page'),
     url(r'^create$', views.create_bill, name='create_bill'),
-    # url(r'^(\d+)/$', views.view_list, name='view_list'),
+    url(r'^(\d+)/$', views.view_bill_list, name='view_bill_list'),
     # url(r'^(\d+)/remove$', views.remove_list, name='remove_list'),
     # url(r'^(\d+)/remove_item$', views.remove_list_item, name='remove_list_item'),
 ]

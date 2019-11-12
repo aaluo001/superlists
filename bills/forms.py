@@ -22,29 +22,29 @@ class BillForm(ModelForm):
         model = Bill
         fields = ('money', 'comment', )
         widgets = {
-            # 金额
+            # 收入支出
             'money': forms.TextInput(
                 attrs={
-                    'placeholder': '负数为支出，正数为收入',
+                    'placeholder': '正数为收入，负数为支出',
                     'class': 'form-control',
                 }
             ),
             # 备注
             'comment': forms.TextInput(
                 attrs={
-                    'placeholder': '金额的使用说明',
+                    'placeholder': '收入支出说明',
                     'class': 'form-control',
                 }
             ),
         }
         error_messages = {
-            # 金额
+            # 收入支出
             'money': {
-                'required': ERROR_MESSAGES['required'].format('金额'),
-                'invalid': ERROR_MESSAGES['invalid_decimal'].format('金额'),
-                'max_digits': ERROR_MESSAGES['max_digits'].format('金额', '8'),
-                'max_whole_digits': ERROR_MESSAGES['max_whole_digits'].format('金额', '7'),
-                'max_decimal_places': ERROR_MESSAGES['max_decimal_places'].format('金额', '1'),
+                'required': ERROR_MESSAGES['required'].format('收入支出'),
+                'invalid': ERROR_MESSAGES['invalid_decimal'].format('收入支出'),
+                'max_digits': ERROR_MESSAGES['max_digits'].format('收入支出', '8'),
+                'max_whole_digits': ERROR_MESSAGES['max_whole_digits'].format('收入支出', '7'),
+                'max_decimal_places': ERROR_MESSAGES['max_decimal_places'].format('收入支出', '1'),
             },
             # 备注
             'comment': {
