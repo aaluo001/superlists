@@ -4,7 +4,8 @@
 # Author: TangJianwei
 # Create: 2019-11-06
 #------------------------------
-from django.utils import timezone
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -23,7 +24,7 @@ def get_billyms(request):
     else: return Billym.objects.filter(owner=owner)
 
 def get_bills_on_today_created():
-    return Bill.objects.filter(create_ts__date=timezone.now().date())
+    return Bill.objects.filter(create_ts__date=datetime.now().date())
 
 
 def index(request):
