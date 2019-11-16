@@ -34,3 +34,12 @@
         {% csrf_token %}
     </form>
 {% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        view_billyms("{% url 'get_billyms' %}", null);
+        view_bill_records("{% url 'get_bills_on_created_today' %}");
+    });
+</script>
+{% endblock %}

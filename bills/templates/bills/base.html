@@ -35,8 +35,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><b>我的账单</b></h3>
                     </div>
-                    <div class="panel-body">
-                        {% include 'bills/base_lists.html' %}
+                    <div id="id_view_billyms" class="panel-body">
                     </div>
                 </div>
             </div><!-- /.col-md-4-->
@@ -57,9 +56,10 @@
 
                 {# 表示区域-2 #}
                 <div id="id_display_area_2">
-                    {% include 'bills/base_bill_records.html' %}
+                    <br>
+                    <div id="id_view_bill_records"></div>
                 </div>
-            
+
                 {# 温馨提示 #}
                 <div id="id_notes">
                     {% block notes %}{% endblock %}
@@ -76,8 +76,11 @@
     {# JavaScript #}
     {% include 'commons/js.html' %}
 
+
     {# app includes #}
     <script src="{% static 'js/bills.js' %}"></script>
     {# app includes #}
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
