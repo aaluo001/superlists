@@ -24,12 +24,19 @@ def bill_records(bills):
 def get_billym(request, billym_id):
     ''' 取得指定的月账单
     '''
-    return Billym.objects.get(owner=get_owner(request), id=billym_id)
+    owner = get_owner(request)
+    if (not owner): return None
+    else: return Billym.objects.get(owner=owner, id=billym_id)
+
 
 def get_billyms(request):
     ''' 取得所有的月账单
     '''
-    billyms = Billym.objects.filter(owner=get_owner(request))
+    billyms = None
+    owner = get_owner(request)
+    if (not owner): return json_response([])
+    else: billyms = Billym.objects.filter(owner=owner)
+
     data = [
         {
             'id': billym.id,
@@ -50,13 +57,17 @@ def get_bills(request, billym_id):
     ''' 取得指定月账单的账单明细
     '''
     billym = get_billym(request, billym_id)
-    data = bill_records(billym.bill_set.all())
-    return json_response(data)
+    if (not billym):
+        return json_response([])
+    else:
+        return json_response(bill_records(billym.bill_set.all()))
 
 def get_aggregates_on_selected_billym(request, billym_id):
     ''' 统计指定的月账单
     '''
     billym = get_billym(request, billym_id)
+    if (not billym): return json_response({})
+
     expends = billym.bill_set.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
     incomes = billym.bill_set.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
     balance = expends + incomes

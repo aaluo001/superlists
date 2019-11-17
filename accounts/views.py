@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 
+from commons.views import redirect_to_home_page
 from accounts.models import Token
 from accounts.request_filter import RequestFilter
 
@@ -55,13 +56,13 @@ def send_login_email(request):
     # 监测网络爬虫
     if (is_crawler(request)):
         messages.error(request, IS_CRAWLER_ERROR)
-        return redirect(reverse('home_page'))
+        return redirect_to_home_page()
     
     # 检查邮箱地址是否正确
     email = request.POST['email']
     if (not re.match(EMAIL_REGEX, email)):
         messages.error(request, SEND_EMAIL_FAILED)
-        return redirect(reverse('home_page'))
+        return redirect_to_home_page()
     
     # 作成效验码
     token_object = None
@@ -87,7 +88,7 @@ def send_login_email(request):
         messages.error(request, SEND_EMAIL_FAILED)
     else:
         messages.success(request, SEND_EMAIL_SUCCESSED)
-    return redirect(reverse('home_page'))
+    return redirect_to_home_page()
 
 
 def login(request):
@@ -96,4 +97,4 @@ def login(request):
         auth.login(request, user_object)
     else:
         messages.error(request, LOGIN_FAILED)
-    return redirect(reverse('home_page'))
+    return redirect_to_home_page()

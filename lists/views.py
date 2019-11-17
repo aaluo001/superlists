@@ -9,8 +9,8 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 
 from commons.views import get_owner
-from lists.models import Item
-from lists.models import List
+from commons.views import redirect_to_home_page
+from lists.models import List, Item
 from lists.forms import ItemForm, ExistingListItemForm
 
 
@@ -61,7 +61,7 @@ def view_list(request, list_id):
         )
     except List.DoesNotExist:
         messages.error(request, NOT_FOUND_LIST_ERROR)
-        return redirect(reverse('home_page'))
+        return redirect_to_home_page()
 
 
     form = None
@@ -84,9 +84,9 @@ def view_list(request, list_id):
 
 
 def remove_list(request, list_id):
-    # 只有登录用户才能删除自己的清单
+    # 只有登录用户才能使用该机能
     owner = get_owner(request)
-    if (not owner): return redirect(reverse('home_page'))
+    if (not owner): return redirect_to_home_page()
 
     try:
         list_object = List.objects.get(id=list_id, owner=owner)
@@ -94,23 +94,24 @@ def remove_list(request, list_id):
         pass
     else:
         list_object.delete()
-    return redirect(reverse('home_page'))
+    return redirect_to_home_page()
 
 
 def remove_list_item(request, item_id):
-    # 只有登录用户才能删除自己的待办事项
+    # 只有登录用户才能使用该机能
     owner = get_owner(request)
-    if (not owner): return redirect(reverse('home_page'))
+    if (not owner): return redirect_to_home_page()
 
     try:
         item_object = Item.objects.select_related('list').get(id=item_id, list__owner=owner)
     except Item.DoesNotExist:
-        return redirect(reverse('home_page'))
+        return redirect_to_home_page()
     else:
         item_object.delete()
         if (item_object.list.item_set.count() == 0):
             item_object.list.delete()
-            return redirect(reverse('home_page'))
-        return redirect(item_object.list)
+            return redirect_to_home_page()
+        else:
+            return redirect(item_object.list)
 
     

@@ -6,33 +6,34 @@
 #------------------------------
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-# from django.contrib import messages
-
+from django.contrib import messages
 
 from commons.views import get_owner
+from commons.views import redirect_to_home_page
 from bills.models import Billym, Bill
 from bills.forms import BillForm
 
 
 def index(request):
-    context = {
-        'form': BillForm(),
-    }
-    return render(request, 'bills/index.html', context)
+    # 只有登录用户才能使用该机能
+    if (not get_owner(request)): return redirect_to_home_page()
+    return render(request, 'bills/index.html', {'form': BillForm()})
+
 
 def create_bill(request):
+    # 只有登录用户才能使用该机能
+    owner = get_owner(request)
+    if (not owner): return redirect_to_home_page()
+
     form = BillForm(data=request.POST)
     if (form.is_valid()):
-        form.save(get_owner(request))
+        form.save(owner)
         return redirect(reverse('bill_page'))
     else:
-        context = {
-            'form': form,
-        }
-        return render(request, 'bills/index.html', context)
+        return render(request, 'bills/index.html', {'form': form})
+
 
 def view_bill_list(request, billym_id):
-    context = {
-        'selected_billym_id': billym_id,
-    }
-    return render(request, 'bills/bill_list.html', context)
+    # 只有登录用户才能使用该机能
+    if (not get_owner(request)): return redirect_to_home_page()
+    return render(request, 'bills/bill_list.html', {'selected_billym_id': billym_id})
