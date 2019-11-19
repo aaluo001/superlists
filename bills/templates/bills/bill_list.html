@@ -25,7 +25,7 @@
     $(document).ready(function() {
         view_billyms("{% url 'get_billyms' %}", {{ selected_billym_id }});
         view_aggregates_on_selected_billym("{% url 'get_aggregates_on_selected_billym' selected_billym_id %}");
-        view_bill_records("{% url 'get_bills' selected_billym_id %}");
+        view_bills("{% url 'get_bills' selected_billym_id %}");
     });
 </script>
 {% endblock %}

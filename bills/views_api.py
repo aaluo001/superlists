@@ -6,9 +6,9 @@
 #------------------------------
 from datetime import datetime
 from django.db.models import Sum
+from django.http import JsonResponse
 
 from commons.views import get_owner
-from commons.views import json_response
 from bills.models import Billym, Bill
 
 
@@ -34,7 +34,7 @@ def get_billyms(request):
     '''
     billyms = None
     owner = get_owner(request)
-    if (not owner): return json_response([])
+    if (not owner): return JsonResponse({'billyms': None})
     else: billyms = Billym.objects.filter(owner=owner)
 
     data = [
@@ -45,28 +45,28 @@ def get_billyms(request):
             'url': billym.get_absolute_url()
         } for billym in billyms
     ]
-    return json_response(data)
+    return JsonResponse({'billyms': data})
 
 def get_bills_on_created_today(request):
     ''' 取得当天的账单明细
     '''
     bills = Bill.objects.filter(create_ts__date=datetime.now().date())
-    return json_response(bill_records(bills))
+    return JsonResponse({'bills': bill_records(bills)})
 
 def get_bills(request, billym_id):
     ''' 取得指定月账单的账单明细
     '''
     billym = get_billym(request, billym_id)
     if (not billym):
-        return json_response([])
+        return JsonResponse({'bills': None})
     else:
-        return json_response(bill_records(billym.bill_set.all()))
+        return JsonResponse({'bills': bill_records(billym.bill_set.all())})
 
 def get_aggregates_on_selected_billym(request, billym_id):
     ''' 统计指定的月账单
     '''
     billym = get_billym(request, billym_id)
-    if (not billym): return json_response({})
+    if (not billym): return JsonResponse({})
 
     expends = billym.bill_set.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
     incomes = billym.bill_set.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
@@ -78,4 +78,4 @@ def get_aggregates_on_selected_billym(request, billym_id):
     data['expends'] = expends.to_eng_string()
     data['incomes'] = incomes.to_eng_string()
     data['balance'] = balance.to_eng_string()
-    return json_response(data)
+    return JsonResponse(data)
