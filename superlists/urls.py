@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^$', home_page, name='home_page'),
     url(r'^lists/', include(lists_urls)),
     url(r'^accounts/', include(accounts_urls)),
-    url(r'^bills/', include(bills_urls)),
-    url(r'^api/bills/', include(bills_urls_api)),
+    url(r'^bills/', include(bills_urls, namespace='bills')),
+    url(r'^api/bills/', include(bills_urls_api, namespace='api_bills')),
     url(r'^favicon.ico$', RedirectView.as_view(url='static/favicon.ico'))
 ]

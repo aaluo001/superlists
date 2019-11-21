@@ -5,7 +5,7 @@
 {% block header_text %}新建账单{% endblock %}
 
 {% block bill_form %}
-    <form method="POST" action="{% url 'create_bill' %}" class="form-horizontal">
+    <form method="POST" action="{% url 'bills:create_bill' %}" class="form-horizontal">
         <div class="form-group">
             <label for="id_money" class="col-sm-2 control-label">收入支出*</label>
             <div class="col-sm-8">{{ form.money }}</div>
@@ -38,8 +38,8 @@
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        view_billyms("{% url 'get_billyms' %}", null);
-        view_bills("{% url 'get_bills_on_created_today' %}");
+        view_billyms("{% url 'api_bills:get_billyms' %}", null);
+        view_bills("{% url 'api_bills:get_bills_on_created_today' %}");
     });
 </script>
 {% endblock %}

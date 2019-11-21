@@ -28,12 +28,12 @@ def create_bill(request):
     form = BillForm(data=request.POST)
     if (form.is_valid()):
         form.save(owner)
-        return redirect(reverse('bill_page'))
+        return redirect(reverse('bills:bill_page'))
     else:
         return render(request, 'bills/index.html', {'form': form})
 
 
-def view_bill_list(request, billym_id):
+def select_billym(request, billym_id):
     # 只有登录用户才能使用该机能
     if (not get_owner(request)): return redirect_to_home_page()
     return render(request, 'bills/bill_list.html', {'selected_billym_id': billym_id})

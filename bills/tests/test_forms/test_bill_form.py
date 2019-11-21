@@ -23,18 +23,18 @@ class BillFormTest(TestCase):
         '''
         soup = BeautifulSoup(BillForm().as_p(), 'html.parser')
         # print(soup)
-        money_text = soup.find('input', {'name': 'money'})
-        self.assertEqual(money_text['type'], 'text')
-        self.assertEqual(money_text['placeholder'], '正数为收入，负数为支出')
-        self.assertEqual(money_text['required'], '')
-        self.assertEqual(money_text['class'], ['form-control', ])
+        text_money = soup.find('input', {'name': 'money'})
+        self.assertEqual(text_money['type'], 'text')
+        self.assertEqual(text_money['placeholder'], '正数为收入，负数为支出')
+        self.assertEqual(text_money['required'], '')
+        self.assertEqual(text_money['class'], ['form-control', ])
 
-        comment_text = soup.find('input', {'name': 'comment'})
-        self.assertEqual(comment_text['type'], 'text')
-        self.assertEqual(comment_text['placeholder'], '收入支出说明')
-        self.assertEqual(comment_text['maxlength'], '32')
-        self.assertEqual(comment_text['required'], '')
-        self.assertEqual(comment_text['class'], ['form-control', ])
+        text_comment = soup.find('input', {'name': 'comment'})
+        self.assertEqual(text_comment['type'], 'text')
+        self.assertEqual(text_comment['placeholder'], '收入支出说明')
+        self.assertEqual(text_comment['maxlength'], '32')
+        self.assertEqual(text_comment['required'], '')
+        self.assertEqual(text_comment['class'], ['form-control', ])
 
 
     def test_011(self):
@@ -97,8 +97,18 @@ class BillFormTest(TestCase):
         other_billym = Billym.objects.create(owner=owner, year=2019, month=10)
 
         # 新建账单
-        BillForm(data={'money': -10.9, 'comment':'Buy a cup of tea.'}).save(owner=owner)
-        BillForm(data={'money': +20.5, 'comment':'Inputs.'}).save(owner=owner)
+        BillForm(
+            data={
+                'money': -9999999.9, 
+                'comment':'最大长度测试：八九十一二三四五六七八九十一二三四五六七八九十！。',
+            }
+        ).save(owner=owner)
+        BillForm(
+            data={
+                'money': +1234567.5, 
+                'comment':'Inputs:89012345678901234567890!.',
+            }
+        ).save(owner=owner)
         
         billym = Billym.objects.first()
         bills = Bill.objects.all()
@@ -107,11 +117,11 @@ class BillFormTest(TestCase):
         self.assertEqual(bills[1].billym, billym)
         self.assertNotEqual(billym, other_billym)
 
-        self.assertEqual(bills[0].money.to_eng_string(), '20.5')
-        self.assertEqual(bills[0].comment, 'Inputs.')
+        self.assertEqual(bills[0].money.to_eng_string(), '1234567.5')
+        self.assertEqual(bills[0].comment, 'Inputs:89012345678901234567890!.')
         self.assertEqual(bills[0].date, datetime.now().date())
 
-        self.assertEqual(bills[1].money.to_eng_string(), '-10.9')
-        self.assertEqual(bills[1].comment, 'Buy a cup of tea.')
+        self.assertEqual(bills[1].money.to_eng_string(), '-9999999.9')
+        self.assertEqual(bills[1].comment, '最大长度测试：八九十一二三四五六七八九十一二三四五六七八九十！。')
         self.assertEqual(bills[1].date, datetime.now().date())
 

@@ -25,7 +25,7 @@ class Billym(models.Model):
         unique_together = ('owner', 'year', 'month', )
     
     def get_absolute_url(self):
-        return reverse('view_bill_list', args=[self.id, ])
+        return reverse('bills:select_billym', args=[self.id, ])
 
 
 class Bill(models.Model):
