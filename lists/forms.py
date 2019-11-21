@@ -28,7 +28,7 @@ class ItemForm(ModelForm):
         }
         error_messages = {
             'text': {
-                'required': ERROR_MESSAGES['required'].format('待办事项'),
+                'required': ERROR_MESSAGES['required'],
             }
         }
 
@@ -39,7 +39,7 @@ class ItemForm(ModelForm):
         data = self.cleaned_data['text']
         if (len(data) > 32):
             raise ValidationError(\
-                ERROR_MESSAGES['max_length'].format('待办事项', '32'))
+                ERROR_MESSAGES['max_length'].format('32'))
         return data
 
     

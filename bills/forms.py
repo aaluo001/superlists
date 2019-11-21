@@ -21,6 +21,10 @@ class BillForm(ModelForm):
     class Meta:
         model = Bill
         fields = ('money', 'comment', )
+        labels = {
+            'money': '收入支出',
+            'comment': '备注',
+        }
         widgets = {
             # 收入支出
             'money': forms.TextInput(
@@ -40,16 +44,16 @@ class BillForm(ModelForm):
         error_messages = {
             # 收入支出
             'money': {
-                'required': ERROR_MESSAGES['required'].format('收入支出'),
-                'invalid': ERROR_MESSAGES['invalid_decimal'].format('收入支出'),
-                'max_digits': ERROR_MESSAGES['max_digits'].format('收入支出', '8'),
-                'max_whole_digits': ERROR_MESSAGES['max_whole_digits'].format('收入支出', '7'),
-                'max_decimal_places': ERROR_MESSAGES['max_decimal_places'].format('收入支出', '1'),
+                'required': ERROR_MESSAGES['required'],
+                'invalid': ERROR_MESSAGES['invalid_decimal'],
+                'max_digits': ERROR_MESSAGES['max_digits'].format('8'),
+                'max_whole_digits': ERROR_MESSAGES['max_whole_digits'].format('7'),
+                'max_decimal_places': ERROR_MESSAGES['max_decimal_places'].format('1'),
             },
             # 备注
             'comment': {
-                'required': ERROR_MESSAGES['required'].format('备注'),
-                'max_length': ERROR_MESSAGES['max_length'].format('备注', '32'),
+                'required': ERROR_MESSAGES['required'],
+                'max_length': ERROR_MESSAGES['max_length'].format('32'),
             },
         }
  

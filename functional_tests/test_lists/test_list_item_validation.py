@@ -132,7 +132,7 @@ class ListItemValidationTest(ListsTest):
         ))
         self.wait_for(lambda: self.assertEqual(
             self.get_error_element().text,
-            '待办事项：不能为空！'
+            '请输入内容！'
         ))
 
         # 我的清单可以正常表示

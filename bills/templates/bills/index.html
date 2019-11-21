@@ -6,25 +6,17 @@
 
 {% block bill_form %}
     <form method="POST" action="{% url 'bills:create_bill' %}" class="form-horizontal">
-        <div class="form-group">
-            <label for="id_money" class="col-sm-2 control-label">收入支出*</label>
-            <div class="col-sm-8">{{ form.money }}</div>
-        </div>
-        {% if form.money.errors %}
-            <div class="form-group has-error">
-                <span class="help-block col-sm-offset-2">{{ form.money.errors }}</span>
+        {% for field in form %}
+            <div class="form-group">
+                <div class="col-sm-2 text-right">*{{ field.label_tag }}</div>
+                <div class="col-sm-8">{{ field }}</div>
             </div>
-        {% endif %}
-
-        <div class="form-group">
-            <label for="id_money" class="col-sm-2 control-label">备注*</label>
-            <div class="col-sm-8">{{ form.comment }}</div>
-        </div>
-        {% if form.comment.errors %}
-            <div class="form-group has-error">
-                <span class="help-block col-sm-offset-2">{{ form.comment.errors }}</span>
-            </div>
-        {% endif %}
+            {% if field.errors %}
+                <div class="form-group has-error">
+                    <div class="help-block col-sm-offset-2">{{ field.errors }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-9">

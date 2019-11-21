@@ -42,23 +42,23 @@ class BillFormTest(TestCase):
         '''
         form = BillForm(data={'money': '', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['收入支出：不能为空！', ])
+        self.assertEqual(form.errors['money'], ['请输入内容！', ])
 
         form = BillForm(data={'money': 'abc', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['收入支出：请输入实数！', ])
+        self.assertEqual(form.errors['money'], ['请输入实数！', ])
 
         form = BillForm(data={'money': '12345678.1', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['收入支出：不能超过 8 个数字！', ])
+        self.assertEqual(form.errors['money'], ['请不要超过 8 个数字！', ])
 
         form = BillForm(data={'money': '9.11', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['收入支出：不能超过 1 位小数！', ])
+        self.assertEqual(form.errors['money'], ['请不要超过 1 位小数！', ])
 
         form = BillForm(data={'money': '12345678', 'comment': 'test', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['money'], ['收入支出：不能超过 7 位整数！', ])
+        self.assertEqual(form.errors['money'], ['请不要超过 7 位整数！', ])
 
         form = BillForm(data={'money': '-1234567.1', 'comment': 'test', })
         self.assertTrue(form.is_valid())
@@ -68,7 +68,7 @@ class BillFormTest(TestCase):
         '''
         form = BillForm(data={'money': '10.9', 'comment': '', })
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['comment'], ['备注：不能为空！', ])
+        self.assertEqual(form.errors['comment'], ['请输入内容！', ])
 
         form = BillForm(
             data={
@@ -77,7 +77,7 @@ class BillFormTest(TestCase):
             }
         )
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['comment'], ['备注：不能超过 32 个字符！', ])
+        self.assertEqual(form.errors['comment'], ['请不要超过 32 个字符！', ])
 
         form = BillForm(
             data={
