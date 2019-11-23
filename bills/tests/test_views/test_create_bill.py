@@ -8,6 +8,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -18,7 +19,7 @@ from bills.forms import BillForm
 class CreateBillTest(TestCase):
 
     def post_create_bill(self, data):
-        return self.client.post('/bills/create', data=data)
+        return self.client.post(reverse('bills:create_bill'), data=data)
 
     def test_001(self):
         ''' 未登录用户会跳转到首页
@@ -40,7 +41,7 @@ class CreateBillTest(TestCase):
             'comment': 'this is a test.',
         }
         response = self.post_create_bill(data)
-        self.assertRedirects(response, '/bills/index/')
+        self.assertRedirects(response, reverse('bills:bill_page'))
 
     def test_012(self):
         ''' 正常处理后，数据保存到数据库(一)

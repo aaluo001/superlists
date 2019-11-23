@@ -14,9 +14,6 @@ from lists.models import List, Item
 from lists.forms import ItemForm, ExistingListItemForm
 
 
-NOT_FOUND_LIST_ERROR = '没有找到该清单，或该清单已被删除！'
-
-
 def get_my_lists(request):
     owner = get_owner(request)
     if (not owner): return None
@@ -60,7 +57,7 @@ def view_list(request, list_id):
             id=list_id, owner=get_owner(request)
         )
     except List.DoesNotExist:
-        messages.error(request, NOT_FOUND_LIST_ERROR)
+        messages.error(request, '没有找到该清单，或该清单已被删除！')
         return redirect_to_home_page()
 
 

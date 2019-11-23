@@ -145,8 +145,21 @@ class BillModelTest(TestCase):
             Bill.objects.create(billym=billym, money=10.1, date='2019-1-1', comment=1.0)
 
 
+    def make_other_data(self):
+        ''' 生成其他用户的数据
+        '''
+        other_user = User.objects.create(email='other@163.com')
+        billym_1 = Billym.objects.create(owner=other_user, year=2019, month=1)
+        billym_2 = Billym.objects.create(owner=other_user, year=2019, month=2)
+
+        Bill.objects.create(billym=billym_1, money=-12.2, date='2019-01-01', comment='other_user-1')
+        Bill.objects.create(billym=billym_1, money=-18.5, date='2019-01-02', comment='other_user-2')
+        Bill.objects.create(billym=billym_1, money=+20.0, date='2019-01-16', comment='other_user-3')
+        Bill.objects.create(billym=billym_2, money=-12.9, date='2019-02-01', comment='other_user-4')
+        Bill.objects.create(billym=billym_2, money=+11.8, date='2019-03-29', comment='other_user-5')
+
     def make_data(self):
-        ''' 
+        ''' 生成当前用户的数据
         '''
         owner = User.objects.create(email='abc@163.com')
         billym_1 = Billym.objects.create(owner=owner, year=2019, month=1)
@@ -175,11 +188,14 @@ class BillModelTest(TestCase):
     def test_021(self):
         ''' 取得当天的数据，并降序排列
         '''
+        self.make_other_data()
         self.make_data()
 
         # 结合月账单信息联合查询
         # 取得当天的数据，并降序排列
+        owner = User.objects.get(email='abc@163.com')
         bills = Bill.objects.select_related('billym')\
+            .filter(billym__owner=owner)\
             .filter(create_ts__date=timezone.now().date()).order_by('-id')
 
         # 打印出SQL语句
@@ -204,10 +220,15 @@ class BillModelTest(TestCase):
         self.assertEquals(bills[3].billym.month, 1)
 
     def test_022(self):
-        ''' 取得月份账单的件数
+        ''' 统计月份账单的件数，及合计收入支出
         '''
+        self.make_other_data()
         self.make_data()
-        billyms = Billym.objects.annotate(bills_count=Count('bill'), bills_sum=Sum('bill__money'))
+
+        # 统计月份账单的件数，及合计收入支出
+        owner = User.objects.get(email='abc@163.com')        
+        billyms = Billym.objects.filter(owner=owner)\
+            .annotate(bills_count=Count('bill'), bills_sum=Sum('bill__money'))
         
         # 打印出SQL语句
         #print(billyms.query)
@@ -223,17 +244,16 @@ class BillModelTest(TestCase):
     def test_023(self):
         ''' 统计月份账单的收入与支出
         '''
+        self.make_other_data()
         self.make_data()
-        billyms = Billym.objects.all()
+
+        owner = User.objects.get(email='abc@163.com')        
+        billyms = Billym.objects.filter(owner=owner)
 
         bills_1 = Bill.objects.filter(billym=billyms[0])
-        inps = bills_1.filter(money__gt=0).aggregate(money_inps=Sum('money'))
-        oups = bills_1.filter(money__lt=0).aggregate(money_oups=Sum('money'))
-        money_inps = inps['money_inps']
-        money_oups = oups['money_oups']
+        incomes = bills_1.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
+        expends = bills_1.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
 
-        self.assertEquals(money_inps.to_eng_string(), str(29.8 + 19.8))
-        self.assertEquals(money_oups.to_eng_string(), str(-10.9))
-        self.assertEquals((money_inps + money_oups).to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
-
-
+        self.assertEquals(incomes.to_eng_string(), str(29.8 + 19.8))
+        self.assertEquals(expends.to_eng_string(), str(-10.9))
+        self.assertEquals((incomes + expends).to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))

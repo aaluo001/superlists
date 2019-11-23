@@ -26,12 +26,3 @@
         {% csrf_token %}
     </form>
 {% endblock %}
-
-{% block scripts %}
-<script>
-    $(document).ready(function() {
-        view_billyms("{% url 'api_bills:get_billyms' %}", null);
-        view_bills("{% url 'api_bills:get_bills_on_created_today' %}");
-    });
-</script>
-{% endblock %}

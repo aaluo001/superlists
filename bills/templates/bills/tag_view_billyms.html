@@ -1,0 +1,20 @@
+{# bills/tag_view_billyms.html #}
+
+{% if billyms %}
+    <table id="id_billyms_table" class="table table-bordered table-condensed">
+        {% for billym in billyms %}
+            <tr>
+                <td id="id_billym_row_{{ forloop.counter }}"
+                    {% if selected_billym and selected_billym.id == billym.id %}
+                        class="app-selected"
+                    {% endif %}>
+                    <a href="{{ billym.get_absolute_url }}">
+                        {{ billym.year }}年{{ billym.month }}月
+                    </a><br>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    没有找到您的账单！
+{% endif %}

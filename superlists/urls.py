@@ -20,7 +20,6 @@ from lists.views import home_page
 from lists import urls as lists_urls
 from accounts import urls as accounts_urls
 from bills import urls as bills_urls
-from bills import urls_api as bills_urls_api
 
 
 urlpatterns = [
@@ -28,6 +27,5 @@ urlpatterns = [
     url(r'^lists/', include(lists_urls)),
     url(r'^accounts/', include(accounts_urls)),
     url(r'^bills/', include(bills_urls, namespace='bills')),
-    url(r'^api/bills/', include(bills_urls_api, namespace='api_bills')),
     url(r'^favicon.ico$', RedirectView.as_view(url='static/favicon.ico'))
 ]

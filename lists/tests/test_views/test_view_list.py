@@ -12,7 +12,6 @@ User = get_user_model()
 
 from lists.models import List, Item
 from lists.forms  import ItemForm, ExistingListItemForm
-from lists.views  import NOT_FOUND_LIST_ERROR
 
 
 class ViewListTestForRequestGET(TestCase):
@@ -73,7 +72,7 @@ class ViewListTestForRequestGET(TestCase):
 
         self.assertEqual(
             mock_messages.error.call_args,
-            call(response.wsgi_request, NOT_FOUND_LIST_ERROR)
+            call(response.wsgi_request, '没有找到该清单，或该清单已被删除！')
         )
         self.assertRedirects(response, '/')
 
@@ -152,7 +151,7 @@ class ViewListTestForRequestPOST(TestCase):
 
         self.assertEqual(
             mock_messages.error.call_args,
-            call(response.wsgi_request, NOT_FOUND_LIST_ERROR)
+            call(response.wsgi_request, '没有找到该清单，或该清单已被删除！')
         )
         self.assertRedirects(response, '/')
 
