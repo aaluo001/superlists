@@ -4,6 +4,8 @@
 # Author: TangJianwei
 # Create: 2019-11-21
 #------------------------------
+from unittest.mock import patch, call
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
@@ -29,17 +31,89 @@ class SelectBillymTest(TestCase):
         response = self.client.get(reverse('bills:select_billym', args=[billym.id,]))
         self.assertTemplateUsed(response, 'bills/selected_billym.html')
 
+
     def test_002(self):
         ''' 上下文
         '''
         owner = User.objects.create(email='abc@163.com')
-        billym_1 = Billym.objects.create(owner=owner, year=2019, month=1)
-        billym_2 = Billym.objects.create(owner=owner, year=2019, month=2)
-
         self.client.force_login(owner)
+
+        # 只有收入
+        billym_1 = Billym.objects.create(owner=owner, year=2019, month=1)
+        Bill.objects.create(billym=billym_1, money=10.9, comment='test 1', date='2019-01-01')
+        Bill.objects.create(billym=billym_1, money=19.1, comment='test 2', date='2019-01-01')
+
         response = self.client.get(reverse('bills:select_billym', args=[billym_1.id,]))
         self.assertEquals(response.context['selected_billym'], billym_1)
+        self.assertEquals(response.context['expends'], 0)
+        self.assertEquals(response.context['incomes'].to_eng_string(), '30.0')
+        self.assertEquals(response.context['balance'].to_eng_string(), '30.0')
+
+
+        # 只有支出
+        billym_2 = Billym.objects.create(owner=owner, year=2019, month=2)
+        Bill.objects.create(billym=billym_2, money=-1000000.3, comment='test 1', date='2019-02-21')
+
         response = self.client.get(reverse('bills:select_billym', args=[billym_2.id,]))
         self.assertEquals(response.context['selected_billym'], billym_2)
+        self.assertEquals(response.context['expends'].to_eng_string(), '-1000000.3')
+        self.assertEquals(response.context['incomes'], 0)
+        self.assertEquals(response.context['balance'].to_eng_string(), '-1000000.3')
 
-        self.assertEquals('Finished the test！', '')
+
+        # 收入和支出同时存在
+        billym_3 = Billym.objects.create(owner=owner, year=2019, month=3)
+        Bill.objects.create(billym=billym_3, money=9999999.9, comment='test 1', date='2019-03-01')
+        Bill.objects.create(billym=billym_3, money=1000.1, comment='test 2', date='2019-03-01')
+        Bill.objects.create(billym=billym_3, money=-9999999.9, comment='test 3', date='2019-03-01')
+        Bill.objects.create(billym=billym_3, money=-0.1, comment='test 4', date='2019-03-01')
+
+        response = self.client.get(reverse('bills:select_billym', args=[billym_3.id,]))
+        self.assertEquals(response.context['selected_billym'], billym_3)
+        self.assertEquals(response.context['expends'].to_eng_string(), '-10000000.0')
+        self.assertEquals(response.context['incomes'].to_eng_string(), '10001000.0')
+        self.assertEquals(response.context['balance'].to_eng_string(), '1000.0')
+
+
+    @patch('bills.views.messages')
+    def test_003(self, mock_messages):
+        ''' 访问一个不存在的月账单
+            跳转到新建账单页面，并显示提示消息。
+        '''
+        owner = User.objects.create(email='abc@163.com')
+        self.client.force_login(owner)
+
+        # 没有月账单的数据
+        self.assertEquals(len(Billym.objects.all()), 0)
+        # 访问一个不存在的月账单
+        response = self.client.get(reverse('bills:select_billym', args=[1,]))
+        
+        # 跳转到新建账单页面
+        self.assertRedirects(response, reverse('bills:bill_page'))
+        self.assertEquals(
+            mock_messages.error.call_args,
+            call(response.wsgi_request, '没有找到该账单，或该账单已被删除！')
+        )
+
+
+    @patch('bills.views.messages')
+    def test_004(self, mock_messages):
+        ''' 访问别人的月账单
+            跳转到新建账单页面，并显示提示消息。
+        '''
+        other_user = User.objects.create(email='other@163.com')
+        billym = Billym.objects.create(owner=other_user, year=2019, month=1)
+
+        owner = User.objects.create(email='abc@163.com')
+        self.client.force_login(owner)
+
+        # 访问别人的月账单
+        response = self.client.get(reverse('bills:select_billym', args=[billym.id,]))
+
+        # 跳转到新建账单页面
+        self.assertRedirects(response, reverse('bills:bill_page'))
+        self.assertEquals(
+            mock_messages.error.call_args,
+            call(response.wsgi_request, '没有找到该账单，或该账单已被删除！')
+        )
+

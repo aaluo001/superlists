@@ -41,9 +41,9 @@ def select_billym(request, billym_id):
 
     try:
         selected_billym = Billym.objects.get(owner=owner, id=billym_id)
-    except Billym.DoseNotExist:
+    except Billym.DoesNotExist:
         messages.error(request, '没有找到该账单，或该账单已被删除！')
-        return redirect_to_home_page()
+        return redirect(reverse('bills:bill_page'))
     else:
         expends = selected_billym.bill_set.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
         incomes = selected_billym.bill_set.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
