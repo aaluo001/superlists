@@ -133,9 +133,9 @@ class BillModelTest(TestCase):
         # PS:
         # 如果没有指定comment, 就像这样
         #   bill = Bill.objects.create(billym=billym, money=10.1, date=1)
-        # 程序也不会出错，那么，默认的note会是什么呢？
-        # 执行 print(bill.note)，会发现程序执行到这里换行了。
-        # 所以，默认的note可能是换行符。
+        # 程序也不会出错，那么，默认的comment会是什么呢？
+        # 执行 print(bill.comment)，会发现程序执行到这里换行了。
+        # 所以，默认的comment可能是换行符。
 
         # 不能为空
         with self.assertRaises(TransactionManagementError):

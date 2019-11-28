@@ -4,11 +4,10 @@
 # Author: TangJianwei
 # Create: 2019-11-23
 #------------------------------
-from datetime import datetime
-
 from django import template
 register = template.Library()
 
+from commons.utils import date_now
 from bills.models import Billym, Bill
 
 
@@ -37,5 +36,5 @@ def view_bills(owner, billym_id=None):
             'bills': Bill.objects.select_related('billym')\
                 .values('date', 'money', 'comment')\
                 .filter(billym__owner=owner)\
-                .filter(create_ts__date=datetime.now().date())
+                .filter(create_ts__date=date_now())
         }

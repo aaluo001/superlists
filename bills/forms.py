@@ -4,12 +4,11 @@
 # Author: TangJianwei
 # Create: 2019-10-21
 #------------------------------
-from datetime import datetime
-
 from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
+from commons.utils import date_now
 from commons.messages import ERROR_MESSAGES
 from bills.models import Billym, Bill
 
@@ -60,7 +59,7 @@ class BillForm(ModelForm):
 
     # ---------- 保存到数据库 ----------
     def save(self, owner):
-        date = datetime.now().date()
+        date = date_now()
         self.instance.billym, _ = Billym.objects.get_or_create(\
             owner=owner, year=date.year, month=date.month
         )
