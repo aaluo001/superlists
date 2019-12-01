@@ -52,17 +52,17 @@ class ViewBillsTest(TestCase):
         owner = User.objects.create(email='abc@163.com')
         billym = Billym.objects.create(owner=owner, year=date.year, month=date.month)
 
-        # 当天的数据
-        Bill.objects.create(billym=billym, money=1000.1, comment='todays bill 1', date=date)
-        Bill.objects.create(billym=billym, money=-200.9, comment='todays bill 2', date=date)
-
         # 以前的数据
         date_before = timezone.now() - timedelta(days=1)
         bill_before = Bill.objects.create(
-            billym=billym, money=+32.1, date=date_before, comment='date before'
+            billym=billym, money=+32.1, date=date_before.date(), comment='date before'
         )
         bill_before.create_ts = date_before
         bill_before.save()
+
+        # 当天的数据
+        Bill.objects.create(billym=billym, money=1000.1, comment='todays bill 1', date=date)
+        Bill.objects.create(billym=billym, money=-200.9, comment='todays bill 2', date=date)
 
         context = view_bills(owner)
         bills = context['bills']
@@ -78,14 +78,62 @@ class ViewBillsTest(TestCase):
 
     def test_011(self):
         ''' 被指定的月账单，没有账单明细
-            不会取得其他月账单的账单明细
         '''
-        self.fail('Finished the test!')
+        # 其他用户的数据
+        self.make_other_data()
+
+        # 当前用户的数据
+        date = date_now()
+        owner = User.objects.create(email='abc@163.com')
+        billym = Billym.objects.create(owner=owner, year=date.year, month=date.month)
+
+        # 其他月份的月账单(不会被抽出)
+        other_billym = Billym.objects.create(owner=owner, year=2019, month=1)
+        Bill.objects.create(billym=other_billym, money='-99999.9', comment='other billym', date='2019-1-1')
+
+        # 没有账单明细
+        self.assertEquals(len(billym.bill_set.all()), 0)
+        context = view_bills(owner, billym.id)
+        self.assertEquals(len(context['bills']), 0)
 
 
     def test_012(self):
         ''' 被指定的月账单有账单明细
-            不会取得其他月账单的账单明细
         '''
-        pass
+        # 其他用户的数据
+        self.make_other_data()
 
+        # 当前用户的数据
+        date = date_now()
+        owner = User.objects.create(email='abc@163.com')
+        billym = Billym.objects.create(owner=owner, year=date.year, month=date.month)
+
+        # 以前的数据
+        date_before = timezone.now() - timedelta(days=1)
+        bill_before = Bill.objects.create(
+            billym=billym, money=+32.1, date=date_before.date(), comment='date before'
+        )
+        bill_before.create_ts = date_before
+        bill_before.save()
+
+        # 当天的数据
+        Bill.objects.create(billym=billym, money=1000.1, comment='todays bill 1', date=date)
+        Bill.objects.create(billym=billym, money=-200.9, comment='todays bill 2', date=date)
+
+        # 其他月份的月账单(不会被抽出)
+        other_billym = Billym.objects.create(owner=owner, year=2019, month=1)
+        Bill.objects.create(billym=other_billym, money='-99999.9', comment='other billym', date='2019-1-1')
+
+        context = view_bills(owner, billym.id)
+        bills = context['bills']
+
+        self.assertEquals(len(bills), 3)
+        self.assertEquals(bills[0]['money'].to_eng_string(), '-200.9')
+        self.assertEquals(bills[0]['comment'], 'todays bill 2')
+        self.assertEquals(bills[0]['date'], date)
+        self.assertEquals(bills[1]['money'].to_eng_string(), '1000.1')
+        self.assertEquals(bills[1]['comment'], 'todays bill 1')
+        self.assertEquals(bills[1]['date'], date)
+        self.assertEquals(bills[2]['money'].to_eng_string(), '32.1')
+        self.assertEquals(bills[2]['comment'], 'date before')
+        self.assertEquals(bills[2]['date'], date_before.date())
