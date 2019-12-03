@@ -12,6 +12,9 @@ from functional_tests.base import FunctionalTest
 
 class BillsTest(FunctionalTest):
 
-    def get_input_box(self, id):
-        return self.browser.find_element_by_id(id)
+    def get_money_input_box(self):
+        return self.browser.find_element_by_id('id_money')
+
+    def get_comment_input_box(self):
+        return self.browser.find_element_by_id('id_comment')
 

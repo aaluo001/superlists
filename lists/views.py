@@ -7,9 +7,12 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 
+from commons.decorators import require_login
 from commons.views import get_owner
 from commons.views import redirect_to_home_page
+
 from lists.models import List, Item
 from lists.forms import ItemForm, ExistingListItemForm
 
@@ -28,16 +31,15 @@ def home_page(request):
     return render(request, 'lists/index.html', context)
 
 
+@require_POST
 def new_list(request):
     form = ItemForm(data=request.POST)
     if (form.is_valid()):
         # 如果当前用户已经登录，就将当前用户绑定为清单的拥有者。
         # 不然清单将没有拥有者，可以被所有未登录用户查看。
         list_object = List()
-        if (request.user.is_authenticated):
-            list_object.owner = request.user
+        list_object.owner = get_owner(request)
         list_object.save()
-
         form.save(for_list=list_object)
         return redirect(list_object)
     else:
@@ -80,13 +82,10 @@ def view_list(request, list_id):
     return render(request, 'lists/list.html', context)
 
 
+@require_login
 def remove_list(request, list_id):
-    # 只有登录用户才能使用该机能
-    owner = get_owner(request)
-    if (not owner): return redirect_to_home_page()
-
     try:
-        list_object = List.objects.get(id=list_id, owner=owner)
+        list_object = List.objects.get(id=list_id, owner=request.user)
     except List.DoesNotExist:
         pass
     else:
@@ -94,13 +93,10 @@ def remove_list(request, list_id):
     return redirect_to_home_page()
 
 
+@require_login
 def remove_list_item(request, item_id):
-    # 只有登录用户才能使用该机能
-    owner = get_owner(request)
-    if (not owner): return redirect_to_home_page()
-
     try:
-        item_object = Item.objects.select_related('list').get(id=item_id, list__owner=owner)
+        item_object = Item.objects.select_related('list').get(id=item_id, list__owner=request.user)
     except Item.DoesNotExist:
         return redirect_to_home_page()
     else:

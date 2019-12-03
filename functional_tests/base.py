@@ -24,7 +24,7 @@ from .management.commands.create_session import create_pre_authenticated_session
 MAX_WAIT = 10
 
 def wait(func):
-    def modified_func(*args, **kwargs):
+    def wrap(*args, **kwargs):
         start_time = time.time()
         while True:
             try:
@@ -32,7 +32,7 @@ def wait(func):
             except (AssertionError, WebDriverException) as e:
                 if ((time.time() - start_time) > MAX_WAIT): raise e
                 time.sleep(0.5)
-    return modified_func
+    return wrap
 
 
 class FunctionalTest(StaticLiveServerTestCase):

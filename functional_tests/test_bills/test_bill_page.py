@@ -57,3 +57,36 @@ class BillPageTest(BillsTest):
         self.wait_for(lambda: self.assertEquals(
             self.browser.find_elements_by_id('id_bills_table'), []
         ))
+
+    def test_003(self):
+        ''' 新建账单
+        '''
+        # 创建登录用户
+        self.create_pre_authenticated_session('abc@163.com')
+
+        self.browser.get(self.live_server_url)
+        navbar = self.browser.find_element_by_id('id_navigation')
+        navbar.find_element_by_link_text('应用').click()
+        navbar.find_element_by_link_text('账单').click()
+
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
+            '新建账单'
+        ))
+
+        # 金额
+        money_input_box = self.get_money_input_box()
+        self.assertEquals(money_input_box.get_attribute('placeholder'), '正数为收入，负数为支出')
+        self.assertEquals(money_input_box.get_attribute('class'), 'form-control')
+        self.assertTrue(money_input_box.get_attribute('required'))
+
+        # 备注
+        comment_input_box = self.get_comment_input_box()
+        self.assertEquals(comment_input_box.get_attribute('placeholder'), '收入支出说明')
+        self.assertEquals(comment_input_box.get_attribute('maxlength'), '32')
+        self.assertEquals(comment_input_box.get_attribute('class'), 'form-control')
+        self.assertTrue(comment_input_box.get_attribute('required'))
+
+        # 提交
+        submit = self.browser.find_element_by_css_selector('form.form-horizontal button.btn.btn-primary')
+        self.assertEquals(submit.text, '提交')
