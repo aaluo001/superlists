@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         {% for bill in bills %}
-            <tr>
+            <tr id="id_bills_row_{{ forloop.counter }}">
                 <td width="90">{{ bill.date | date:"Y-m-d" }}</td>
                 <td width="145" class="text-right">
                     <div

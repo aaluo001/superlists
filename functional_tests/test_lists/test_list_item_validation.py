@@ -62,10 +62,6 @@ class ListItemValidationTest(ListsTest):
         self.wait_for_row_in_list_table(2, '泡杯茶')
 
 
-    def get_error_element(self):
-        return self.browser.find_element_by_css_selector('.has-error')
-
-
     def test_002(self):
         ''' 不能提交重复的待办事项
         '''

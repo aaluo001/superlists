@@ -4,7 +4,7 @@
     <table id="id_billyms_table" class="table table-bordered table-condensed">
         {% for billym in billyms %}
             <tr>
-                <td id="id_billym_row_{{ forloop.counter }}"
+                <td id="id_billyms_row_{{ forloop.counter }}"
                     {% if selected_billym and selected_billym.id == billym.id %}
                         class="app-selected"
                     {% endif %}>
