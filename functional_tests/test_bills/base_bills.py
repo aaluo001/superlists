@@ -29,18 +29,29 @@ class BillsTest(FunctionalTest):
     def get_submit_button(self):
         return self.browser.find_element_by_css_selector('form.form-horizontal button.btn.btn-primary')
 
+    def get_bills(self):
+        return self.browser.find_elements_by_css_selector('#id_bills_table > tbody > tr')
+
+    def get_billyms(self):
+        return self.browser.find_elements_by_css_selector('#id_billyms_table tr')
+
 
     def create_bill(self, money, comment):
         self.get_money_input_box().send_keys(money)
         self.get_comment_input_box().send_keys(comment)
         self.get_submit_button().send_keys(Keys.ENTER)
 
+    def create_bill_normally(self, money, comment):
+        row_num = self.wait_for(lambda: len(self.get_bills()))
+        self.create_bill(money, comment)
+        self.wait_for(lambda: self.assertEquals(
+            len(self.get_bills()), row_num + 1
+        ))
 
-    # @wait
-    # def get_bills_table(self):
-    #     return self.browser.find_element_by_id('id_bills_table')
-
-
-    # def get_bills_row_cols(self, row):
-    #     return row.find_element_by_css_selector('td')
-
+    def create_bill_failed(self, money, comment):
+        row_num = self.wait_for(lambda: len(self.get_bills()))
+        self.create_bill(money, comment)
+        self.wait_for(lambda: self.get_error_element())
+        self.wait_for(lambda: self.assertEquals(
+            len(self.get_bills()), row_num
+        ))

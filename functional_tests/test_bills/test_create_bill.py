@@ -16,13 +16,7 @@ class CreateBillTest(BillsTest):
         '''
         # 进入新建账单页面，新建一条账单
         self.goto_bill_page('abc@163.com')
-        self.create_bill('1000000.1', 'incomes 1')
- 
-        # 正常处理后，会显示刚刚新建的账单
-        self.wait_for(lambda: self.assertEquals(
-            len(self.browser.find_elements_by_css_selector('#id_bills_table > tbody > tr')),
-            1
-        ))
+        self.create_bill_normally('1000000.1', 'incomes 1')
 
         bill_cols = self.browser.find_elements_by_css_selector('#id_bills_row_{} > td'.format(1))
         self.assertEquals(bill_cols[0].text, date_now_str())
@@ -37,8 +31,7 @@ class CreateBillTest(BillsTest):
 
         # 同时，会新建一条月账单
         self.wait_for(lambda: self.assertEquals(
-            len(self.browser.find_elements_by_css_selector('#id_billyms_table tr')),
-            1
+            len(self.get_billyms()), 1
         ))
         # 月账单没有被选中
         self.assertEquals(
@@ -56,11 +49,7 @@ class CreateBillTest(BillsTest):
 
 
         # 再新建一条账单，并显示出来
-        self.create_bill('-9999999.9', 'expends 1')
-        self.wait_for(lambda: self.assertEquals(
-            len(self.browser.find_elements_by_css_selector('#id_bills_table > tbody > tr')),
-            2
-        ))
+        self.create_bill_normally('-9999999.9', 'expends 1')
 
         bill_cols = self.browser.find_elements_by_css_selector('#id_bills_row_{} > td'.format(1))
         self.assertEquals(bill_cols[0].text, date_now_str())
@@ -75,8 +64,7 @@ class CreateBillTest(BillsTest):
 
         # 还是会显示刚刚的月账单
         self.wait_for(lambda: self.assertEquals(
-            len(self.browser.find_elements_by_css_selector('#id_billyms_table tr')),
-            1
+            len(self.get_billyms()), 1
         ))
         # 月账单没有被选中
         self.assertEquals(
@@ -122,7 +110,7 @@ class CreateBillTest(BillsTest):
         self.goto_bill_page('abc@163.com')
 
         # 输入错误内容后，点击提交
-        self.create_bill(money=' ', comment='error money')
+        self.create_bill_failed(money=' ', comment='error money')
         self.wait_for(lambda: self.assertEquals(
             self.get_error_element().text,
             '请输入实数！'
@@ -135,7 +123,7 @@ class CreateBillTest(BillsTest):
         self.goto_bill_page('abc@163.com')
 
         # 输入错误内容后，点击提交
-        self.create_bill(money='1.22', comment='error money')
+        self.create_bill_failed(money='1.22', comment='error money')
         self.wait_for(lambda: self.assertEquals(
             self.get_error_element().text,
             '请不要超过 1 位小数！'
@@ -148,7 +136,7 @@ class CreateBillTest(BillsTest):
         self.goto_bill_page('abc@163.com')
 
         # 输入错误内容后，点击提交
-        self.create_bill(money='12345678', comment='error money')
+        self.create_bill_failed(money='12345678', comment='error money')
         self.wait_for(lambda: self.assertEquals(
             self.get_error_element().text,
             '请不要超过 7 位整数！'
@@ -162,7 +150,7 @@ class CreateBillTest(BillsTest):
         self.goto_bill_page('abc@163.com')
 
         # 输入错误内容后，点击提交
-        self.create_bill(money='1.0', comment=' ')
+        self.create_bill_failed(money='1.0', comment=' ')
         self.wait_for(lambda: self.assertEquals(
             self.get_error_element().text,
             '请输入内容！'

@@ -4,7 +4,6 @@
 # Author: TangJianwei
 # Create: 2019-11-24
 #------------------------------
-from datetime import datetime
 from datetime import timedelta
 
 from django.utils import timezone
