@@ -80,8 +80,11 @@ class FunctionalTest(StaticLiveServerTestCase):
     def wait_for(self, func):
         return func()
 
+
     def get_error_element(self):
         ''' 取得显示错误信息的元素
         '''
-        return self.browser.find_element_by_css_selector('.has-error')
+        return self.wait_for(lambda: 
+            self.browser.find_element_by_css_selector('.has-error')
+        )
 

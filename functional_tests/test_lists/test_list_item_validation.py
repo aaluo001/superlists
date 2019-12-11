@@ -74,22 +74,18 @@ class ListItemValidationTest(ListsTest):
         input_box.send_keys(Keys.ENTER)
 
         # 于是，得到一条错误消息
-        self.wait_for(lambda: self.assertTrue(
-            self.get_error_element().is_displayed()
-        ))
-        self.wait_for(lambda: self.assertEqual(
+        self.assertEqual(
             self.get_error_element().text,
             '您已经提交一个同样的待办事项！'
-        ))
+        )
 
         # 再次输入时，错误消息消失了
         input_box = self.get_item_input_box()
         input_box.send_keys('a')
         time.sleep(1)
-
-        self.wait_for(lambda: self.assertFalse(
+        self.assertFalse(
             self.get_error_element().is_displayed()
-        ))
+        )
 
 
     def test_003(self):
@@ -123,13 +119,10 @@ class ListItemValidationTest(ListsTest):
         input_box.send_keys(Keys.ENTER)
 
         # 于是，得到一条错误消息
-        self.wait_for(lambda: self.assertTrue(
-            self.get_error_element().is_displayed()
-        ))
-        self.wait_for(lambda: self.assertEqual(
+        self.assertEqual(
             self.get_error_element().text,
             '请输入内容！'
-        ))
+        )
 
         # 我的清单可以正常表示
         self.wait_for_row_in_my_lists_table(1, 'Reticulate splines')
