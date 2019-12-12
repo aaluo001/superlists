@@ -4,8 +4,7 @@
 # Author: TangJianwei
 # Create: 2019-11-23
 #------------------------------
-from commons.utils import date_now
-from commons.utils import date_now_str
+from commons.utils import date_now, date_now_str
 from .base_bills import BillsTest
 
 
@@ -19,27 +18,30 @@ class CreateBillTest(BillsTest):
         self.create_bill_normally('1000000.1', 'incomes 1')
 
         bill_fields = self.get_bill_record_fields(1)
-        self.assertEquals(bill_fields[0].text, date_now_str())
-        self.assertEquals(bill_fields[1].text, '1000000.1')
-        self.assertEquals(bill_fields[2].text, 'incomes 1')
+        self.assertEqual(bill_fields[0].text, date_now_str())
+        self.assertEqual(bill_fields[1].text, '1000000.1')
+        self.assertEqual(bill_fields[2].text, 'incomes 1')
         
         # 正数不会显示成红色
-        self.assertEquals(
+        self.assertEqual(
             bill_fields[1].find_elements_by_css_selector('.text-danger'),
             []
         )
 
         # 同时，会新建一条月账单
-        self.wait_for(lambda: self.assertEquals(
+        self.wait_for(lambda: self.assertEqual(
             len(self.get_billyms()), 1
         ))
 
         # 月账单没有被选中
-        billym_row = self.get_billym_element(row_num=1)
-        self.assertNotIn('app-selected', billym_row.get_attribute('class'))
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_elements_by_css_selector('#id_billyms_table td.app-selected'),
+            []
+        ))
 
         # 月账单会显示某年某月
-        billym_element = self.get_billym_element()
+        date = date_now()
+        billym_element = self.get_billym_element(date.year, date.month)
         self.assertRegex(
             billym_element.get_attribute('href'),
             r'/bills/(\d+)/$'
@@ -50,27 +52,29 @@ class CreateBillTest(BillsTest):
         self.create_bill_normally('-9999999.9', 'expends 1')
 
         bill_fields = self.get_bill_record_fields(1)
-        self.assertEquals(bill_fields[0].text, date_now_str())
-        self.assertEquals(bill_fields[1].text, '-9999999.9')
-        self.assertEquals(bill_fields[2].text, 'expends 1')
+        self.assertEqual(bill_fields[0].text, date_now_str())
+        self.assertEqual(bill_fields[1].text, '-9999999.9')
+        self.assertEqual(bill_fields[2].text, 'expends 1')
         
         # 负数显示成红色
-        self.assertEquals(
+        self.assertEqual(
             bill_fields[1].find_element_by_css_selector('.text-danger').text,
             bill_fields[1].text
         )
 
         # 还是会显示刚刚的月账单
-        self.wait_for(lambda: self.assertEquals(
+        self.wait_for(lambda: self.assertEqual(
             len(self.get_billyms()), 1
         ))
 
         # 月账单没有被选中
-        billym_row = self.get_billym_element(row_num=1)
-        self.assertNotIn('app-selected', billym_row.get_attribute('class'))
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_elements_by_css_selector('#id_billyms_table td.app-selected'),
+            []
+        ))
 
         # 月账单会显示某年某月
-        billym_element = self.get_billym_element()
+        billym_element = self.get_billym_element(date.year, date.month)
         self.assertRegex(
             billym_element.get_attribute('href'),
             r'/bills/(\d+)/$'
@@ -107,7 +111,7 @@ class CreateBillTest(BillsTest):
 
         # 输入错误内容后，点击提交
         self.create_bill_failed(money=' ', comment='error money')
-        self.assertEquals(
+        self.assertEqual(
             self.get_error_element().text,
             '请输入实数！'
         )
@@ -120,7 +124,7 @@ class CreateBillTest(BillsTest):
 
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='1.22', comment='error money')
-        self.assertEquals(
+        self.assertEqual(
             self.get_error_element().text,
             '请不要超过 1 位小数！'
         )
@@ -133,7 +137,7 @@ class CreateBillTest(BillsTest):
 
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='12345678', comment='error money')
-        self.assertEquals(
+        self.assertEqual(
             self.get_error_element().text,
             '请不要超过 7 位整数！'
         )
@@ -147,7 +151,7 @@ class CreateBillTest(BillsTest):
 
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='1.0', comment=' ')
-        self.assertEquals(
+        self.assertEqual(
             self.get_error_element().text,
             '请输入内容！'
         )

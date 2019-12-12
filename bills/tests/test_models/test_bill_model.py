@@ -207,17 +207,17 @@ class BillModelTest(TestCase):
         # 这是<class 'decimal.Decimal'>类型，即Decimal('19.8')
         # 通过to_eng_string()来取得其字符串。
 
-        self.assertEquals(len(bills), 5)
+        self.assertEqual(len(bills), 5)
 
-        self.assertEquals(bills[0].date, datetime(2019, 2, 21).date())
-        self.assertEquals(bills[0].money.to_eng_string(), '19.8')
-        self.assertEquals(bills[0].billym.year, 2019)
-        self.assertEquals(bills[0].billym.month, 2)
+        self.assertEqual(bills[0].date, datetime(2019, 2, 21).date())
+        self.assertEqual(bills[0].money.to_eng_string(), '19.8')
+        self.assertEqual(bills[0].billym.year, 2019)
+        self.assertEqual(bills[0].billym.month, 2)
 
-        self.assertEquals(bills[3].date, datetime(2019, 1, 5).date())
-        self.assertEquals(bills[3].money.to_eng_string(), '-12.5')
-        self.assertEquals(bills[3].billym.year, 2019)
-        self.assertEquals(bills[3].billym.month, 1)
+        self.assertEqual(bills[3].date, datetime(2019, 1, 5).date())
+        self.assertEqual(bills[3].money.to_eng_string(), '-12.5')
+        self.assertEqual(bills[3].billym.year, 2019)
+        self.assertEqual(bills[3].billym.month, 1)
 
     def test_022(self):
         ''' 统计月份账单的件数，及合计收入支出
@@ -233,13 +233,13 @@ class BillModelTest(TestCase):
         # 打印出SQL语句
         #print(billyms.query)
 
-        self.assertEquals(len(billyms), 2)
-        self.assertEquals(billyms[0].year, 2019)
-        self.assertEquals(billyms[0].month, 2)
-        self.assertEquals(billyms[0].bills_count, 3)
-        self.assertEquals(billyms[0].bills_sum.to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
-        self.assertEquals(billyms[1].bills_count, 4)
-        self.assertEquals(billyms[1].bills_sum.to_eng_string(), str(round(32.1 - 10 - 12.5 - 10.1, 1)))
+        self.assertEqual(len(billyms), 2)
+        self.assertEqual(billyms[0].year, 2019)
+        self.assertEqual(billyms[0].month, 2)
+        self.assertEqual(billyms[0].bills_count, 3)
+        self.assertEqual(billyms[0].bills_sum.to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
+        self.assertEqual(billyms[1].bills_count, 4)
+        self.assertEqual(billyms[1].bills_sum.to_eng_string(), str(round(32.1 - 10 - 12.5 - 10.1, 1)))
 
     def test_023(self):
         ''' 统计月份账单的收入与支出
@@ -254,6 +254,6 @@ class BillModelTest(TestCase):
         incomes = bills_1.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
         expends = bills_1.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
 
-        self.assertEquals(incomes.to_eng_string(), str(29.8 + 19.8))
-        self.assertEquals(expends.to_eng_string(), str(-10.9))
-        self.assertEquals((incomes + expends).to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
+        self.assertEqual(incomes.to_eng_string(), str(29.8 + 19.8))
+        self.assertEqual(expends.to_eng_string(), str(-10.9))
+        self.assertEqual((incomes + expends).to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))

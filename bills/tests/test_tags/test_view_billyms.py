@@ -23,11 +23,11 @@ class ViewBillymsTest(TestCase):
 
         # 当前用户还没有月账单
         owner = User.objects.create(email='abc@163.com')
-        self.assertEquals(len(Billym.objects.filter(owner=owner)), 0)
+        self.assertEqual(len(Billym.objects.filter(owner=owner)), 0)
 
         # 没有指定被选中的月账单
         context = view_billyms(owner)
-        self.assertEquals(len(context['billyms']), 0)
+        self.assertEqual(len(context['billyms']), 0)
         self.assertIsNone(context['selected_billym'])
 
 
@@ -45,8 +45,8 @@ class ViewBillymsTest(TestCase):
 
         # 指定了被选中的月账单
         context = view_billyms(owner, billym_1)
-        self.assertEquals(len(context['billyms']), 2)
+        self.assertEqual(len(context['billyms']), 2)
         self.assertIn(billym_1, context['billyms'])
         self.assertIn(billym_2, context['billyms'])
-        self.assertEquals(context['selected_billym'], billym_1)
+        self.assertEqual(context['selected_billym'], billym_1)
 

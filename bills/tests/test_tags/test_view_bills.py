@@ -37,7 +37,7 @@ class ViewBillsTest(TestCase):
         # 没有取得当前用户的账单明细
         owner = User.objects.create(email='abc@163.com')
         context = view_bills(owner)
-        self.assertEquals(len(context['bills']), 0)
+        self.assertEqual(len(context['bills']), 0)
 
 
     def test_002(self):
@@ -66,13 +66,13 @@ class ViewBillsTest(TestCase):
         context = view_bills(owner)
         bills = context['bills']
 
-        self.assertEquals(len(bills), 2)
-        self.assertEquals(bills[0]['money'].to_eng_string(), '-200.9')
-        self.assertEquals(bills[0]['comment'], 'todays bill 2')
-        self.assertEquals(bills[0]['date'], date)
-        self.assertEquals(bills[1]['money'].to_eng_string(), '1000.1')
-        self.assertEquals(bills[1]['comment'], 'todays bill 1')
-        self.assertEquals(bills[1]['date'], date)
+        self.assertEqual(len(bills), 2)
+        self.assertEqual(bills[0]['money'].to_eng_string(), '-200.9')
+        self.assertEqual(bills[0]['comment'], 'todays bill 2')
+        self.assertEqual(bills[0]['date'], date)
+        self.assertEqual(bills[1]['money'].to_eng_string(), '1000.1')
+        self.assertEqual(bills[1]['comment'], 'todays bill 1')
+        self.assertEqual(bills[1]['date'], date)
 
 
     def test_011(self):
@@ -91,9 +91,9 @@ class ViewBillsTest(TestCase):
         Bill.objects.create(billym=other_billym, money='-99999.9', comment='other billym', date='2019-1-1')
 
         # 没有账单明细
-        self.assertEquals(len(billym.bill_set.all()), 0)
+        self.assertEqual(len(billym.bill_set.all()), 0)
         context = view_bills(owner, billym.id)
-        self.assertEquals(len(context['bills']), 0)
+        self.assertEqual(len(context['bills']), 0)
 
 
     def test_012(self):
@@ -126,13 +126,13 @@ class ViewBillsTest(TestCase):
         context = view_bills(owner, billym.id)
         bills = context['bills']
 
-        self.assertEquals(len(bills), 3)
-        self.assertEquals(bills[0]['money'].to_eng_string(), '-200.9')
-        self.assertEquals(bills[0]['comment'], 'todays bill 2')
-        self.assertEquals(bills[0]['date'], date)
-        self.assertEquals(bills[1]['money'].to_eng_string(), '1000.1')
-        self.assertEquals(bills[1]['comment'], 'todays bill 1')
-        self.assertEquals(bills[1]['date'], date)
-        self.assertEquals(bills[2]['money'].to_eng_string(), '32.1')
-        self.assertEquals(bills[2]['comment'], 'date before')
-        self.assertEquals(bills[2]['date'], date_before.date())
+        self.assertEqual(len(bills), 3)
+        self.assertEqual(bills[0]['money'].to_eng_string(), '-200.9')
+        self.assertEqual(bills[0]['comment'], 'todays bill 2')
+        self.assertEqual(bills[0]['date'], date)
+        self.assertEqual(bills[1]['money'].to_eng_string(), '1000.1')
+        self.assertEqual(bills[1]['comment'], 'todays bill 1')
+        self.assertEqual(bills[1]['date'], date)
+        self.assertEqual(bills[2]['money'].to_eng_string(), '32.1')
+        self.assertEqual(bills[2]['comment'], 'date before')
+        self.assertEqual(bills[2]['date'], date_before.date())

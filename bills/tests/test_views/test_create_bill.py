@@ -56,23 +56,23 @@ class CreateBillTest(TestCase):
         self.post_create_bill(data)
 
         billyms = Billym.objects.all()
-        self.assertEquals(len(billyms), 1)
+        self.assertEqual(len(billyms), 1)
 
         billym = billyms[0]
         date = datetime.now().date()
 
-        self.assertEquals(billym.owner, user)
-        self.assertEquals(billym.year,  date.year)
-        self.assertEquals(billym.month, date.month)
+        self.assertEqual(billym.owner, user)
+        self.assertEqual(billym.year,  date.year)
+        self.assertEqual(billym.month, date.month)
 
         bills = Bill.objects.all()
-        self.assertEquals(len(bills), 1)
+        self.assertEqual(len(bills), 1)
 
         bill = bills[0]
-        self.assertEquals(bill.billym, billym)
-        self.assertEquals(bill.money.to_eng_string(), '1234567.1')
-        self.assertEquals(bill.comment, 'this is a test, 123456789012345.')
-        self.assertEquals(bill.date, date)
+        self.assertEqual(bill.billym, billym)
+        self.assertEqual(bill.money.to_eng_string(), '1234567.1')
+        self.assertEqual(bill.comment, 'this is a test, 123456789012345.')
+        self.assertEqual(bill.date, date)
 
     def test_013(self):
         ''' 正常处理后，数据保存到数据库(二)
@@ -98,13 +98,13 @@ class CreateBillTest(TestCase):
         self.post_create_bill(data3)
 
         billyms = Billym.objects.all()
-        self.assertEquals(len(billyms), 1)
+        self.assertEqual(len(billyms), 1)
 
         bills = Bill.objects.all()
-        self.assertEquals(len(bills), 3)
+        self.assertEqual(len(bills), 3)
 
         for bill in bills:
-            self.assertEquals(bill.billym, billyms[0])
+            self.assertEqual(bill.billym, billyms[0])
 
 
     def test_021(self):
@@ -120,8 +120,8 @@ class CreateBillTest(TestCase):
 
         billyms = Billym.objects.all()
         bills = Bill.objects.all()
-        self.assertEquals(len(billyms), 0)
-        self.assertEquals(len(bills), 0)
+        self.assertEqual(len(billyms), 0)
+        self.assertEqual(len(bills), 0)
 
     def test_022(self):
         ''' 提交出错时，迁移到index页面
@@ -137,7 +137,7 @@ class CreateBillTest(TestCase):
         form = response.context['form']
 
         # 迁移到index页面
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'bills/index.html')
 
         # 上下文中返回BillForm
@@ -148,5 +148,5 @@ class CreateBillTest(TestCase):
         text_money   = soup.find('input', {'name': 'money'})
         text_comment = soup.find('input', {'name': 'comment'})
 
-        self.assertEquals(text_money['value'], '1.22')
-        self.assertEquals(text_comment['value'], 'this is the test.')
+        self.assertEqual(text_money['value'], '1.22')
+        self.assertEqual(text_comment['value'], 'this is the test.')

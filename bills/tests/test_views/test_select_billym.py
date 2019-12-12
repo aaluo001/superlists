@@ -44,10 +44,10 @@ class SelectBillymTest(TestCase):
         Bill.objects.create(billym=billym_1, money=19.1, comment='test 2', date='2019-01-01')
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_1.id,]))
-        self.assertEquals(response.context['selected_billym'], billym_1)
-        self.assertEquals(response.context['expends'], 0)
-        self.assertEquals(response.context['incomes'].to_eng_string(), '30.0')
-        self.assertEquals(response.context['balance'].to_eng_string(), '30.0')
+        self.assertEqual(response.context['selected_billym'], billym_1)
+        self.assertEqual(response.context['expends'], 0)
+        self.assertEqual(response.context['incomes'].to_eng_string(), '30.0')
+        self.assertEqual(response.context['balance'].to_eng_string(), '30.0')
 
 
         # 只有支出
@@ -55,10 +55,10 @@ class SelectBillymTest(TestCase):
         Bill.objects.create(billym=billym_2, money=-1000000.3, comment='test 1', date='2019-02-21')
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_2.id,]))
-        self.assertEquals(response.context['selected_billym'], billym_2)
-        self.assertEquals(response.context['expends'].to_eng_string(), '-1000000.3')
-        self.assertEquals(response.context['incomes'], 0)
-        self.assertEquals(response.context['balance'].to_eng_string(), '-1000000.3')
+        self.assertEqual(response.context['selected_billym'], billym_2)
+        self.assertEqual(response.context['expends'].to_eng_string(), '-1000000.3')
+        self.assertEqual(response.context['incomes'], 0)
+        self.assertEqual(response.context['balance'].to_eng_string(), '-1000000.3')
 
 
         # 收入和支出同时存在
@@ -69,10 +69,10 @@ class SelectBillymTest(TestCase):
         Bill.objects.create(billym=billym_3, money=-0.1, comment='test 4', date='2019-03-01')
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_3.id,]))
-        self.assertEquals(response.context['selected_billym'], billym_3)
-        self.assertEquals(response.context['expends'].to_eng_string(), '-10000000.0')
-        self.assertEquals(response.context['incomes'].to_eng_string(), '10001000.0')
-        self.assertEquals(response.context['balance'].to_eng_string(), '1000.0')
+        self.assertEqual(response.context['selected_billym'], billym_3)
+        self.assertEqual(response.context['expends'].to_eng_string(), '-10000000.0')
+        self.assertEqual(response.context['incomes'].to_eng_string(), '10001000.0')
+        self.assertEqual(response.context['balance'].to_eng_string(), '1000.0')
 
 
     @patch('bills.views.messages')
@@ -84,13 +84,13 @@ class SelectBillymTest(TestCase):
         self.client.force_login(owner)
 
         # 没有月账单的数据
-        self.assertEquals(len(Billym.objects.all()), 0)
+        self.assertEqual(len(Billym.objects.all()), 0)
         # 访问一个不存在的月账单
         response = self.client.get(reverse('bills:select_billym', args=[1,]))
         
         # 跳转到新建账单页面
         self.assertRedirects(response, reverse('bills:bill_page'))
-        self.assertEquals(
+        self.assertEqual(
             mock_messages.error.call_args,
             call(response.wsgi_request, '没有找到该账单，或该账单已被删除！')
         )
@@ -112,7 +112,7 @@ class SelectBillymTest(TestCase):
 
         # 跳转到新建账单页面
         self.assertRedirects(response, reverse('bills:bill_page'))
-        self.assertEquals(
+        self.assertEqual(
             mock_messages.error.call_args,
             call(response.wsgi_request, '没有找到该账单，或该账单已被删除！')
         )

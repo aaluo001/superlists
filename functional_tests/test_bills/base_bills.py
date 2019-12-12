@@ -9,13 +9,11 @@ from selenium.webdriver.common.keys import Keys
 from functional_tests.base import wait
 from functional_tests.base import FunctionalTest
 
-from commons.utils import date_now
-
 
 class BillsTest(FunctionalTest):
 
-    def goto_bill_page(self, login_email):
-        self.create_pre_authenticated_session(login_email)
+    def goto_bill_page(self, email):
+        self.create_pre_authenticated_session(email)
         self.browser.get(self.live_server_url)
         navbar = self.browser.find_element_by_id('id_navigation')
         navbar.find_element_by_link_text('应用').click()
@@ -46,7 +44,7 @@ class BillsTest(FunctionalTest):
     def create_bill_normally(self, money, comment):
         row_num = self.wait_for(lambda: len(self.get_bills()))
         self.create_bill(money, comment)
-        self.wait_for(lambda: self.assertEquals(
+        self.wait_for(lambda: self.assertEqual(
             len(self.get_bills()), row_num + 1
         ))
 
@@ -54,7 +52,7 @@ class BillsTest(FunctionalTest):
         row_num = self.wait_for(lambda: len(self.get_bills()))
         self.create_bill(money, comment)
         self.get_error_element()
-        self.wait_for(lambda: self.assertEquals(
+        self.wait_for(lambda: self.assertEqual(
             len(self.get_bills()), row_num
         ))
 
@@ -64,23 +62,22 @@ class BillsTest(FunctionalTest):
             self.browser.find_elements_by_css_selector('#id_bills_row_{} > td'.format(row_num))
         )
 
-    def get_billym_element(self, date=date_now(), row_num=None):
+    def get_billym_element(self, year, month):
         billyms_panel = self.wait_for(lambda:
             self.browser.find_element_by_id('id_view_billyms')
         )
-        if (row_num):
-            return self.wait_for(lambda:
-                billyms_panel.find_element_by_id('id_billyms_row_{}'.format(row_num))
-            )
-        else:
-            return self.wait_for(lambda:
-                billyms_panel.find_element_by_link_text('{}年{}月'.format(date.year, date.month))
-            )
+        return self.wait_for(lambda:
+            billyms_panel.find_element_by_link_text('{}年{}月'.format(year, month))
+        )
 
-    def select_billym(self, date=date_now()):
-        self.get_billym_element(date).click()
+    def select_billym(self, year, month):
+        self.get_billym_element(year, month).click()
         self.wait_for(lambda: self.assertEqual(
             self.browser.find_element_by_css_selector('#id_jumbotron > h1').text,
             '账单明细'
         ))
+        e = self.wait_for(lambda:
+            self.browser.find_element_by_css_selector('#id_billyms_table td.app-selected')
+        )
+        self.assertEqual(e.text, '{}年{}月'.format(year, month))
 
