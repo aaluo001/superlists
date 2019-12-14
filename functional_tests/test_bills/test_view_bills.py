@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from commons.utils import date_now, date_now_str
+from commons.utils import date_now, date_now_str, date_to_str
 from bills.models import Billym, Bill
 
 from .base_bills import BillsTest
@@ -165,7 +165,7 @@ class ViewBillsTest(BillsTest):
         ))
 
         bill_1_fields = self.get_bill_record_fields(1)
-        self.assertEqual(bill_1_fields[0].text, date_before.date().strftime('%Y-%m-%d'))
+        self.assertEqual(bill_1_fields[0].text, date_to_str(date_before.date()))
         self.assertEqual(bill_1_fields[1].text, '32.1')
         self.assertEqual(bill_1_fields[2].text, 'date before 2')
 
@@ -176,7 +176,7 @@ class ViewBillsTest(BillsTest):
         )
 
         bill_2_fields = self.get_bill_record_fields(2)
-        self.assertEqual(bill_2_fields[0].text, date_before.date().strftime('%Y-%m-%d'))
+        self.assertEqual(bill_2_fields[0].text, date_to_str(date_before.date()))
         self.assertEqual(bill_2_fields[1].text, '-9991.1')
         self.assertEqual(bill_2_fields[2].text, 'date before 1')
         
