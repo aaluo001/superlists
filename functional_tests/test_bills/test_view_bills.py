@@ -11,7 +11,10 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from commons.utils import date_now, date_now_str, date_to_str
+from functional_tests.management.commands.make_bills import make_bills
+from functional_tests.server_tools import make_bills_on_server
+
+from commons.utils import date_now, date_now_str
 from bills.models import Billym, Bill
 
 from .base_bills import BillsTest
@@ -136,38 +139,27 @@ class ViewBillsTest(BillsTest):
         self.assertEqual(bill_fields[2].text, 'my bills')
 
     def test_012(self):
-        ''' 账单明细页面，可以显示当前用户以前的账单明细
+        ''' 账单明细页面，可以显示月账单的所有账单明细
         '''
-        # 当前用户以前的数据
-        date_before = timezone.now() - timedelta(days=1)
-        owner = User.objects.create(email='abc@163.com')
-        billym = Billym.objects.create(owner=owner, year=date_before.year, month=date_before.month)
-        bill_before_1 = Bill.objects.create(
-            billym=billym, money=-9991.1, date=date_before.date(), comment='date before 1'
-        )
-        bill_before_1.create_ts = date_before
-        bill_before_1.save()
-
-        bill_before_2 = Bill.objects.create(
-            billym=billym, money=+32.1, date=date_before.date(), comment='date before 2'
-        )
-        bill_before_2.create_ts = date_before
-        bill_before_2.save()
-
+        # 创建当前用户的账单明细
+        if (self.staging_tests):
+            make_bills_on_server('abc@163.com')
+        else:
+            make_bills('abc@163.com')
 
         # 当前用户访问浏览器
         self.goto_bill_page('abc@163.com')
 
-        # 可以看到以前的账单明细
-        self.select_billym(date_before.year, date_before.month)
+        # 选择一条月账单，可以看到该月账单所有的账单明细
+        self.select_billym(2018, 12)
         self.wait_for(lambda: self.assertEqual(
             len(self.get_bills()), 2
         ))
 
         bill_1_fields = self.get_bill_record_fields(1)
-        self.assertEqual(bill_1_fields[0].text, date_to_str(date_before.date()))
+        self.assertEqual(bill_1_fields[0].text, '2018-12-11')
         self.assertEqual(bill_1_fields[1].text, '32.1')
-        self.assertEqual(bill_1_fields[2].text, 'date before 2')
+        self.assertEqual(bill_1_fields[2].text, 'billym_1: old bill 2')
 
         # 正数不会显示成红色
         self.assertEqual(
@@ -176,9 +168,9 @@ class ViewBillsTest(BillsTest):
         )
 
         bill_2_fields = self.get_bill_record_fields(2)
-        self.assertEqual(bill_2_fields[0].text, date_to_str(date_before.date()))
+        self.assertEqual(bill_2_fields[0].text, '2018-12-01')
         self.assertEqual(bill_2_fields[1].text, '-9991.1')
-        self.assertEqual(bill_2_fields[2].text, 'date before 1')
+        self.assertEqual(bill_2_fields[2].text, 'billym_1: old bill 1')
         
         # 负数显示成红色
         self.assertEqual(
@@ -187,24 +179,23 @@ class ViewBillsTest(BillsTest):
         )
 
     def test_013(self):
-        ''' 账单明细页面，不会显示其他未被选择的月账单数据
+        ''' 账单明细页面，不会显示其他未被选择的月账单的账单明细
         '''
-        # 其他月账单
-        owner = User.objects.create(email='abc@163.com')
-        billym_1 = Billym.objects.create(owner=owner, year=2019, month=10)
-        Bill.objects.create(billym=billym_1, money=+912.9, comment='other billym 1', date='2019-10-01')
-        billym_2 = Billym.objects.create(owner=owner, year=2019, month=11)
-        Bill.objects.create(billym=billym_2, money=-499.0, comment='other billym 2A', date='2019-11-11')
-        Bill.objects.create(billym=billym_2, money=+599.1, comment='other billym 2B', date='2019-11-12')
+        # 创建当前用户的账单明细
+        if (self.staging_tests):
+            make_bills_on_server('abc@163.com')
+        else:
+            make_bills('abc@163.com')
 
         # 当前用户访问浏览器
         self.goto_bill_page('abc@163.com')
 
-        # 可以看到其他的月账单
+        # 可以看到所有的月账单
         billym_elements = self.wait_for(lambda: self.get_billyms())
-        self.assertEqual(len(billym_elements), 2)
+        self.assertEqual(len(billym_elements), 3)
         self.assertEqual(billym_elements[0].text, '2019年11月')
         self.assertEqual(billym_elements[1].text, '2019年10月')
+        self.assertEqual(billym_elements[2].text, '2018年12月')
 
         # 新建一条账单
         self.create_bill_normally('-2000999', 'my bills')
@@ -212,10 +203,11 @@ class ViewBillsTest(BillsTest):
         # 可以看到刚刚新建的月账单
         date = date_now()
         billym_elements = self.wait_for(lambda: self.get_billyms())
-        self.assertEqual(len(billym_elements), 3)
+        self.assertEqual(len(billym_elements), 4)
         self.assertEqual(billym_elements[0].text, '{}年{}月'.format(date.year, date.month))
         self.assertEqual(billym_elements[1].text, '2019年11月')
         self.assertEqual(billym_elements[2].text, '2019年10月')
+        self.assertEqual(billym_elements[3].text, '2018年12月')
 
         # 选择刚刚新建的月账单
         self.select_billym(date.year, date.month)
@@ -233,12 +225,12 @@ class ViewBillsTest(BillsTest):
             len(self.get_bills()), 2
         ))
         bill_fields = self.get_bill_record_fields(1)
-        self.assertEqual(bill_fields[0].text, '2019-11-12')
+        self.assertEqual(bill_fields[0].text, '2019-11-11')
         self.assertEqual(bill_fields[1].text, '599.1')
-        self.assertEqual(bill_fields[2].text, 'other billym 2B')
+        self.assertEqual(bill_fields[2].text, 'billym_3: old bill 2')
 
         bill_fields = self.get_bill_record_fields(2)
         self.assertEqual(bill_fields[0].text, '2019-11-11')
         self.assertEqual(bill_fields[1].text, '-499.0')
-        self.assertEqual(bill_fields[2].text, 'other billym 2A')
+        self.assertEqual(bill_fields[2].text, 'billym_3: old bill 1')
 

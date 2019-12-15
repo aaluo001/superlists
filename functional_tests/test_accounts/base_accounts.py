@@ -36,7 +36,7 @@ class AccountsTest(FunctionalTest):
             inbox = poplib.POP3_SSL('pop.163.com')
             try:
                 inbox.user(test_email)
-                inbox.pass_(os.environ['TEST_EMAIL_PASSWORD'])
+                inbox.pass_(os.environ['EMAIL_TEST_PW'])
                 start_time = time.time()
                 
                 while (time.time() - start_time) < 60:

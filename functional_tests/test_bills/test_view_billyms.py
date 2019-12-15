@@ -7,6 +7,9 @@
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from functional_tests.management.commands.make_bills import make_bills
+from functional_tests.server_tools import make_bills_on_server
+
 from bills.models import Billym, Bill
 from .base_bills import BillsTest
 
@@ -41,14 +44,24 @@ class ViewBillymsTest(BillsTest):
         ''' 我的账单，只能看到当前用户的月账单
         '''
         # 其他用户新建账单
-        other_user = User.objects.create(email='other@163.com')
-        Billym.objects.create(owner=other_user, year=2017, month=1)
+        self.goto_bill_page('other_user@163.com')
+        self.create_bill_normally('100.1', 'other users bills 1')
+        self.create_bill_normally('-90.9', 'other users bills 2')
+        self.quit_browser()
 
-        # 我的月账单
-        owner = User.objects.create(email='abc@163.com')
-        Billym.objects.create(owner=owner, year=2019, month=10)
+        # 创建当前用户的账单明细
+        if (self.staging_tests):
+            make_bills_on_server('abc@163.com')
+        else:
+            make_bills('abc@163.com')
 
         # 当前用户访问浏览器
+        self.init_browser()
         self.goto_bill_page('abc@163.com')
+
+        # 可以看到所有的月账单
         billym_elements = self.wait_for(lambda: self.get_billyms())
-        self.assertEqual(billym_elements[0].text, '2019年10月')
+        self.assertEqual(len(billym_elements), 3)
+        self.assertEqual(billym_elements[0].text, '2019年11月')
+        self.assertEqual(billym_elements[1].text, '2019年10月')
+        self.assertEqual(billym_elements[2].text, '2018年12月')
