@@ -4,18 +4,9 @@
 # Author: TangJianwei
 # Create: 2019-12-8
 #------------------------------
-from datetime import datetime
-from datetime import timedelta
-
-from django.utils import timezone
-from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from functional_tests.management.commands.make_bills import make_bills
 from functional_tests.server_tools import make_bills_on_server
-
 from commons.utils import date_now, date_now_str
-from bills.models import Billym, Bill
 
 from .base_bills import BillsTest
 
@@ -43,15 +34,11 @@ class ViewBillsTest(BillsTest):
     def test_002(self):
         ''' 新建账单页面，不会显示当前用户非当天的数据
         '''
-        # 当前用户以前的数据
-        date_before = timezone.now() - timedelta(days=1)
-        owner = User.objects.create(email='abc@163.com')
-        billym = Billym.objects.create(owner=owner, year=date_before.year, month=date_before.month)
-        bill_before = Bill.objects.create(
-            billym=billym, money=+32.1, date=date_before.date(), comment='date before 1'
-        )
-        bill_before.create_ts = date_before
-        bill_before.save()
+        # 创建当前用户的账单明细
+        if (self.staging_tests):
+            make_bills_on_server('abc@163.com')
+        else:
+            make_bills('abc@163.com')
 
         # 当前用户访问浏览器
         self.goto_bill_page('abc@163.com')

@@ -4,13 +4,9 @@
 # Author: TangJianwei
 # Create: 2019-12-8
 #------------------------------
-from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from functional_tests.management.commands.make_bills import make_bills
 from functional_tests.server_tools import make_bills_on_server
 
-from bills.models import Billym, Bill
 from .base_bills import BillsTest
 
 

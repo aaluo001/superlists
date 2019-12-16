@@ -16,9 +16,13 @@
         </tr>
     </thead>
     <tbody>
-        <tr id="id_aggs_row_{{ forloop.counter }}">
+        <tr id="id_aggs_row">
             <td width="120">{{ incomes }}</td>
-            <td width="120" class="text-danger">{{ expends }}</td>
+            <td width="120" 
+                {% if expends < 0 %}
+                    class="text-danger"
+                {% endif %}
+            >{{ expends }}</td>
             <td width="120" 
                 {% if balance < 0 %}
                     class="text-danger"
