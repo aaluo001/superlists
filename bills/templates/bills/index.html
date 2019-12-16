@@ -8,7 +8,7 @@
     <form method="POST" action="{% url 'bills:create_bill' %}" class="form-horizontal">
         {% for field in form %}
             <div class="form-group">
-                <div class="col-sm-2 text-right">*{{ field.label_tag }}</div>
+                <div class="col-sm-2 text-left">*{{ field.label_tag }}</div>
                 <div class="col-sm-8">{{ field }}</div>
             </div>
             {% if field.errors %}
@@ -25,4 +25,5 @@
         </div>
         {% csrf_token %}
     </form>
+    <br>
 {% endblock %}
