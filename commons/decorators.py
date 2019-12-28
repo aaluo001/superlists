@@ -6,7 +6,7 @@
 #------------------------------
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from .views import redirect_to_home_page
 

@@ -5,12 +5,12 @@
 # Create: 2019-03-10
 #------------------------------
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 
 class List(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-id', )

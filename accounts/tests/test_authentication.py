@@ -18,7 +18,7 @@ class AuthenticateTest(TestCase):
     def test_returns_None_if_no_such_token(self):
         ''' 登录验证失败时，返回None
         '''
-        login_user_object = PasswordlessAuthenticationBackend().authenticate(uid='abc123')
+        login_user_object = PasswordlessAuthenticationBackend().authenticate(None, uid='abc123')
         self.assertIsNone(login_user_object)
 
 
@@ -27,7 +27,7 @@ class AuthenticateTest(TestCase):
             如果用户不存在，就返回新建用户
         '''
         token_object = Token.objects.create(email='abc@163.com')
-        login_user_object = PasswordlessAuthenticationBackend().authenticate(uid=token_object.uid)
+        login_user_object = PasswordlessAuthenticationBackend().authenticate(None, uid=token_object.uid)
         user_object = User.objects.get(email=token_object.email)
         self.assertEqual(login_user_object, user_object)
 
@@ -38,7 +38,7 @@ class AuthenticateTest(TestCase):
         '''
         token_object = Token.objects.create(email='abc@163.com')
         user_object = User.objects.create(email=token_object.email)
-        login_user_object = PasswordlessAuthenticationBackend().authenticate(uid=token_object.uid)
+        login_user_object = PasswordlessAuthenticationBackend().authenticate(None, uid=token_object.uid)
         self.assertEqual(login_user_object, user_object)
 
 

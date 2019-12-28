@@ -5,7 +5,7 @@
 # Create: 2019-11-06
 #------------------------------
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 def get_owner(request):

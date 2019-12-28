@@ -6,7 +6,7 @@
 #------------------------------
 from django.db.models import Sum
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
@@ -47,8 +47,8 @@ def select_billym(request, billym_id):
 
         context = {
             'selected_billym': selected_billym,
-            'expends': expends,
-            'incomes': incomes,
-            'balance': expends + incomes,
+            'expends': round(expends, 1),
+            'incomes': round(incomes, 1),
+            'balance': round(expends + incomes, 1),
         }
         return render(request, 'bills/selected_billym.html', context)

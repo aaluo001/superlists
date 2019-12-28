@@ -4,6 +4,7 @@
 # Author: TangJianwei
 # Create: 2019-11-24
 #------------------------------
+from decimal import Decimal
 from datetime import timedelta
 
 from django.utils import timezone
@@ -67,10 +68,10 @@ class ViewBillsTest(TestCase):
         bills = context['bills']
 
         self.assertEqual(len(bills), 2)
-        self.assertEqual(bills[0]['money'].to_eng_string(), '-200.9')
+        self.assertEqual(bills[0]['money'], Decimal('-200.9'))
         self.assertEqual(bills[0]['comment'], 'todays bill 2')
         self.assertEqual(bills[0]['date'], date)
-        self.assertEqual(bills[1]['money'].to_eng_string(), '1000.1')
+        self.assertEqual(bills[1]['money'], Decimal('1000.1'))
         self.assertEqual(bills[1]['comment'], 'todays bill 1')
         self.assertEqual(bills[1]['date'], date)
 
@@ -127,12 +128,12 @@ class ViewBillsTest(TestCase):
         bills = context['bills']
 
         self.assertEqual(len(bills), 3)
-        self.assertEqual(bills[0]['money'].to_eng_string(), '-200.9')
+        self.assertEqual(bills[0]['money'], Decimal('-200.9'))
         self.assertEqual(bills[0]['comment'], 'todays bill 2')
         self.assertEqual(bills[0]['date'], date)
-        self.assertEqual(bills[1]['money'].to_eng_string(), '1000.1')
+        self.assertEqual(bills[1]['money'], Decimal('1000.1'))
         self.assertEqual(bills[1]['comment'], 'todays bill 1')
         self.assertEqual(bills[1]['date'], date)
-        self.assertEqual(bills[2]['money'].to_eng_string(), '32.1')
+        self.assertEqual(bills[2]['money'], Decimal('32.1'))
         self.assertEqual(bills[2]['comment'], 'date before')
         self.assertEqual(bills[2]['date'], date_before.date())

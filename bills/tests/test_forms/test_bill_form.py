@@ -4,6 +4,8 @@
 # Author: TangJianwei
 # Create: 2019-11-04
 #------------------------------
+from decimal import Decimal
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -117,11 +119,11 @@ class BillFormTest(TestCase):
         self.assertEqual(bills[1].billym, billym)
         self.assertNotEqual(billym, other_billym)
 
-        self.assertEqual(bills[0].money.to_eng_string(), '1234567.5')
+        self.assertEqual(bills[0].money, Decimal('1234567.5'))
         self.assertEqual(bills[0].comment, 'Inputs:89012345678901234567890!.')
         self.assertEqual(bills[0].date, datetime.now().date())
 
-        self.assertEqual(bills[1].money.to_eng_string(), '-9999999.9')
+        self.assertEqual(bills[1].money, Decimal('-9999999.9'))
         self.assertEqual(bills[1].comment, '最大长度测试：八九十一二三四五六七八九十一二三四五六七八九十！。')
         self.assertEqual(bills[1].date, datetime.now().date())
 

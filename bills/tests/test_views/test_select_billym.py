@@ -4,10 +4,11 @@
 # Author: TangJianwei
 # Create: 2019-11-21
 #------------------------------
+from decimal import Decimal
 from unittest.mock import patch, call
 
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -45,9 +46,9 @@ class SelectBillymTest(TestCase):
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_1.id,]))
         self.assertEqual(response.context['selected_billym'], billym_1)
-        self.assertEqual(response.context['expends'], 0)
-        self.assertEqual(response.context['incomes'].to_eng_string(), '30.0')
-        self.assertEqual(response.context['balance'].to_eng_string(), '30.0')
+        self.assertEqual(response.context['expends'], Decimal('0'))
+        self.assertEqual(response.context['incomes'], Decimal('30'))
+        self.assertEqual(response.context['balance'], Decimal('30'))
 
 
         # 只有支出
@@ -56,9 +57,9 @@ class SelectBillymTest(TestCase):
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_2.id,]))
         self.assertEqual(response.context['selected_billym'], billym_2)
-        self.assertEqual(response.context['expends'].to_eng_string(), '-1000000.3')
-        self.assertEqual(response.context['incomes'], 0)
-        self.assertEqual(response.context['balance'].to_eng_string(), '-1000000.3')
+        self.assertEqual(response.context['expends'], Decimal('-1000000.3'))
+        self.assertEqual(response.context['incomes'], Decimal('0'))
+        self.assertEqual(response.context['balance'], Decimal('-1000000.3'))
 
 
         # 收入和支出同时存在
@@ -70,9 +71,9 @@ class SelectBillymTest(TestCase):
 
         response = self.client.get(reverse('bills:select_billym', args=[billym_3.id,]))
         self.assertEqual(response.context['selected_billym'], billym_3)
-        self.assertEqual(response.context['expends'].to_eng_string(), '-10000000.0')
-        self.assertEqual(response.context['incomes'].to_eng_string(), '10001000.0')
-        self.assertEqual(response.context['balance'].to_eng_string(), '1000.0')
+        self.assertEqual(response.context['expends'], Decimal('-10000000'))
+        self.assertEqual(response.context['incomes'], Decimal('10001000'))
+        self.assertEqual(response.context['balance'], Decimal('1000.0'))
 
 
     @patch('bills.views.messages')

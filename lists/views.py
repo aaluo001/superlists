@@ -5,7 +5,7 @@
 # Create: 2019-02-25
 #------------------------------
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 

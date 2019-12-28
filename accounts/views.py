@@ -9,7 +9,7 @@ import uuid
 import smtplib
 
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 
@@ -92,7 +92,7 @@ def send_login_email(request):
 
 
 def login(request):
-    user_object = auth.authenticate(uid=request.GET.get('token'))
+    user_object = auth.authenticate(request, uid=request.GET.get('token'))
     if (user_object):
         auth.login(request, user_object)
     else:

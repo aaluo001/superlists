@@ -4,11 +4,12 @@
 # Author: TangJianwei
 # Create: 2019-11-17
 #------------------------------
+from decimal import Decimal
 from datetime import datetime
 from bs4 import BeautifulSoup
 
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -70,7 +71,7 @@ class CreateBillTest(TestCase):
 
         bill = bills[0]
         self.assertEqual(bill.billym, billym)
-        self.assertEqual(bill.money.to_eng_string(), '1234567.1')
+        self.assertEqual(bill.money, Decimal('1234567.1'))
         self.assertEqual(bill.comment, 'this is a test, 123456789012345.')
         self.assertEqual(bill.date, date)
 

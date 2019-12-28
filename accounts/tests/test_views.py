@@ -5,6 +5,7 @@
 # Create: 2019-03-25
 #------------------------------
 import smtplib
+
 from unittest.mock import patch, call
 from django.test import TestCase
 
@@ -124,8 +125,11 @@ class LoginTest(TestCase):
     def test_002(self, mock_auth):
         ''' 登录验证时，使用了auth.authenticate()函数
         '''
-        self.get_login()
-        self.assertEqual(mock_auth.authenticate.call_args, call(uid='abc123'))
+        response = self.get_login()
+        self.assertEqual(
+            mock_auth.authenticate.call_args,
+            call(response.wsgi_request, uid='abc123')
+        )
 
 
     def test_003(self, mock_auth):

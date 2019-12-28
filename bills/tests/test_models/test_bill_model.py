@@ -4,7 +4,8 @@
 # Author: TangJianwei
 # Create: 2019-10-13
 #------------------------------
-import decimal
+from decimal import Decimal
+from decimal import InvalidOperation
 
 from datetime import datetime
 from datetime import timedelta
@@ -97,7 +98,7 @@ class BillModelTest(TestCase):
         with self.assertRaises(TransactionManagementError):
             Bill.objects.create(billym=billym, money=10.12, date='2019-1-1', comment='input')
         # 不能有超过8位整数
-        with self.assertRaises(decimal.InvalidOperation):
+        with self.assertRaises(InvalidOperation):
             Bill.objects.create(billym=billym, money=123456789.1, date='2019-1-1', comment='input')
 
     def test_013(self):
@@ -202,20 +203,18 @@ class BillModelTest(TestCase):
         # print(bills.query)
 
         # print(type(bills[0].money))
-        # print(bills[0].money.to_eng_string())
-        # PS:
         # 这是<class 'decimal.Decimal'>类型，即Decimal('19.8')
         # 通过to_eng_string()来取得其字符串。
 
         self.assertEqual(len(bills), 5)
 
         self.assertEqual(bills[0].date, datetime(2019, 2, 21).date())
-        self.assertEqual(bills[0].money.to_eng_string(), '19.8')
+        self.assertEqual(bills[0].money, Decimal('19.8'))
         self.assertEqual(bills[0].billym.year, 2019)
         self.assertEqual(bills[0].billym.month, 2)
 
         self.assertEqual(bills[3].date, datetime(2019, 1, 5).date())
-        self.assertEqual(bills[3].money.to_eng_string(), '-12.5')
+        self.assertEqual(bills[3].money, Decimal('-12.5'))
         self.assertEqual(bills[3].billym.year, 2019)
         self.assertEqual(bills[3].billym.month, 1)
 
@@ -237,9 +236,9 @@ class BillModelTest(TestCase):
         self.assertEqual(billyms[0].year, 2019)
         self.assertEqual(billyms[0].month, 2)
         self.assertEqual(billyms[0].bills_count, 3)
-        self.assertEqual(billyms[0].bills_sum.to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
+        self.assertEqual(billyms[0].bills_sum, Decimal('38.7'))
         self.assertEqual(billyms[1].bills_count, 4)
-        self.assertEqual(billyms[1].bills_sum.to_eng_string(), str(round(32.1 - 10 - 12.5 - 10.1, 1)))
+        self.assertEqual(billyms[1].bills_sum, Decimal('-0.5'))
 
     def test_023(self):
         ''' 统计月份账单的收入与支出
@@ -254,6 +253,6 @@ class BillModelTest(TestCase):
         incomes = bills_1.filter(money__gt=0).aggregate(incomes=Sum('money'))['incomes']
         expends = bills_1.filter(money__lt=0).aggregate(expends=Sum('money'))['expends']
 
-        self.assertEqual(incomes.to_eng_string(), str(29.8 + 19.8))
-        self.assertEqual(expends.to_eng_string(), str(-10.9))
-        self.assertEqual((incomes + expends).to_eng_string(), str(round(29.8 + 19.8 - 10.9, 1)))
+        self.assertEqual(incomes, Decimal('49.6'))
+        self.assertEqual(expends, Decimal('-10.9'))
+        self.assertEqual((incomes + expends), Decimal('38.7'))

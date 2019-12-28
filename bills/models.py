@@ -5,7 +5,7 @@
 # Create: 2019-07-07
 #------------------------------
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 
@@ -13,7 +13,7 @@ class Billym(models.Model):
     ''' 月账单
         以月份为单位，进行账单统计
     '''
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, blank=False)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, blank=False, on_delete=models.CASCADE)
 
     # 账单发生日期年份
     year  = models.PositiveIntegerField(null=False)
