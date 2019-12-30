@@ -6,6 +6,12 @@
  *==============================
  */
 
+QUnit.module("初期表示测试");
+QUnit.test("光标焦点会在输入框中", function(assert) {
+    initItemText();
+    assert.equal($('input[name="text"]').is(":focus"), true);
+});
+
 QUnit.module("执行键盘输入操作测试");
 QUnit.test("执行键盘输入操作时，错误提示会消失", function(assert) {
     initItemText();

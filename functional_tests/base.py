@@ -81,10 +81,16 @@ class FunctionalTest(StaticLiveServerTestCase):
         return func()
 
 
-    def get_error_element(self):
-        ''' 取得显示错误信息的元素
+    def get_error_elements(self):
+        ''' 取得所有显示错误信息的元素
         '''
         return self.wait_for(lambda: 
-            self.browser.find_element_by_css_selector('.has-error')
+            self.browser.find_elements_by_css_selector('.has-error')
         )
 
+    def get_error_element_by_id(self, id):
+        ''' 通过ID取得显示错误信息的元素
+        '''
+        return self.wait_for(lambda: 
+            self.browser.find_element_by_css_selector('#{}'.format(id))
+        )

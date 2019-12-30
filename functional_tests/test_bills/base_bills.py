@@ -51,7 +51,7 @@ class BillsTest(FunctionalTest):
     def create_bill_failed(self, money, comment):
         row_num = self.wait_for(lambda: len(self.get_bills()))
         self.create_bill(money, comment)
-        self.get_error_element()
+        self.get_error_elements()
         self.wait_for(lambda: self.assertEqual(
             len(self.get_bills()), row_num
         ))

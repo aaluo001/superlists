@@ -31,29 +31,29 @@ class ViewListTestForRequestGET(TestCase):
     def test_002(self):
         ''' 清单项目显示上下文(匿名用户)
         '''
-        other_list_object = List.objects.create()       ## 不会取到错误的清单
         list_object = List.objects.create()
-        
         response = self.get_view_list(list_object)
-        
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
-        self.assertEqual(response.context['list'], list_object)
-        self.assertIsNone(response.context['list_set'])
+        self.assertEqual(response.context['selected_list'], list_object)
 
         
     def test_003(self):
         ''' 清单项目显示上下文(登录用户)
         '''
-        other_list_object = List.objects.create()       ## 不会取到错误的清单
-        user_object = User.objects.create(email='abc@163.com')
-        self.client.force_login(user_object)
-        list_object = List.objects.create(owner=user_object)
+        # 其他用户的清单
+        other_user = User.objects.create(email='other@163.com')
+        List.objects.create(owner=other_user)
+
+        # 当前登录用户的清单
+        owner = User.objects.create(email='abc@163.com')
+        list_object = List.objects.create(owner=owner)
         Item.objects.create(list=list_object, text='new item')
         
+        self.client.force_login(owner)
         response = self.get_view_list(list_object)
         
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
-        self.assertEqual(response.context['list'], list_object)
+        self.assertEqual(response.context['selected_list'], list_object)
         
         list_set = response.context['list_set']
         self.assertEqual(len(list_set), 1)
@@ -80,11 +80,11 @@ class ViewListTestForRequestGET(TestCase):
     def test_012(self):
         ''' 匿名用户无法取得已指定拥有者的清单
         '''
-        user_object = User.objects.create(email='abc@163.com')
+        owner = User.objects.create(email='abc@163.com')
         # 已指定拥有者的清单
-        list_object = List.objects.create(owner=user_object)
+        list_object = List.objects.create(owner=owner)
         # 未登录用户
-        # self.client.force_login(user_object)
+        # self.client.force_login(owner)
         response = self.get_view_list(list_object)
         self.assertRedirects(response, '/')
 
@@ -92,10 +92,10 @@ class ViewListTestForRequestGET(TestCase):
     def test_013(self):
         ''' 登录用户无法取得未指定拥有者的清单
         '''
-        user_object = User.objects.create(email='abc@163.com')
+        owner = User.objects.create(email='abc@163.com')
         # 未指定拥有者的清单
         list_object = List.objects.create()
-        self.client.force_login(user_object)
+        self.client.force_login(owner)
         response = self.get_view_list(list_object)
         self.assertRedirects(response, '/')
 
@@ -115,9 +115,7 @@ class ViewListTestForRequestPOST(TestCase):
     def test_001(self):
         ''' 提交的待办事项内容可以保存到数据库
         '''
-        other_list_object = List.objects.create()   ## 不会取到错误的清单项目
         list_object = List.objects.create()
-
         self.post_item_text_input(list_object, 'A new item 1')
         self.post_item_text_input(list_object, 'A new item 2')
 
@@ -133,7 +131,6 @@ class ViewListTestForRequestPOST(TestCase):
     def test_002(self):
         ''' 处理完了后页面跳转到清单项目显示
         '''
-        other_list_object = List.objects.create()
         list_object = List.objects.create()
         response = self.post_item_text_input(list_object, 'A new item')
         self.assertRedirects(response, list_object.get_absolute_url())
@@ -174,7 +171,7 @@ class ViewListTestForRequestPOST(TestCase):
         list_object = List.objects.create()
         Item.objects.create(list=list_object, text='do me')
         # 提交重复的待办事项
-        response = self.post_item_text_input(list_object, 'do me')
+        self.post_item_text_input(list_object, 'do me')
         self.assertEqual(Item.objects.count(), 1)
 
 
@@ -191,8 +188,7 @@ class ViewListTestForRequestPOST(TestCase):
         list_object = List.objects.create()
         response = self.post_item_text_input(list_object, '')
         self.assertIsInstance(response.context['form'], ExistingListItemForm)
-        self.assertEqual(response.context['list'], list_object)
-        self.assertIsNone(response.context['list_set'])
+        self.assertEqual(response.context['selected_list'], list_object)
 
     def test_033(self):
         ''' 如果时登录用户，提交出错时，仍可以取得我的清单
@@ -200,13 +196,13 @@ class ViewListTestForRequestPOST(TestCase):
         other_list_object = List.objects.create()
         Item.objects.create(list=other_list_object, text='Other item')
         
-        user_object = User.objects.create(email='abc@163.com')
-        self.client.force_login(user_object)
+        owner = User.objects.create(email='abc@163.com')
+        self.client.force_login(owner)
 
         ## 新建清单
-        list_object_1 = List.objects.create(owner=user_object)
+        list_object_1 = List.objects.create(owner=owner)
         Item.objects.create(list=list_object_1, text='New item 1')
-        list_object_2 = List.objects.create(owner=user_object)
+        list_object_2 = List.objects.create(owner=owner)
         Item.objects.create(list=list_object_2, text='New item 2')
 
         # 提交出错(提交空的待办事项)

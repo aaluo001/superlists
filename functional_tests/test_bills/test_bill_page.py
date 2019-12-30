@@ -42,7 +42,7 @@ class BillPageTest(BillsTest):
             '新建账单'
         ))
 
-        # 金额
+        # 收入支出
         money_input_box = self.get_money_input_box()
         self.assertEqual(money_input_box.get_attribute('placeholder'), '正数为收入，负数为支出')
         self.assertEqual(money_input_box.get_attribute('class'), 'form-control')

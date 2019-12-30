@@ -1,3 +1,6 @@
+{# lists/base.html #}
+
+{% load list_tags %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -33,8 +36,12 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><b>我的待办事项</b></h3>
                     </div>
-                    <div class="panel-body">
-                        {% include 'lists/base_lists.html' %}
+                    <div id="id_view_mylists" class="panel-body">
+                        {% if user.email %}
+                            {% view_mylists user selected_list %}
+                        {% else %}
+                            您还没有登录！
+                        {% endif %}
                     </div>
                 </div>
             </div><!-- /.col-md-4-->
@@ -48,7 +55,7 @@
                             {{ form.text }}
                             {% csrf_token %}
                             {% if form.errors %}
-                                <div class="form-group has-error">
+                                <div class="form-group has-error" id="id_error_{{ form.text.name }}">
                                     <span class="help-block text-left">{{ form.text.errors }}</span>
                                 </div>
                             {% endif %}

@@ -2,11 +2,11 @@
 
 {% block header_text %}待办事项{% endblock %}
 
-{% block form_action %}{% url 'view_list' list.id %}{% endblock %}
+{% block form_action %}{% url 'view_list' selected_list.id %}{% endblock %}
 
 {% block dispaly_area_1 %}
     <table id="id_list_table" class="table table-condensed">
-        {% for item in list.item_set.all %}
+        {% for item in selected_list.item_set.all %}
             <tr>
                 <td width="40"  class="text-right"><b>{{ forloop.counter }}.&nbsp;</b></td>
                 <td width="600" id="id_row_{{ forloop.counter }}">{{ item.text }}</td>
@@ -29,7 +29,7 @@
 
     {# 只有登录用户才能操作清单 #}
     {% if user.email %}
-        <form name="remove_list" class="text-left" method="POST" action="{% url 'remove_list' list.id %}">
+        <form name="remove_list" class="text-left" method="POST" action="{% url 'remove_list' selected_list.id %}">
             <button type="submit" name="remove_list" class="btn btn-danger btn-sm">删除清单</button>
             <div id="id_remove_list_dialog" title="删除清单" style="display:none">
                 <p>

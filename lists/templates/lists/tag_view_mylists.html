@@ -1,0 +1,18 @@
+{# lists/base_lists.html #}
+
+{% if list_set %}
+    <table id="id_my_lists_table" class="table table-bordered table-condensed">
+        {% for list_object in list_set %}
+            <tr>
+                <td id="id_my_lists_row_{{ forloop.counter }}"
+                    {% if selected_list and selected_list.id == list_object.id %}
+                        class="app-selected"
+                    {% endif %}>
+                    <a href="{{ list_object.get_absolute_url }}">{{ list_object.name }}</a><br>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>没有找到您的待办事项！</p>
+{% endif %}

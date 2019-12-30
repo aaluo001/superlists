@@ -102,7 +102,7 @@ class MyListsTest(ListsTest):
 
         # "我的待办事项"列不再显示任何清单内容(显示未登录信息)
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_element_by_css_selector('div#id_my_lists > div.panel-body > p').text,
+            self.browser.find_element_by_css_selector('div#id_my_lists > div.panel-body').text,
             '您还没有登录！'
         ))
         self.wait_for(lambda: self.assertEqual(
@@ -121,7 +121,7 @@ class MyListsTest(ListsTest):
         
         # "我的清单"列不再显示任何清单内容(显示未登录信息)
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_element_by_css_selector('div#id_my_lists > div.panel-body > p').text,
+            self.browser.find_element_by_css_selector('div#id_my_lists > div.panel-body').text,
             '您还没有登录！'
         ))
         self.wait_for(lambda: self.assertEqual(

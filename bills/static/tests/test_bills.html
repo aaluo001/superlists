@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Bills Test</title>
+    <link href="../../../commons/static/tests/qunit.css" rel="stylesheet">
+    <link href="../../../commons/static/jquery/jquery-ui.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+
+        <form>
+            <input name="money" />
+            <div class="has-error" id="id_error_money">Error Money</div>
+            <input name="comment" />
+            <div class="has-error" id="id_error_comment">Error Comment</div>
+        </form>
+
+        <!-- <form name="remove_list" method="POST">
+            <button name="remove_list">删除清单</button>
+            <div id="id_remove_list_dialog" title="删除清单" style="display:none">
+                <p>您确定要删除该清单吗？</p>
+            </div>
+        </form> -->
+
+    </div>
+
+    <script src="../../../commons/static/jquery/jquery.min.js"></script>
+    <script src="../../../commons/static/jquery/jquery-ui.min.js"></script>
+    <script src="../../../commons/static/tests/qunit.js"></script>
+    <script src="../../../commons/static/js/utils.js"></script>
+    <script src="../js/bills.js"></script>
+    <script src="test_bills.js"></script>
+
+</body>
+</html>

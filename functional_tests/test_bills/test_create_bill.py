@@ -105,6 +105,7 @@ class CreateBillTest(BillsTest):
 
     def test_021(self):
         ''' 收入支出：表单检查出错，并显示错误信息1
+            在收入支出输入框中，执行键盘输入操作时，错误提示会消失
         '''
         # 进入新建账单页面
         self.goto_bill_page('abc@163.com')
@@ -112,12 +113,19 @@ class CreateBillTest(BillsTest):
         # 输入错误内容后，点击提交
         self.create_bill_failed(money=' ', comment='error money')
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_money').text,
             '请输入实数！'
         )
 
+        # 在收入支出输入框中，执行键盘输入操作时，错误提示会消失
+        money_input_box = self.get_money_input_box()
+        money_input_box.send_keys('-10.1')
+        self.assertFalse(self.get_error_element_by_id('id_error_money').is_displayed())
+
+
     def test_022(self):
         ''' 收入支出：表单检查出错，并显示错误信息2
+            在其他输入框中，执行键盘输入操作时，错误提示不会消失
         '''
         # 进入新建账单页面
         self.goto_bill_page('abc@163.com')
@@ -125,9 +133,15 @@ class CreateBillTest(BillsTest):
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='1.22', comment='error money')
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_money').text,
             '请不要超过 1 位小数！'
         )
+
+        # 在其他输入框中，执行键盘输入操作时，错误提示不会消失
+        comment_input_box = self.get_comment_input_box()
+        comment_input_box.send_keys('test')
+        self.assertTrue(self.get_error_element_by_id('id_error_money').is_displayed())
+
 
     def test_023(self):
         ''' 收入支出：表单检查出错，并显示错误信息3
@@ -138,13 +152,14 @@ class CreateBillTest(BillsTest):
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='12345678', comment='error money')
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_money').text,
             '请不要超过 7 位整数！'
         )
 
 
     def test_031(self):
         ''' 备注：表单检查出错，并显示错误信息1
+            在备注输入框中，执行键盘输入操作时，错误提示会消失
         '''
         # 进入新建账单页面
         self.goto_bill_page('abc@163.com')
@@ -152,6 +167,29 @@ class CreateBillTest(BillsTest):
         # 输入错误内容后，点击提交
         self.create_bill_failed(money='1.0', comment=' ')
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_comment').text,
             '请输入内容！'
         )
+
+        # 在备注输入框中，执行键盘输入操作时，错误提示会消失
+        comment_input_box = self.get_comment_input_box()
+        comment_input_box.send_keys('test')
+        self.assertFalse(self.get_error_element_by_id('id_error_comment').is_displayed())
+
+
+    def test_032(self):
+        ''' 备注：表单检查出错，并显示错误信息1
+            在其他输入框中，执行键盘输入操作时，错误提示不会消失
+        '''
+        # 进入新建账单页面
+        self.goto_bill_page('abc@163.com')
+
+        # 输入错误内容后，点击提交
+        self.create_bill_failed(money='1.0', comment=' ')
+        self.assertTrue(self.get_error_element_by_id('id_error_comment').is_displayed())
+
+        # 在其他输入框中，执行键盘输入操作时，错误提示不会消失
+        money_input_box = self.get_money_input_box()
+        money_input_box.send_keys('-10.1')
+        self.assertTrue(self.get_error_element_by_id('id_error_comment').is_displayed())
+

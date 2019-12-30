@@ -17,18 +17,8 @@ from lists.models import List, Item
 from lists.forms import ItemForm, ExistingListItemForm
 
 
-def get_my_lists(request):
-    owner = get_owner(request)
-    if (not owner): return None
-    else: return List.objects.filter(owner=owner)
-
-
 def home_page(request):
-    context = {
-        'form': ItemForm(),
-        'list_set': get_my_lists(request),
-    }
-    return render(request, 'lists/index.html', context)
+    return render(request, 'lists/index.html', {'form': ItemForm()})
 
 
 @require_POST
@@ -43,11 +33,7 @@ def new_list(request):
         form.save(for_list=list_object)
         return redirect(list_object)
     else:
-        context = { \
-            'form': form,
-            'list_set': get_my_lists(request),
-        }
-        return render(request, 'lists/index.html', context)
+        return render(request, 'lists/index.html', {'form': form})
 
 
 def view_list(request, list_id):
@@ -75,9 +61,8 @@ def view_list(request, list_id):
         form = ExistingListItemForm(for_list=list_object)
 
     context = { \
-        'list': list_object,
+        'selected_list': list_object,
         'form': form,
-        'list_set': get_my_lists(request),
     }
     return render(request, 'lists/list.html', context)
 

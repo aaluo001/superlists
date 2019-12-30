@@ -75,7 +75,7 @@ class ListItemValidationTest(ListsTest):
 
         # 于是，得到一条错误消息
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_text').text,
             '您已经提交一个同样的待办事项！'
         )
 
@@ -84,7 +84,7 @@ class ListItemValidationTest(ListsTest):
         input_box.send_keys('a')
         time.sleep(1)
         self.assertFalse(
-            self.get_error_element().is_displayed()
+            self.get_error_element_by_id('id_error_text').is_displayed()
         )
 
 
@@ -120,7 +120,7 @@ class ListItemValidationTest(ListsTest):
 
         # 于是，得到一条错误消息
         self.assertEqual(
-            self.get_error_element().text,
+            self.get_error_element_by_id('id_error_text').text,
             '请输入内容！'
         )
 
